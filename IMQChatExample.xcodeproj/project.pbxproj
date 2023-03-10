@@ -172,7 +172,7 @@
 		4B3B9BD2277AFEE50091A74E = {
 			isa = PBXGroup;
 			children = (
-				4B3B9BDD277AFEE50091A74E /* IMUIKitExample */,
+				4B3B9BDD277AFEE50091A74E /* IMQChatExample */,
 				4B3B9BDC277AFEE50091A74E /* Products */,
 				8B20C38944CC1FA6CAB21600 /* Frameworks */,
 				F552B53527F5CDE6D78E0094 /* Pods */,
@@ -187,7 +187,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4B3B9BDD277AFEE50091A74E /* IMUIKitExample */ = {
+		4B3B9BDD277AFEE50091A74E /* IMQChatExample */ = {
 			isa = PBXGroup;
 			children = (
 				39A2F24128D9DF9100DDCAF2 /* Main */,
@@ -201,7 +201,7 @@
 				39572AAD28C6F74D007A9526 /* InfoPlist.strings */,
 				DD4ADFA629878A8400C61D55 /* IMUIKitExample-Bridging-Header.h */,
 			);
-			path = IMUIKitExample;
+			path = IMQChatExample;
 			sourceTree = "<group>";
 		};
 		8B20C38944CC1FA6CAB21600 /* Frameworks */ = {
@@ -258,7 +258,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1410;
 				ORGANIZATIONNAME = NetEase;
 				TargetAttributes = {
 					4B3B9BDA277AFEE50091A74E = {
@@ -486,7 +486,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -543,7 +543,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -561,7 +561,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = IMUIKitExample/IMUIKitExample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = IMQChatExample/IMUIKitExample.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -569,7 +569,7 @@
 				DEVELOPMENT_TEAM = 569GNZ5392;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = IMUIKitExample/Info.plist;
+				INFOPLIST_FILE = IMQChatExample/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "云信IM";
 				INFOPLIST_KEY_NSCameraUsageDescription = "若不允许，你将无法导入照片";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "想使用您的麦克风";
@@ -582,7 +582,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -596,7 +596,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "IMUIKitExample/IMUIKitExample-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "IMQChatExample/IMUIKitExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -611,7 +611,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = IMUIKitExample/IMUIKitExample.entitlements;
+				CODE_SIGN_ENTITLEMENTS = IMQChatExample/IMUIKitExample.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -619,7 +619,7 @@
 				DEVELOPMENT_TEAM = 569GNZ5392;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = IMUIKitExample/Info.plist;
+				INFOPLIST_FILE = IMQChatExample/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "云信IM";
 				INFOPLIST_KEY_NSCameraUsageDescription = "若不允许，你将无法导入照片";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "想使用您的麦克风";
@@ -632,7 +632,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -646,7 +646,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "IMUIKitExample/IMUIKitExample-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "IMQChatExample/IMUIKitExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

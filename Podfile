@@ -40,12 +40,6 @@ target 'IMQChatExample' do
 
   # 如果需要查看UI部分源码请注释掉以上在线依赖，打开下面的本地依赖
 #   pod 'NEQChatUIKit', :path => 'NEQChatUIKit/NEQChatUIKit.podspec'
-#   pod 'NEContactUIKit', :path => 'NEContactUIKit/NEContactUIKit.podspec'
-#   pod 'NEConversationUIKit', :path => 'NEConversationUIKit/NEConversationUIKit.podspec'
-#   pod 'NETeamUIKit', :path => 'NETeamUIKit/NETeamUIKit.podspec'
-#   pod 'NEChatUIKit', :path => 'NEChatUIKit/NEChatUIKit.podspec'
-#   pod 'NEMapKit', :path => 'NEMapKit/NEMapKit.podspec'
-#   pod 'NERtcCallUIKit', :path => 'NERtcCallUIKit/NERtcCallUIKit.podspec'
 
 
 end
