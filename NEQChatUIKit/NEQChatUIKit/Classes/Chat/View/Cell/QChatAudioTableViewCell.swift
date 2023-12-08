@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NIMSDK
+import UIKit
 
 protocol QChatAudioCell {
   var isPlaying: Bool { get set }
@@ -14,6 +14,10 @@ protocol QChatAudioCell {
 
 class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
   var isPlaying: Bool = false
+
+  // 白色背景
+  let backView = QChatBubbleButton()
+
   var audioImageView = UIImageView(image: UIImage.ne_imageNamed(name: "play_3"))
   var timeLabel = UILabel()
 
@@ -46,7 +50,7 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
     contentBtn.addSubview(audioImageView)
     NSLayoutConstraint.activate([
       audioImageView.rightAnchor.constraint(equalTo: contentBtn.rightAnchor, constant: -16),
-      audioImageView.centerYAnchor.constraint(equalTo: contentBtn.centerYAnchor),
+      audioImageView.topAnchor.constraint(equalTo: contentBtn.topAnchor, constant: 6),
       audioImageView.widthAnchor.constraint(equalToConstant: 28),
       audioImageView.heightAnchor.constraint(equalToConstant: 28),
     ])
@@ -58,7 +62,7 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
     contentBtn.addSubview(timeLabel)
     NSLayoutConstraint.activate([
       timeLabel.rightAnchor.constraint(equalTo: audioImageView.leftAnchor, constant: -12),
-      timeLabel.centerYAnchor.constraint(equalTo: contentBtn.centerYAnchor),
+      timeLabel.centerYAnchor.constraint(equalTo: audioImageView.centerYAnchor),
       timeLabel.heightAnchor.constraint(equalToConstant: 28),
     ])
 
@@ -74,7 +78,7 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
     contentBtn.addSubview(leftAudioImageView)
     NSLayoutConstraint.activate([
       leftAudioImageView.leftAnchor.constraint(equalTo: contentBtn.leftAnchor, constant: 16),
-      leftAudioImageView.centerYAnchor.constraint(equalTo: contentBtn.centerYAnchor),
+      leftAudioImageView.topAnchor.constraint(equalTo: contentBtn.topAnchor, constant: 6),
       leftAudioImageView.widthAnchor.constraint(equalToConstant: 28),
       leftAudioImageView.heightAnchor.constraint(equalToConstant: 28),
     ])
@@ -86,7 +90,7 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
     contentBtn.addSubview(leftTimeLabel)
     NSLayoutConstraint.activate([
       leftTimeLabel.leftAnchor.constraint(equalTo: leftAudioImageView.rightAnchor, constant: 12),
-      leftTimeLabel.centerYAnchor.constraint(equalTo: contentBtn.centerYAnchor),
+      leftTimeLabel.centerYAnchor.constraint(equalTo: leftAudioImageView.centerYAnchor),
       leftTimeLabel.rightAnchor.constraint(equalTo: contentBtn.rightAnchor, constant: -12),
       leftTimeLabel.heightAnchor.constraint(equalToConstant: 28),
     ])
@@ -96,6 +100,10 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
        let leftImage3 = UIImage.ne_imageNamed(name: "left_play_3") {
       leftAudioImageView.animationImages = [leftImage1, leftImage2, leftImage3]
     }
+
+    backView.isUserInteractionEnabled = false
+    backView.backgroundColor = .clear
+    backView.layer.cornerRadius = 4
   }
 
   override var messageFrame: QChatMessageFrame? {
@@ -109,17 +117,34 @@ class QChatAudioTableViewCell: QChatBaseTableViewCell, QChatAudioCell {
         m.isPlaying ? startAnimation() : stopAnimation()
       }
 
+      backView.removeFromSuperview()
       if let isSend = messageFrame?.message?.isOutgoingMsg {
         if isSend == true {
           timeLabel.isHidden = false
           audioImageView.isHidden = false
           leftTimeLabel.isHidden = true
           leftAudioImageView.isHidden = true
+
+          if messageFrame?.quickComments?.count ?? 0 > 0 {
+            if let contentW = messageFrame?.contentSize.width {
+              backView.setBubbleImage(image: UIImage.ne_imageNamed(name: "audio_back_right")!)
+              backView.frame = CGRect(x: contentBtn.width - contentW - qChat_margin, y: 6, width: contentW, height: 28)
+              contentBtn.insertSubview(backView, belowSubview: audioImageView)
+            }
+          }
         } else {
           timeLabel.isHidden = true
           audioImageView.isHidden = true
           leftTimeLabel.isHidden = false
           leftAudioImageView.isHidden = false
+
+          if messageFrame?.quickComments?.count ?? 0 > 0 {
+            if let contentW = messageFrame?.contentSize.width {
+              backView.setBubbleImage(image: UIImage.ne_imageNamed(name: "audio_back_left")!)
+              backView.frame = CGRect(x: qChat_margin, y: 6, width: contentW, height: 28)
+              contentBtn.insertSubview(backView, belowSubview: leftAudioImageView)
+            }
+          }
         }
       }
     }

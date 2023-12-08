@@ -3,10 +3,11 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreIMKit
 import CoreAudio
 import MJRefresh
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 typealias AddMemberRoleBlock = (_ memberRole: MemberRole?) -> Void
 public class QChatAddMemberVC: QChatSearchVC {
@@ -28,6 +29,9 @@ public class QChatAddMemberVC: QChatSearchVC {
   override public func viewDidLoad() {
     super.viewDidLoad()
     title = localizable("add_member")
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
+
     tableView.register(
       QChatImageTextCell.self,
       forCellReuseIdentifier: "\(QChatImageTextCell.self)"
@@ -51,11 +55,16 @@ public class QChatAddMemberVC: QChatSearchVC {
     param.limit = 50
     param.timeTag = lastTimeTag
     QChatServerProvider.shared.getServerMembers(param) { [weak self] error, sMembers in
-      print("sMembers:\(sMembers) error:\(error)")
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
         self?.emptyView.isHidden = false
-
       } else {
         if !sMembers.isEmpty {
           self?.lastTimeTag = sMembers.last?.createTime
@@ -123,9 +132,15 @@ public class QChatAddMemberVC: QChatSearchVC {
     param.limit = 50
     param.timeTag = lastTimeTag
     QChatServerProvider.shared.getServerMembers(param) { [weak self] error, sMembers in
-      print("sMembers:\(sMembers) error:\(error)")
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         if !sMembers.isEmpty {
           self?.lastTimeTag = sMembers.last?.createTime
@@ -207,8 +222,19 @@ public class QChatAddMemberVC: QChatSearchVC {
       accid: member?.accid
     )
     QChatRoleProvider.shared.addMemberRole(param) { [weak self] error, memberRole in
-      if error != nil {
-        self?.showToast(error?.localizedDescription ?? "")
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        case errorCode_NoExist:
+          self?.showToast(localizable("qchat_member_no_exist"))
+        case errorCode_Existed:
+          self?.showToast(localizable("qchat_member_exised"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         self?.serverMembers?.remove(at: index)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: DispatchWorkItem(block: {
@@ -228,13 +254,13 @@ public class QChatAddMemberVC: QChatSearchVC {
     }
   }
 
-  private lazy var emptyView: EmptyDataView = {
-    let view = EmptyDataView(
-      imageName: "rolePlaceholder",
+  private lazy var emptyView: NEEmptyDataView = {
+    let view = NEEmptyDataView(
+      image: UIImage.ne_imageNamed(name: "rolePlaceholder"),
       content: localizable("noMember_add"),
       frame: CGRect(
         x: 0,
-        y: 60,
+        y: topConstant,
         width: self.view.bounds.size.width,
         height: self.view.bounds.size.height
       )

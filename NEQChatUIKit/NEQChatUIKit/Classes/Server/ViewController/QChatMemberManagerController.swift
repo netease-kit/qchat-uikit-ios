@@ -3,23 +3,43 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import MJRefresh
-import NECoreIMKit
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 typealias MemberCountChange = (Int) -> Void
 
 public class QChatMemberManagerController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, ViewModelDelegate, QChatMemberSelectControllerDelegate {
-  let viewmodel = MemberManagerViewModel()
+  let viewmodel = QChatMemberManagerViewModel()
 
-  var memberCount = 0
+  var memberCount = 0 {
+    didSet {
+      countChangeBlock?(memberCount)
+    }
+  }
 
   var serverId: UInt64?
 
   var roleId: UInt64?
 
   var countChangeBlock: MemberCountChange?
+
+  // 是否是管理员管理页面
+  // true: 管理员管理, false: 订阅者管理, nil: 成员管理
+  var isAdministrator: Bool?
+
+  init(serverId: UInt64? = nil, roleId: UInt64? = nil, isAdministrator: Bool? = nil) {
+    super.init(nibName: nil, bundle: nil)
+    self.serverId = serverId
+    self.roleId = roleId
+    self.isAdministrator = isAdministrator
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override public func viewDidLoad() {
     super.viewDidLoad()
@@ -32,6 +52,11 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
 
   func setupUI() {
     title = localizable("qchat_manager_member")
+    if isAdministrator != nil {
+      title = isAdministrator == true ? localizable("administrator_manage") : localizable("subscriber_manage")
+    }
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
     view.backgroundColor = .white
     setupTable()
     tableView.delegate = self
@@ -53,11 +78,11 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
     tableView.mj_footer = mjfooter
   }
 
-  @objc func loadMoreData() {
+  @objc func loadMoreData(_ refresh: Bool = false) {
     if let rid = roleId, let sid = serverId {
-      viewmodel.getData(sid, rid)
+      viewmodel.getData(sid, rid, refresh)
     } else {
-      fatalError("serverId or roleId is nil")
+      print("serverId or roleId is nil")
     }
   }
 
@@ -98,6 +123,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
   }
 
   public func dataDidChange() {
+    memberCount = viewmodel.datas.count
     view.hideToastActivity()
     tableView.mj_footer?.endRefreshing()
     tableView.reloadData()
@@ -111,7 +137,16 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
 
   public func dataDidError(_ error: Error) {
     view.hideToastActivity()
-    showToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   public func numberOfSections(in tableView: UITableView) -> Int {
@@ -136,7 +171,8 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
         for: indexPath
       ) as! QChatPlainTextArrowCell
       cell.titleLabel.text = localizable("add_member")
-      cell.detailLabel.text = "\(memberCount)"
+      cell.detailLabel.text = isAdministrator != nil ? nil : "\(memberCount)"
+      cell.dividerLine.isHidden = false
       return cell
     }
 
@@ -191,31 +227,25 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
           .addMembers(users, weakSelf?.serverId, weakSelf?.roleId) { successCount in
             NELog.infoLog(ModuleName + " " + (weakSelf?.className() ?? "QChatMemberManagerController"), desc: "✅ CALLBACK SUCCESS")
             weakSelf?.view.hideToastActivity()
-
             weakSelf?.showToast(localizable("qchat_add_success"))
-            if let block = weakSelf?.countChangeBlock, var count = weakSelf?.memberCount {
-              count += successCount
-              weakSelf?.memberCount = count
-              block(count)
-            }
+            weakSelf?.memberCount += successCount
           }
       }
       navigationController?.pushViewController(memberSelect, animated: true)
     } else {
       let user = viewmodel.datas[indexPath.row]
-      showAlert(message: localizable("qchat_sure_delete_user")) {
+      showAlert(title: localizable("removeMember"), message: String(format: localizable("confirm_delete_text"), user.nickName ?? "") + localizable("qchat_member") + localizable("question_mark")) {
         if let rid = weakSelf?.roleId, let sid = weakSelf?.serverId {
           weakSelf?.view.makeToastActivity(.center)
-          weakSelf?.viewmodel.remove(user, sid, rid) {
+          weakSelf?.viewmodel.remove(user, sid, rid) { failedCount in
             NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(sid)")
             weakSelf?.view.hideToastActivity()
-            weakSelf?.viewmodel.datas.remove(at: indexPath.row)
-            weakSelf?.tableView.reloadData()
-            if var count = weakSelf?.memberCount,
-               let block = weakSelf?.countChangeBlock {
-              count -= 1
-              weakSelf?.memberCount = count
-              block(count)
+            if failedCount > 0 {
+              weakSelf?.loadMoreData(true)
+            } else {
+              weakSelf?.viewmodel.datas.remove(at: indexPath.row)
+              weakSelf?.memberCount -= 1
+              weakSelf?.tableView.reloadData()
             }
           }
         }

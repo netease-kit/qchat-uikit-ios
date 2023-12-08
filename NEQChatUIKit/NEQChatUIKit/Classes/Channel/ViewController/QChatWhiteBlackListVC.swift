@@ -3,26 +3,33 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreIMKit
 import NECoreKit
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectControllerDelegate {
+  var viewmodel = QChatWhiteBlackViewModel()
   public var type: RoleType = .white
   public var channel: ChatChannel?
   private var memberArray: [ServerMemeber]?
   private var isEdited: Bool = false
-
+  var owner: String?
   override public func viewDidLoad() {
     super.viewDidLoad()
     isEdited = false
     title = type == .white ? localizable("white_list") : localizable("black_list")
+
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: localizable("qchat_edit"),
       style: .plain,
       target: self,
       action: #selector(edit)
     )
+    navigationView.setMoreButtonTitle(localizable("qchat_edit"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(edit))
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
 
     tableView.backgroundColor = .white
     tableView.sectionHeaderHeight = 0
@@ -49,6 +56,9 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
         self?.memberArray = result?.memberArray
         self?.tableView.reloadData()
       }
+    viewmodel.getOwner(channel?.serverId) { [weak self] owner in
+      self?.owner = owner
+    }
   }
 
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -74,6 +84,8 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
       cell.backgroundColor = .white
       cell.rightStyle = .indicate
       cell.titleLabel.text = localizable("add_member")
+      cell.titleLeftMargin?.constant = 40
+      cell.dividerLine.isHidden = false
       return cell
     } else {
       let cell = tableView.dequeueReusableCell(
@@ -87,7 +99,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
 //            if CoreKitEngine.instance.imAccid == member?.accid, self.type == .white {
 //                cell.rightStyle = .none
 //            }
-      if IMKitEngine.instance.imAccid == member?.accid, type == .white {
+      if QChatKitClient.instance.imAccid() == member?.accid, type == .white {
         cell.rightStyle = .none
       }
       return cell
@@ -112,8 +124,15 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
           }
           self?
             .addMemberList(members: seletedMembers, type: self?.type ?? .white) { error in
-              if error != nil {
-                self?.view.makeToast(error?.localizedDescription)
+              if let err = error as NSError? {
+                switch err.code {
+                case errorCode_NetWorkError:
+                  self?.showToast(localizable("network_error"))
+                case errorCode_NoPermission:
+                  self?.showToast(localizable("no_permession"))
+                default:
+                  self?.showToast(err.localizedDescription)
+                }
               } else {
                 for m in seletedMembers {
                   self?.memberArray?.append(m)
@@ -134,21 +153,28 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
 //                    return
 //                }
 
-        if IMKitEngine.instance.imAccid == member.accid, type == .white {
+        if QChatKitClient.instance.imAccid() == member.accid, type == .white {
           return
         }
 
         let name = (member.nick != nil ? member.nick : member.accid) ?? ""
-        let message = localizable("confirm_delete_channel") + name +
-          localizable("qchat_member") + "?"
+        let message = String(format: localizable("confirm_delete_text"), name) +
+          localizable("qchat_member") + localizable("question_mark")
         let alertVC = UIAlertController.reconfimAlertView(
           title: localizable("removeMember"),
           message: message
         ) {
           let members = [member]
           self.removeMemberList(members: members, type: self.type) { [weak self] error in
-            if error != nil {
-              self?.view.makeToast(error?.localizedDescription)
+            if let err = error as NSError? {
+              switch err.code {
+              case errorCode_NetWorkError:
+                self?.showToast(localizable("network_error"))
+              case errorCode_NoPermission:
+                self?.showToast(localizable("no_permession"))
+              default:
+                self?.showToast(err.localizedDescription)
+              }
             } else {
               if var members = self?.memberArray {
                 var index = -1
@@ -220,9 +246,11 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
     isEdited = !isEdited
     if isEdited {
       navigationItem.rightBarButtonItem?.title = localizable("qchat_save")
+      navigationView.setMoreButtonTitle(localizable("qchat_save"))
       // TODO: reload data
     } else {
       navigationItem.rightBarButtonItem?.title = localizable("qchat_edit")
+      navigationView.setMoreButtonTitle(localizable("qchat_edit"))
       // TODO: reload data
     }
     tableView.reloadData()
@@ -236,19 +264,23 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
       type: type,
       accIds: accid
     )
+    var accidArray = [String]()
+    if let creater = owner, creater != QChatKitClient.instance.imAccid() {
+      accidArray.append(creater)
+    }
     QChatChannelProvider.shared
       .getExistingChannelBlackWhiteMembers(param: param) { error, result in
+        // 黑名单/白名单首先过滤自己
+        accidArray.append(QChatKitClient.instance.imAccid())
+
         if let members = result?.memberArray, !members.isEmpty {
-          var accidArray = [String]()
           for member in members {
             if let id = member.accid {
               accidArray.append(id)
             }
           }
-          filterMembers(accidArray)
-        } else {
-          filterMembers(nil)
         }
+        filterMembers(accidArray)
       }
   }
 }

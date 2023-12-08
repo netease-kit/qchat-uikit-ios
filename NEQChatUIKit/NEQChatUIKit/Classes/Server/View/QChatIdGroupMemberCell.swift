@@ -5,7 +5,7 @@
 
 import UIKit
 
-class QChatIdGroupMemberCell: QChatCornerCell {
+open class QChatIdGroupMemberCell: QChatCornerCell {
   lazy var headView: NEUserHeaderView = {
     let view = NEUserHeaderView(frame: .zero)
     view.titleLabel.textColor = .white
@@ -31,10 +31,18 @@ class QChatIdGroupMemberCell: QChatCornerCell {
     return label
   }()
 
-  var user: UserInfo? {
+  lazy var line: UIView = {
+    let view = UIView()
+    view.backgroundColor = .ne_greyLine
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.isHidden = true
+    return view
+  }()
+
+  var user: QChatUserInfo? {
     didSet {
       if let name = user?.nickName {
-        headView.configHeadData(headUrl: user?.avatar, name: name)
+        headView.configHeadData(headUrl: user?.avatar, name: name, uid: user?.accid ?? "")
       }
       headView.backgroundColor = user?.color
       nameLabel.text = user?.nickName
@@ -42,26 +50,14 @@ class QChatIdGroupMemberCell: QChatCornerCell {
   }
 
   var leftSpace: NSLayoutConstraint?
-
   var rightSpace: NSLayoutConstraint?
-
-  override func awakeFromNib() {
-    super.awakeFromNib()
-    // Initialization code
-  }
-
-  override func setSelected(_ selected: Bool, animated: Bool) {
-    super.setSelected(selected, animated: animated)
-
-    // Configure the view for the selected state
-  }
 
   override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     setupUI()
   }
 
-  required init?(coder: NSCoder) {
+  public required init?(coder: NSCoder) {
     super.init(coder: coder)
   }
 
@@ -76,6 +72,29 @@ class QChatIdGroupMemberCell: QChatCornerCell {
       headView.heightAnchor.constraint(equalToConstant: 32),
     ])
 
+    setupTailorImage()
+
+    setupNameLabel()
+
+    contentView.addSubview(line)
+    NSLayoutConstraint.activate([
+      line.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+      line.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+      line.heightAnchor.constraint(equalToConstant: 1.0),
+      line.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+    ])
+  }
+
+  open func setupNameLabel() {
+    contentView.addSubview(nameLabel)
+    NSLayoutConstraint.activate([
+      nameLabel.leftAnchor.constraint(equalTo: headView.rightAnchor, constant: 12),
+      nameLabel.rightAnchor.constraint(equalTo: tailorImage.leftAnchor, constant: -10),
+      nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+    ])
+  }
+
+  open func setupTailorImage() {
     contentView.addSubview(tailorImage)
     rightSpace = tailorImage.rightAnchor.constraint(
       equalTo: contentView.rightAnchor,
@@ -86,13 +105,6 @@ class QChatIdGroupMemberCell: QChatCornerCell {
       tailorImage.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
       tailorImage.widthAnchor.constraint(equalToConstant: 16.0),
       tailorImage.heightAnchor.constraint(equalToConstant: 16.0),
-    ])
-
-    contentView.addSubview(nameLabel)
-    NSLayoutConstraint.activate([
-      nameLabel.leftAnchor.constraint(equalTo: headView.rightAnchor, constant: 12),
-      nameLabel.rightAnchor.constraint(equalTo: tailorImage.leftAnchor, constant: -10),
-      nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
     ])
   }
 }

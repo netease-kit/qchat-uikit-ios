@@ -39,6 +39,11 @@ class QChatDestructiveCell: QChatCornerCell {
     ])
   }
 
+  override func configure(model: QChatSettingModel) {
+    super.configure(model: model)
+    redTextLabel.text = model.title
+  }
+
   func changeDisableTextColor() {
     redTextLabel.textColor = .ne_disableRedText
   }

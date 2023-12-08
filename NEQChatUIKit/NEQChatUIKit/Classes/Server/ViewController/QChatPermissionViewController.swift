@@ -3,15 +3,16 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 typealias RoleUpdateCompletion = (_ role: ServerRole) -> Void
 public class QChatPermissionViewController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, QChatTextEditCellDelegate, ViewModelDelegate, QChatSwitchCellDelegate {
-  var idGroup: IdGroupModel?
+  var idGroup: QChatIdGroupModel?
 
-  let viewmodel = PermissionViewModel()
+  let viewmodel = QChatPermissionViewModel()
 
   var serverName = ""
 
@@ -34,13 +35,17 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
   }
 
   func setupUI() {
+    navigationView.backgroundColor = .ne_lightBackgroundColor
     if let type = idGroup?.role?.type, type != .everyone {
       addRightAction(localizable("qchat_save"), #selector(savePermission), self)
+      navigationView.setMoreButtonTitle(localizable("qchat_save"))
+      navigationView.addMoreButtonTarget(target: self, selector: #selector(savePermission))
     }
 
     setupTable()
     title = idGroup?.idName
-    tableView.backgroundColor = .ne_backcolor
+    view.backgroundColor = .ne_lightBackgroundColor
+    tableView.backgroundColor = .clear
     tableView.delegate = self
     tableView.dataSource = self
     tableView.register(
@@ -68,8 +73,9 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
 
   func didChangeSwitchValue(_ cell: QChatSwitchCell) {
     print("did change switch value : ", cell)
-    if let key = cell.model?.permissionKey,
-       let value = cell.model?.permission?.value(forKey: key) as? String,
+    if let model = cell.model as? QChatPermissionCellModel,
+       let key = model.permissionKey,
+       let value = model.permission?.value(forKey: key) as? String,
        let type = ChatPermissionType(rawValue: value) {
       updatePermission(type, cell.qSwitch.isOn) { success in
         if success == false {
@@ -84,7 +90,16 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
   }
 
   public func dataDidError(_ error: Error) {
-    showToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   func textDidChange(_ textField: UITextField) {
@@ -156,13 +171,16 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
         withIdentifier: "\(QChatSwitchCell.self)",
         for: indexPath
       ) as! QChatSwitchCell
-      var model: PermissionCellModel?
+      var model: QChatPermissionCellModel?
       if indexPath.section == 2 {
         model = viewmodel.commons[indexPath.row]
+        cell.dividerLine.isHidden = indexPath.row == viewmodel.commons.count - 1
       } else if indexPath.section == 3 {
         model = viewmodel.messages[indexPath.row]
+        cell.dividerLine.isHidden = indexPath.row == viewmodel.messages.count - 1
       } else if indexPath.section == 4 {
         model = viewmodel.members[indexPath.row]
+        cell.dividerLine.isHidden = indexPath.row == viewmodel.members.count - 1
       }
       cell.delegate = self
       cell.model = model
@@ -179,7 +197,7 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
 
   public func tableView(_ tableView: UITableView,
                         viewForHeaderInSection section: Int) -> UIView? {
-    let header = QChatHeaderView()
+    let header = QChatTableHeaderView()
     switch section {
     case 0:
       header.titleLabel.text = localizable("qchat_group_name")
@@ -265,10 +283,13 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
 
     weak var weakSelf = self
     viewmodel.repo.updateRole(param) { error, role in
-      if let err = error as? NSError {
-        if err.code == 408 {
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
           weakSelf?.showToast(localizable("network_error"))
-        } else {
+        case errorCode_NoPermission:
+          weakSelf?.showToast(localizable("no_permession"))
+        default:
           weakSelf?.showToast(err.localizedDescription)
         }
       } else {
@@ -302,10 +323,13 @@ extension QChatPermissionViewController {
     view.makeToastActivity(.center)
     viewmodel.repo.updateRole(param) { error, role in
       weakSelf?.view.hideToastActivity()
-      if let err = error as? NSError {
-        if err.code == 408 {
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
           weakSelf?.showToast(localizable("network_error"))
-        } else {
+        case errorCode_NoPermission:
+          weakSelf?.showToast(localizable("no_permession"))
+        default:
           weakSelf?.showToast(err.localizedDescription)
         }
         completion(false)

@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 typealias CreateCompletion = () -> Void
 
@@ -12,7 +13,7 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
   QChatMemberSelectControllerDelegate, UITableViewDataSource, UITableViewDelegate,
   ViewModelDelegate,
   QChatTextEditCellDelegate {
-  let viewModel = CreateGroupViewModel()
+  let viewModel = QChatCreateGroupViewModel()
 
   var serverId: UInt64?
   var serverName = ""
@@ -21,20 +22,28 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
 
   override public func viewDidLoad() {
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
     viewModel.delegate = self
+    initializeConfig()
     setupUI()
   }
 
-  func setupUI() {
+  func initializeConfig() {
+    title = localizable("qchat_create_new_id_group")
+    view.backgroundColor = .ne_lightBackgroundColor
     addRightAction(localizable("create"), #selector(createClick), self)
     rightNavBtn.setTitleColor(.gray, for: .normal)
     rightNavBtn.isEnabled = true
-    title = localizable("qchat_create_new_id_group")
+
+    navigationView.setMoreButtonTitle(localizable("create"))
+    navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(createClick))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+  }
+
+  func setupUI() {
     setupTable()
     tableView.delegate = self
-    tableView.backgroundColor = .ne_backcolor
+    tableView.backgroundColor = .clear
 
     tableView.dataSource = self
     tableView.register(
@@ -99,7 +108,6 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
   }
 
   func addMember(_ roleId: UInt64) {
-    weak var weakSelf = self
     if viewModel.allUsers.count > 0 {
       var accids = [String]()
       viewModel.allUsers.forEach { user in
@@ -111,18 +119,22 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
       param.accountArray = accids
       param.serverId = serverId
       param.roleId = roleId
-      viewModel.repo.addRoleMember(param) { error, sAccids, fAccids in
-        if let err = error as? NSError {
-          if err.code == 408 {
-            weakSelf?.showToast(localizable("network_error"))
-          } else {
-            weakSelf?.showToast(err.localizedDescription)
+      viewModel.repo.addRoleMember(param) { [weak self] error, sAccids, fAccids in
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
           }
+          return
         }
-        if let block = weakSelf?.completion {
+        if let block = self?.completion {
           block()
         }
-        weakSelf?.navigationController?.popViewController(animated: true)
+        self?.navigationController?.popViewController(animated: true)
       }
     }
   }
@@ -151,8 +163,10 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
     if let text = textField.text {
       if !text.isEmpty {
         rightNavBtn.setTitleColor(.ne_blueText, for: .normal)
+        navigationView.moreButton.setTitleColor(.ne_blueText, for: .normal)
       } else {
         rightNavBtn.setTitleColor(.ne_greyText, for: .normal)
+        navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
       }
       serverName = text
       textFld = textField
@@ -162,7 +176,16 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
 
   public func dataDidError(_ error: Error) {
     UIApplication.shared.keyWindow?.endEditing(true)
-    view.makeToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   public func dataDidChange() {
@@ -277,7 +300,7 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
 
   public func tableView(_ tableView: UITableView,
                         viewForHeaderInSection section: Int) -> UIView? {
-    let header = QChatHeaderView()
+    let header = QChatTableHeaderView()
     if section == 0 {
       header.titleLabel.text = localizable("qchat_group_name")
       return header

@@ -3,17 +3,19 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreKit
-import NECoreIMKit
+import NECoreQChatKit
+import NEQChatKit
 import NIMSDK
+import UIKit
 
 typealias SaveSuccessBlock = (_ server: QChatServer?) -> Void
 
 public class QChatServerSettingViewController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate {
-  let viewModel = SettingViewModel()
+  let viewModel = QChatSettingViewModel()
   var server: QChatServer?
+  var permissions = [QChatSettingModel]()
 
   var headerImageUrl: String?
 
@@ -27,6 +29,13 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   private let className = "QChatServerSettingViewController"
 
+  lazy var headerBackView: UIView = {
+    let view = UIView()
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.backgroundColor = .clear
+    return view
+  }()
+
   lazy var serverName: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -35,6 +44,15 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
     return label
   }()
 
+  public init(server: QChatServer?) {
+    super.init(nibName: nil, bundle: nil)
+    self.server = server
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     navigationController?.navigationBar.isHidden = false
@@ -42,45 +60,42 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   override public func viewDidLoad() {
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
-
-    NELog.infoLog(ModuleName + " " + className, desc: "server id : \(server?.serverId ?? 0)")
-
+    initializeConfig()
     setupUI()
+    viewModel.server = server
+    permissions = viewModel.getSetionAuthority().cellModels
+    weak var weakSelf = self
+    viewModel.didGoBack = {
+      weakSelf?.navigationController?.popToRootViewController(animated: true)
+    }
+  }
+
+  func initializeConfig() {
     addRightAction(localizable("save"), #selector(saveClick), self)
+    navigationView.setMoreButtonTitle(localizable("save"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(saveClick))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
   }
 
   func setupUI() {
     title = localizable("qchat_setting")
-    view.backgroundColor = .ne_backcolor
-    setupTable()
-    tableView.bounces = false
-    tableView.tableHeaderView = headerView()
-    tableView.register(
-      QChatTextArrowCell.self,
-      forCellReuseIdentifier: "\(QChatTextArrowCell.self)"
-    )
-    tableView.register(
-      QChatDestructiveCell.self,
-      forCellReuseIdentifier: "\(QChatDestructiveCell.self)"
-    )
-    tableView.delegate = self
-    tableView.dataSource = self
-  }
+    view.backgroundColor = .ne_lightBackgroundColor
 
-  func headerView() -> UIView {
-    let headerBack = UIView()
-    headerBack.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 334)
-    headerBack.backgroundColor = .clear
+    view.addSubview(headerBackView)
+    NSLayoutConstraint.activate([
+      headerBackView.leftAnchor.constraint(equalTo: view.leftAnchor),
+      headerBackView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      headerBackView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
+      headerBackView.heightAnchor.constraint(equalToConstant: 334),
+    ])
 
     let cornerView = UIView()
     cornerView.translatesAutoresizingMaskIntoConstraints = false
-    headerBack.addSubview(cornerView)
+    headerBackView.addSubview(cornerView)
     NSLayoutConstraint.activate([
-      cornerView.topAnchor.constraint(equalTo: headerBack.topAnchor, constant: 22),
-      cornerView.leftAnchor.constraint(equalTo: headerBack.leftAnchor, constant: 20),
-      cornerView.rightAnchor.constraint(equalTo: headerBack.rightAnchor, constant: -20),
+      cornerView.topAnchor.constraint(equalTo: headerBackView.topAnchor, constant: 22),
+      cornerView.leftAnchor.constraint(equalTo: headerBackView.leftAnchor, constant: 20),
+      cornerView.rightAnchor.constraint(equalTo: headerBackView.rightAnchor, constant: -20),
       cornerView.heightAnchor.constraint(equalToConstant: 98),
     ])
     cornerView.clipsToBounds = true
@@ -135,13 +150,13 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
       camera.centerYAnchor.constraint(equalTo: cameraBtn.centerYAnchor, constant: -2),
     ])
 
+    serverName.text = server?.name
     cornerView.addSubview(serverName)
     NSLayoutConstraint.activate([
       serverName.leftAnchor.constraint(equalTo: header.rightAnchor, constant: 16),
       serverName.rightAnchor.constraint(equalTo: cornerView.rightAnchor, constant: -16),
       serverName.topAnchor.constraint(equalTo: cornerView.topAnchor, constant: 30),
     ])
-    serverName.text = server?.name
 
     let account = UILabel()
     account.translatesAutoresizingMaskIntoConstraints = false
@@ -155,9 +170,29 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
     ])
     account.text = "ID: \(server?.serverId ?? 0)"
 
-    addInputView(headerBack, cornerView)
+    addInputView(headerBackView, cornerView)
+    setupTable()
+  }
 
-    return headerBack
+  override public func setupTable() {
+    tableView.bounces = false
+    tableView.register(
+      QChatTextArrowCell.self,
+      forCellReuseIdentifier: "\(QChatTextArrowCell.self)"
+    )
+    tableView.register(
+      QChatDestructiveCell.self,
+      forCellReuseIdentifier: "\(QChatDestructiveCell.self)"
+    )
+    tableView.delegate = self
+    tableView.dataSource = self
+    view.addSubview(tableView)
+    NSLayoutConstraint.activate([
+      tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+      tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      tableView.topAnchor.constraint(equalTo: headerBackView.bottomAnchor, constant: 0),
+      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+    ])
   }
 
   func addInputView(_ back: UIView, _ topView: UIView) {
@@ -205,7 +240,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
     ])
     serverThemeInput.placeholder = localizable("qchat_please_input_topic")
     if let custom = server?.custom, let dic = getDictionaryFromJSONString(custom),
-       let topic = dic["topic"] as? String {
+       let topic = dic["topic"] as? String, topic.count > 0 {
       serverThemeInput.text = topic
     }
     serverThemeInput.tag = 64
@@ -219,7 +254,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
         constant: 16
       ),
     ])
-    permissionLabel.text = localizable("qchat_permisssion")
+    permissionLabel.text = localizable("qchat_permission")
   }
 
   func getTagLabel() -> UILabel {
@@ -268,17 +303,14 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
       return
     }
 
-    if let icon = headerImageUrl {
-      server?.icon = icon
-    }
-
-    var serverParam = UpdateServerParam(name: name, icon: headerImageUrl)
-
-    guard let sid = server?.serverId else {
+    guard let _ = server?.serverId else {
       showToast(localizable("serverId_notbe_empty"))
       return
     }
-    serverParam.serverId = sid
+
+    guard var serverParam = server?.convertUpdateServerParam() else { return }
+    serverParam.name = name
+    serverParam.icon = headerImageUrl
 
     if let topic = serverThemeInput.text, topic.count > 0 {
       serverParam.custom = getJSONStringFromDictionary(["topic": topic])
@@ -287,36 +319,47 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
     view.makeToastActivity(.center)
     print("update param : ", serverParam)
-    QChatServerProvider.shared.updateServer(serverParam) { error in
+    viewModel.repo.updateServer(serverParam) { error, newServer in
       print("update finish : ", error as Any)
       weakSelf?.view.hideToastActivity()
-      if let err = error as? NSError {
-        if err.code == 408 {
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
           weakSelf?.showToast(localizable("network_error"))
-        } else {
+        case errorCode_NoPermission:
+          weakSelf?.showToast(localizable("no_permession"))
+        default:
           weakSelf?.showToast(err.localizedDescription)
         }
       } else {
+        weakSelf?.server = newServer
         weakSelf?.navigationController?.popViewController(animated: true)
       }
+      weakSelf?.headerImage?.configHeadData(headUrl: weakSelf?.server?.icon,
+                                            name: weakSelf?.server?.name ?? "",
+                                            uid: "\(weakSelf?.server?.serverId ?? 0)")
+      weakSelf?.serverNameInput.text = weakSelf?.server?.name
+      weakSelf?.serverThemeInput.text = weakSelf?.server?.topic
     }
   }
 
   func leaveServer() {
     if let serverid = server?.serverId {
-      weak var weakSelf = self
       view.makeToastActivity(.center)
-      viewModel.repo.leaveServer(serverid) { error in
-        weakSelf?.view.hideToastActivity()
-        if let err = error as? NSError {
-          NELog.errorLog(ModuleName + " " + self.className, desc: "leave server error : \(err)")
-          if err.code == 408 {
-            weakSelf?.view.makeToast(localizable("network_error"))
-          } else {
-            weakSelf?.view.makeToast(err.localizedDescription)
+      viewModel.repo.leaveServer(serverid) { [weak self] error in
+        self?.view.hideToastActivity()
+        if let err = error as NSError? {
+          NELog.errorLog(ModuleName + " " + (self?.className ?? ""), desc: "leave server error : \(err)")
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
           }
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
@@ -324,19 +367,21 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   func deleteServer() {
     if let serverid = server?.serverId {
-      weak var weakSelf = self
       view.makeToastActivity(.center)
-      QChatServerProvider.shared.deleteServer(serverid) { error in
+      QChatServerProvider.shared.deleteServer(serverid) { [weak self] error in
         print("delete result : ", error as Any)
-        weakSelf?.view.hideToastActivity()
-        if let err = error as? NSError {
-          if err.code == 408 {
-            weakSelf?.view.makeToast(localizable("network_error"))
-          } else {
-            weakSelf?.view.makeToast(err.localizedDescription)
+        self?.view.hideToastActivity()
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
           }
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
@@ -361,7 +406,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
   public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     print("count section : ", section)
     if section == 0 {
-      return viewModel.permissions.count
+      return permissions.count
     } else if section == 1 {
       return 1
     }
@@ -375,10 +420,13 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
         withIdentifier: "\(QChatTextArrowCell.self)",
         for: indexPath
       ) as! QChatTextArrowCell
-      let model = viewModel.permissions[indexPath.row]
+      let model = permissions[indexPath.row]
       textCell.titleLabel.text = model.title
       textCell.backgroundColor = .clear
       textCell.cornerType = model.cornerType
+      if indexPath.row != permissions.count - 1 {
+        textCell.dividerLine.isHidden = false
+      }
       return textCell
     } else if indexPath.section == 1 {
       let destructiveCell: QChatDestructiveCell = tableView.dequeueReusableCell(
@@ -399,18 +447,17 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if indexPath.section == 0 {
-      if indexPath.row == 1 {
+      if indexPath.row == 0 {
+        let memberCtrl = QChatMemberListViewController()
+        memberCtrl.serverId = server?.serverId
+        navigationController?.pushViewController(memberCtrl, animated: true)
+      } else if indexPath.row == 1 {
         let idGroupController = QChatIdGroupViewController()
         idGroupController.serverid = server?.serverId
-        if let owner = server?.owner, owner == IMKitEngine.instance.imAccid {
+        if let owner = server?.owner, owner == QChatKitClient.instance.imAccid() {
           idGroupController.isOwner = true
         }
         navigationController?.pushViewController(idGroupController, animated: true)
-
-      } else if indexPath.row == 0 {
-        let memberCtrl = MemberListViewController()
-        memberCtrl.serverId = server?.serverId
-        navigationController?.pushViewController(memberCtrl, animated: true)
       }
 
     } else if indexPath.section == 1 {
@@ -461,7 +508,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   func isMyServer() -> Bool {
     if let owner = server?.owner {
-      let accid = IMKitEngine.instance.imAccid
+      let accid = QChatKitClient.instance.imAccid()
       if owner == accid {
         return true
       }
@@ -482,7 +529,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
     view.makeToastActivity(.center)
     if let imageData = image.jpegData(compressionQuality: 0.6) as NSData? {
       let filePath = NSHomeDirectory().appending("/Documents/")
-        .appending(IMKitEngine.instance.imAccid)
+        .appending(QChatKitClient.instance.imAccid())
       let succcess = imageData.write(toFile: filePath, atomically: true)
       weak var weakSelf = self
       if succcess {
@@ -501,5 +548,15 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
           }
       }
     }
+  }
+
+  public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    if let text = textField.text {
+      let newText = (text as NSString).replacingCharacters(in: range, with: string)
+      if newText.utf16.count > textField.tag {
+        return false
+      }
+    }
+    return true
   }
 }

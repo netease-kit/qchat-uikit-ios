@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+# platform :ios, '11.0'
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'IMQChatExample' do
@@ -9,34 +9,33 @@ target 'IMQChatExample' do
   #登录组件
   pod 'YXLogin', '1.0.0'
 
-  #可选UI库
-  pod 'NEContactUIKit', '9.4.0'
-  pod 'NEQChatUIKit', '9.4.0'
-  pod 'NEConversationUIKit', '9.4.0'
-  pod 'NEChatUIKit', '9.4.0'
-  pod 'NETeamUIKit', '9.4.0'
+  # 基础 Kit 库
+pod 'NECoreKit', '9.6.5'
+pod 'NECoreIMKit', '9.6.5'
+pod 'NEChatKit', '9.6.5'
+pod 'NECommonKit', '9.6.4'
+pod 'NECommonUIKit', '9.6.5'
+pod 'NECoreQChatKit', '9.6.5'
+pod 'NEQChatKit', '9.5.3'
 
+# UI 组件，依次为通讯录组件、会话列表组件、会话（聊天）组件、群相关设置、圈组组件
+pod 'NEContactUIKit', '9.6.5'      
+pod 'NEConversationUIKit', '9.6.5' 
+pod 'NEChatUIKit', '9.6.5'         
+pod 'NETeamUIKit', '9.6.5'     
+pod 'NEQChatUIKit', '9.5.3'     
 
-  #可选Kit库（和UIKit对应）
-  pod 'NEContactKit', '9.4.0'
-  pod 'NEQChatKit', '9.4.0'
-  pod 'NEConversationKit', '9.4.0'
-  pod 'NEChatKit', '9.4.0'
-  pod 'NETeamKit', '9.4.0'
+# 扩展库-地理位置组件
+pod 'NEMapKit', '9.6.5'         
 
-  #基础kit库
-  pod 'NECommonUIKit', '9.4.0'
-  pod 'NECommonKit', '9.4.0'
-  pod 'NECoreIMKit', '9.4.0'
-  pod 'NECoreKit', '9.4.0'
+# 扩展库-呼叫组件
+pod 'NERtcCallKit', '2.2.0'
+pod 'NERtcCallUIKit', '2.2.0'
 
-  #扩展库
-  pod 'NEMapKit', '9.4.0'
-
-  #呼叫组件，音视频通话能力，需要开通 音视频2.0，可选，聊天一面会根据依赖初始化自动显示音视频通话入口
-  pod 'NERtcCallUIKit', '1.8.2'
-  pod 'NERtcCallKit', '1.8.2'
-  pod 'NERtcSDK', '4.6.29'
+# 扩展库，依次为 RTC 音视频基础组件、RTC 音视频神经网络组件（使用背景虚化功能需要集成）、RTC 音视频背景分割组件（使用背景虚化功能需要集成）
+pod 'NERtcSDK/RtcBasic', '5.5.2'        
+pod 'NERtcSDK/Nenn'                    
+pod 'NERtcSDK/Segment'     
 
   # 如果需要查看UI部分源码请注释掉以上在线依赖，打开下面的本地依赖
 #   pod 'NEQChatUIKit', :path => 'NEQChatUIKit/NEQChatUIKit.podspec'

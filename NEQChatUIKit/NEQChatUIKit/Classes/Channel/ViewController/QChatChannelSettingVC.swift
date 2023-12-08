@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 typealias UpdateChannelSuccess = (_ channel: ChatChannel?) -> Void
 
@@ -46,6 +47,7 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
 
   func commonUI() {
     title = localizable("channel_setting")
+    view.backgroundColor = .ne_lightBackgroundColor
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: localizable("save"),
       style: .plain,
@@ -59,6 +61,15 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
       action: #selector(close)
     )
     navigationItem.rightBarButtonItem?.tintColor = .ne_blueText
+
+    navigationView.setBackButtonTitle(localizable("close"))
+    navigationView.addBackButtonTarget(target: self, selector: #selector(close))
+    navigationView.setMoreButtonTitle(localizable("save"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(save))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+
+    addLeftSwipeDismissGesture()
+
     tableView.rowHeight = 50
     tableView.register(
       QChatTextEditCell.self,
@@ -123,6 +134,7 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
       ) as! QChatTextArrowCell
       cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
         .union(CornerType.bottomLeft).union(CornerType.bottomRight)
+      cell.dividerLine.isHidden = true
       cell.titleLabel.text = cells[indexPath.section]
       return cell
     case 4:
@@ -133,6 +145,7 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
       cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
         .union(CornerType.bottomLeft).union(CornerType.bottomRight)
       cell.titleLabel.text = cells[indexPath.section]
+      cell.line.isHidden = true
       return cell
     default:
       return UITableViewCell()
@@ -183,9 +196,9 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
   private func deleteChannel() {
     let message: String?
     if let name = viewModel?.channel?.name {
-      message = localizable("confirm_delete_channel") + name + "?"
+      message = String(format: localizable("confirm_delete_text"), name) + localizable("question_mark")
     } else {
-      message = localizable("confirm_delete_channel") + "?"
+      message = localizable("confirm_delete_text") + localizable("question_mark")
     }
     let alertVC = UIAlertController.reconfimAlertView(
       title: localizable("delete_channel"),
@@ -196,8 +209,15 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
           ModuleName + " " + (self?.className ?? "QChatChannelSettingVC"),
           desc: "CALLBACK deleteChannel " + (error?.localizedDescription ?? "no error")
         )
-        if error != nil {
-          self?.view.makeToast(error?.localizedDescription)
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
+          }
         } else {
           self?.view.makeToast(
             localizable("delete_channel_suscess"),
@@ -245,24 +265,25 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
         ModuleName + " " + (self?.className ?? "QChatChannelSettingVC"),
         desc: "CALLBACK updateChannelInfo " + (error?.localizedDescription ?? "no error")
       )
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
         return
       }
-      self?.view.makeToast(
-        localizable("update_channel_suscess"),
-        duration: 2,
-        position: .center,
-        completion: { didTap in
-          self?.didUpdateChannel?(channel)
-          NotificationCenter.default.post(
-            name: NotificationName.updateChannel,
-            object: channel
-          )
-          // 通知上级页面
-          self?.close()
-        }
+      self?.showToastInWindow(localizable("update_channel_suscess"))
+      self?.didUpdateChannel?(channel)
+      NotificationCenter.default.post(
+        name: NotificationName.updateChannel,
+        object: channel
       )
+      // 通知上级页面
+      self?.close()
     })
   }
 

@@ -18,7 +18,7 @@ public class NEEmotionTool: NSObject {
     let regularArr = reExpression?.matches(
       in: str,
       options: .reportProgress,
-      range: NSRange(location: 0, length: str.count)
+      range: NSRange(location: 0, length: str.utf16.count)
     )
 
     let emoticons = NIMInputEmoticonManager.shared
@@ -32,7 +32,7 @@ public class NEEmotionTool: NSObject {
       for i in (0 ... regArr.count - 1).reversed() {
         let result = regArr[i]
 
-        for (idx, obj) in targetEmotions.enumerated() {
+        for obj in targetEmotions {
           let ocStr = str as NSString
           if ocStr.substring(with: result.range) == obj.tag {
             attStr.replaceCharacters(
@@ -45,6 +45,12 @@ public class NEEmotionTool: NSObject {
       }
     }
     return attStr
+  }
+
+  class func getAttWithStr(str: String, font: UIFont, color: UIColor, _ offset: CGPoint = CGPoint(x: 0, y: -3)) -> NSMutableAttributedString {
+    let att = getAttWithStr(str: str, font: font, offset)
+    att.addAttribute(.foregroundColor, value: color, range: NSRange(location: 0, length: att.length))
+    return att
   }
 
   class func getAttWithEmotion(emotion: NIMInputEmoticon, font: UIFont,

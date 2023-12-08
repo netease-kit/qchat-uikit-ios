@@ -6,7 +6,7 @@
 import UIKit
 
 class QChatIdGroupSelectCell: QChatCornerCell {
-  var group: IdGroupModel? {
+  var group: QChatIdGroupModel? {
     didSet {
       if let select = group?.isSelect {
         tailImage.isHighlighted = select

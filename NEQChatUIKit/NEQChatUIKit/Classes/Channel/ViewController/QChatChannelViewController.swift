@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 struct Channel {
   var sectionName = ""
@@ -16,7 +17,7 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
   var viewModel: QChatChannelViewModel?
   var dataList = [Channel]()
   var textFld: UITextField?
-  // 防重点击创建频道
+  // 防重点击创建话题
   var isCreatedChannel = false
   private let className = "QChatChannelViewController"
 
@@ -37,6 +38,7 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
 
   func commonUI() {
     title = localizable("create_channel")
+    view.backgroundColor = .ne_lightBackgroundColor
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: localizable("create"),
       style: .plain,
@@ -50,6 +52,18 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
       action: #selector(cancelEvent)
     )
     navigationItem.rightBarButtonItem?.tintColor = .ne_greyText
+
+    navigationView.setMoreButtonTitle(localizable("create"))
+    navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(createChannel))
+    navigationView.setBackButtonTitle(localizable("cancel"))
+    navigationView.addBackButtonTarget(target: self, selector: #selector(cancelEvent))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+
+    addLeftSwipeDismissGesture()
+
+    tableView.backgroundColor = .clear
+
     tableView.register(
       QChatTextEditCell.self,
       forCellReuseIdentifier: "\(QChatTextEditCell.self)"
@@ -120,6 +134,7 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
       cell.titleLabel.text = dataList[indexPath.section].contentName
       cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
         .union(CornerType.topLeft).union(CornerType.topRight)
+      cell.dividerLine.isHidden = true
       return cell
     }
   }
@@ -171,12 +186,13 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
             desc: "error:\(err.localizedDescription) channel:\(String(describing: channel))"
           )
           self?.view.hideAllToasts()
-          if err.code == 408 {
-            self?.view.makeToast(localizable("network_error"), duration: 2, position: .center)
-          } else if err.code == 403 {
-            self?.view.makeToast(localizable("no_permession"), duration: 2, position: .center)
-          } else {
-            self?.view.makeToast(err.localizedDescription, duration: 2, position: .center)
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
           }
           self?.isCreatedChannel = false
         } else {
@@ -208,8 +224,10 @@ public class QChatChannelViewController: QChatTableViewController, QChatTextEdit
     if textField.tag == 11 {
       if textField.text?.count == 0 {
         navigationItem.rightBarButtonItem?.tintColor = .ne_greyText
+        navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
       } else {
         navigationItem.rightBarButtonItem?.tintColor = .ne_blueText
+        navigationView.moreButton.setTitleColor(.ne_blueText, for: .normal)
       }
       viewModel?.name = textField.text
     } else if textField.tag == 12 {

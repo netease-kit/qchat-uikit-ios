@@ -3,15 +3,17 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreIMKit
 import MJRefresh
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoViewDelegate {
   public var channel: ChatChannel?
   private var channelMembers: [ServerMemeber]?
   var memberInfoView: QChatMemberInfoView?
   var lastMember: ServerMemeber?
+  var isVisitorMode = false
 
   override public func viewDidLoad() {
     super.viewDidLoad()
@@ -20,20 +22,21 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
   }
 
   func commonUI() {
-    title = localizable("channel_member")
-    let header =
-      ChannelHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 78))
-    header.settingButton.addTarget(
-      self,
-      action: #selector(enterChannelSetting),
-      for: .touchUpInside
-    )
-    header.titleLabel.text = channel?.name
-    header.detailLabel.text = channel?.topic
-    tableView.tableHeaderView = header
+    title = channel?.name
+    view.backgroundColor = .white
+    if isVisitorMode == false {
+      addRightAction(UIImage.ne_imageNamed(name: "Setting"), #selector(enterChannelSetting), self)
+      navigationView.setMoreButtonImage(UIImage.ne_imageNamed(name: "Setting"))
+      navigationView.addMoreButtonTarget(target: self, selector: #selector(enterChannelSetting))
+    }
+
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
+
+    tableView.rowHeight = 66
     tableView.register(
-      QChatImageTextOnlineCell.self,
-      forCellReuseIdentifier: "\(QChatImageTextOnlineCell.self)"
+      QChatGroupIdentityMemberCell.self,
+      forCellReuseIdentifier: "\(QChatGroupIdentityMemberCell.self)"
     )
     tableView.mj_footer = MJRefreshBackNormalFooter(
       refreshingTarget: self,
@@ -73,13 +76,18 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
     param.limit = 50
     QChatChannelProvider.shared
       .getChannelMembers(param: param) { [weak self] error, cMembersResult in
-        print(
-          "more cMembersResult.memberArray:\(cMembersResult?.memberArray) thread:\(Thread.current) "
-        )
-        if error != nil {
-          self?.view.makeToast(error?.localizedDescription)
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          default:
+            self?.showToast(err.localizedDescription)
+          }
           return
         }
+
         if let members = cMembersResult?.memberArray, members.count > 0 {
           for m in members {
             self?.channelMembers?.append(m)
@@ -101,29 +109,18 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
   override public func tableView(_ tableView: UITableView,
                                  cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(
-      withIdentifier: "\(QChatImageTextOnlineCell.self)",
+      withIdentifier: "\(QChatGroupIdentityMemberCell.self)",
       for: indexPath
-    ) as! QChatImageTextOnlineCell
+    ) as! QChatGroupIdentityMemberCell
     let member = channelMembers![indexPath.row] as ServerMemeber
-    cell.setup(accid: member.accid, nickName: member.nick, avatar: member.avatar)
-    cell.online = false
-    if channelMembers?.count == 1 {
-      cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
-        .union(CornerType.bottomLeft).union(CornerType.bottomRight)
-    } else {
-      if indexPath.row == 0 {
-        cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
-      } else if indexPath.row == channelMembers!.count - 1 {
-        cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
-        cell.line.isHidden = true
-      }
-    }
+    cell.memberModel = member
+    cell.arrowImageView.isHidden = true
     return cell
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let m = channelMembers![indexPath.row]
-    memberInfoView = QChatMemberInfoView(inView: UIApplication.shared.keyWindow!)
+    memberInfoView = QChatMemberInfoView(inView: view)
     memberInfoView?.setup(accid: m.accid, nickName: m.nick, avatarUrl: m.avatar)
     memberInfoView?.delegate = self
     memberInfoView?.present()
@@ -147,14 +144,13 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
   }
 
   @objc func enterChannelSetting() {
+    if isVisitorMode == true {
+      return
+    }
     let settingVC = QChatChannelSettingVC()
     settingVC.didUpdateChannel = { [weak self] channel in
       self?.channel = channel
-      guard let head = self?.tableView.tableHeaderView as? ChannelHeaderView else {
-        return
-      }
-      head.titleLabel.text = channel?.name
-      head.detailLabel.text = channel?.topic
+      self?.title = channel?.name
     }
 
     settingVC.didDeleteChannel = { [weak self] channel in
@@ -169,7 +165,7 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
 
   func didClickUserHeader(_ accid: String?) {
     if let uid = accid {
-      if IMKitEngine.instance.isMySelf(uid) {
+      if QChatKitClient.instance.isMySelf(uid) {
         Router.shared.use(
           MeSettingRouter,
           parameters: ["nav": navigationController as Any],

@@ -17,7 +17,7 @@ class QChatSectionView: UITableViewHeaderFooterView {
   }
 
   func commonUI() {
-    contentView.backgroundColor = .ne_lightBackgroundColor
+    contentView.backgroundColor = .clear
     titleLabel.font = UIFont.systemFont(ofSize: 12)
     titleLabel.textColor = .ne_greyText
     titleLabel.translatesAutoresizingMaskIntoConstraints = false

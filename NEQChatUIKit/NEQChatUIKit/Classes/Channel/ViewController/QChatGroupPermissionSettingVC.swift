@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 typealias ChannelUpdateSettingBlock = (_ channelRole: ChannelRole?) -> Void
 
@@ -12,10 +13,10 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
   QChatPermissionSettingCellDelegate {
 //    public var didUpdateBlock: ChannelUpdateSettingBlock?
   public var cRole: ChannelRole?
-  private var commonAuths = [RoleStatusInfoExt]()
-  private var messageAuths = [RoleStatusInfoExt]()
-  private var memberAuths = [RoleStatusInfoExt]()
-  private var auths = [[RoleStatusInfoExt]]()
+  private var commonAuths = [QChatRoleStatusInfoExt]()
+  private var messageAuths = [QChatRoleStatusInfoExt]()
+  private var memberAuths = [QChatRoleStatusInfoExt]()
+  private var auths = [[QChatRoleStatusInfoExt]]()
 
   public init(cRole: ChannelRole?) {
     super.init(nibName: nil, bundle: nil)
@@ -33,6 +34,8 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
     } else {
       title = localizable("authority_setting")
     }
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+    view.backgroundColor = .ne_lightBackgroundColor
 
     // 设置标题超长后的省略模式
     let paragraphStyle = NSMutableParagraphStyle()
@@ -55,24 +58,26 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
   private func reloadData() {
     if let auths = cRole?.auths {
       for auth in auths {
-        var authExt = RoleStatusInfoExt(status: auth)
-        let key = "auth" + String(auth.type.rawValue)
-        authExt.title = localizable(key)
-        switch auth.type {
-        case .ManageChannel:
-          commonAuths.insert(authExt, at: 0)
-        case .ManageRole:
-          commonAuths.append(authExt)
-        case .SendMsg:
-          messageAuths.append(authExt)
-//                case .DeleteOtherMsg:
-//                    messageAuths.append(authExt)
-//                case .RevokeMsg:
-//                    messageAuths.append(authExt)
-        case .BlackWhiteList:
-          memberAuths.append(authExt)
-        default:
-          break
+        var authExt = QChatRoleStatusInfoExt(status: auth)
+        if let type = auth.type {
+          let key = "auth_" + String(type.rawValue)
+          authExt.title = localizable(key)
+          switch auth.type {
+          case .manageChannel:
+            commonAuths.insert(authExt, at: 0)
+          case .manageRole:
+            commonAuths.append(authExt)
+          case .sendMsg:
+            messageAuths.append(authExt)
+          //                case .DeleteOtherMsg:
+          //                    messageAuths.append(authExt)
+          //                case .RevokeMsg:
+          //                    messageAuths.append(authExt)
+          case .manageBlackWhiteList:
+            memberAuths.append(authExt)
+          default:
+            break
+          }
         }
       }
       if !commonAuths.isEmpty {
@@ -109,8 +114,10 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
     cell.delegate = self
     if indexPath.row == 0 {
       cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
-    } else if indexPath.row == auths.count - 1 {
-      cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+    }
+    if indexPath.row == auths.count - 1 {
+      cell.cornerType = cell.cornerType.union(CornerType.bottomLeft.union(CornerType.bottomRight))
+      cell.dividerLine.isHidden = true
     }
     return cell
   }
@@ -146,11 +153,14 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
       )
       QChatRoleProvider.shared
         .updateChannelRole(param: param) { [weak self] error, channelRole in
-          if let err = error {
-            if err.code == 408 {
-              self?.view.makeToast(localizable("network_error"))
-            } else {
-              self?.view.makeToast(err.localizedDescription)
+          if let err = error as NSError? {
+            switch err.code {
+            case errorCode_NetWorkError:
+              self?.showToast(localizable("network_error"))
+            case errorCode_NoPermission:
+              self?.showToast(localizable("no_permession"))
+            default:
+              self?.showToast(err.localizedDescription)
             }
             cell?.selectedSuccess(success: false)
           } else {

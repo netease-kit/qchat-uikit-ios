@@ -3,9 +3,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreKit
-import NECoreIMKit
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 // typealias EditMemberCompletion = (_ member: ServerMemeber) -> Void
 
@@ -15,10 +16,10 @@ typealias EditMemberDelete = () -> Void
 
 public class QChatEditMemberViewController: NEBaseTableViewController, UITableViewDataSource,
   UITableViewDelegate, ViewModelDelegate, QChatTextEditCellDelegate {
-  var user: UserInfo?
+  var user: QChatUserInfo?
   var editAble = false
   var showAll = false
-  let viewModel = EditMemberViewModel()
+  let viewModel = QChatEditMemberViewModel()
   private let tag = "QChatEditMemberViewController"
   let textLimit = 50
 
@@ -44,11 +45,16 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
   }
 
   func setupUI() {
+    view.backgroundColor = .ne_lightBackgroundColor
+    addRightAction(localizable("qchat_edit"), #selector(rightBtnClick(_:)), self)
+    navigationView.setMoreButtonTitle(localizable("qchat_edit"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(rightBtnClick(_:)))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+
     setupTable()
     if let name = user?.nickName {
       title = name
     }
-    addRightAction(localizable("qchat_edit"), #selector(rightBtnClick(_:)), self)
     tableView.register(
       QChatTextEditCell.self,
       forCellReuseIdentifier: "\(QChatTextEditCell.self)"
@@ -65,7 +71,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
     tableView.register(QChatUnfoldCell.self, forCellReuseIdentifier: "\(QChatUnfoldCell.self)")
     tableView.dataSource = self
     tableView.delegate = self
-    tableView.backgroundColor = .ne_backcolor
+    tableView.backgroundColor = .clear
 
 //        let image = UIImage.ne_imageNamed(name: "backArrow")?.withRenderingMode(.alwaysOriginal)
 //        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(back))
@@ -104,16 +110,19 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
 
       weak var weakSelf = self
 
-      if IMKitEngine.instance.isMySelf(accid) == true {
+      if QChatKitClient.instance.isMySelf(accid) == true {
         viewModel.updateMyMember(user?.serverMember?.serverId, nickName) { error, member in
           NELog.infoLog(
             ModuleName + " " + self.tag,
             desc: "CALLBACK updateMyMember " + (error?.localizedDescription ?? "no error")
           )
-          if let err = error as? NSError {
-            if err.code == 408 {
+          if let err = error as NSError? {
+            switch err.code {
+            case errorCode_NetWorkError:
               weakSelf?.showToast(localizable("network_error"))
-            } else {
+            case errorCode_NoPermission:
+              weakSelf?.showToast(localizable("no_permession"))
+            default:
               weakSelf?.showToast(err.localizedDescription)
             }
           } else {
@@ -131,10 +140,13 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
               ModuleName + " " + self.tag,
               desc: "CALLBACK updateMember " + (error?.localizedDescription ?? "no error")
             )
-            if let err = error as? NSError {
-              if err.code == 408 {
+            if let err = error as NSError? {
+              switch err.code {
+              case errorCode_NetWorkError:
                 weakSelf?.showToast(localizable("network_error"))
-              } else {
+              case errorCode_NoPermission:
+                weakSelf?.showToast(localizable("no_permession"))
+              default:
                 weakSelf?.showToast(err.localizedDescription)
               }
             } else {
@@ -227,6 +239,11 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
       let group = showAll ? viewModel.allIdGroups[indexPath.row] : viewModel
         .limitIdGroups[indexPath.row]
       cell.tailImage.isHidden = !editAble
+      cell.dividerLine.isHidden = false
+      if viewModel.allIdGroups.count <= viewModel.limit, indexPath.row == viewModel
+        .limitIdGroups.count - 1 {
+        cell.dividerLine.isHidden = true
+      }
       if let type = group.role?.type, type == .everyone {
         cell.tailImage.isHidden = true
       }
@@ -258,7 +275,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
       if indexPath.row == 0 {
         cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
           .union(CornerType.bottomLeft).union(CornerType.bottomRight)
-        cell.redTextLabel.text = "\(localizable("qchat_kick_out")) \(user?.nickName ?? "")"
+        cell.redTextLabel.text = "\(localizable("qchat_kick_out"))\(user?.nickName ?? "")"
         if getKickDisable() {
           cell.changeDisableTextColor()
         }
@@ -283,7 +300,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
 
   public func tableView(_ tableView: UITableView,
                         viewForHeaderInSection section: Int) -> UIView? {
-    let header = QChatHeaderView()
+    let header = QChatTableHeaderView()
     if section == 1 {
       header.titleLabel.text = localizable("qchat_nickname")
       return header
@@ -355,7 +372,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
       if getKickDisable() == true {
         return
       }
-      showAlert(message: localizable("kick_currentMember")) {
+      showAlert(title: localizable("qchat_kick_out") + localizable("qchat_member"), message: String(format: localizable("confirm_delete_text"), user?.nickName ?? "") + localizable("qchat_member") + localizable("question_mark")) {
         weakSelf?.kickOutMember()
       }
     }
@@ -375,7 +392,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
       //                return true
       //            }
 
-      if IMKitEngine.instance.imAccid == accid {
+      if QChatKitClient.instance.imAccid() == accid {
         return true
       }
       if let type = user?.serverMember?.type, type == .owner {
@@ -394,10 +411,13 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
         desc: "CALLBACK kickoutMember " + (error?.localizedDescription ?? "no error")
       )
       weakSelf?.view.hideToastActivity()
-      if let err = error as? NSError {
-        if err.code == 408 {
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
           weakSelf?.showToast(localizable("network_error"))
-        } else {
+        case errorCode_NoPermission:
+          weakSelf?.showToast(localizable("no_permession"))
+        default:
           weakSelf?.showToast(err.localizedDescription)
         }
       } else {
