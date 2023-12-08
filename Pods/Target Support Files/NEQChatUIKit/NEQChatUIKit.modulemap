@@ -1,0 +1,6 @@
+framework module NEQChatUIKit {
+  umbrella header "NEQChatUIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

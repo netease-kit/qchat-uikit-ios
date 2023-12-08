@@ -1,0 +1,6 @@
+framework module NEMapKit {
+  umbrella header "NEMapKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
