@@ -2,10 +2,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
+import NEChatUIKit
 import NECoreKit
 import NETeamUIKit
-import NEChatUIKit
+import UIKit
 
 class IntroduceBrandViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
@@ -13,26 +13,26 @@ class IntroduceBrandViewController: NEBaseViewController, UITableViewDelegate,
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    title = NSLocalizedString("about_yunxin", comment: "")
+    navigationView.backgroundColor = .white
     viewModel.getData()
     setupSubviews()
   }
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(false, animated: false)
   }
 
   func setupSubviews() {
     view.addSubview(headImage)
     view.addSubview(headLabel)
-
     view.addSubview(tableView)
 
     NSLayoutConstraint.activate([
       headImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       headImage.topAnchor.constraint(
         equalTo: view.topAnchor,
-        constant: kNavigationHeight + KStatusBarHeight + 20
+        constant: topConstant + 20
       ),
       headImage.widthAnchor.constraint(equalToConstant: 72),
       headImage.heightAnchor.constraint(equalToConstant: 53),

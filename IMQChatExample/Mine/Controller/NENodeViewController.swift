@@ -3,9 +3,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreKit
+import NECoreQChatKit
 import NETeamUIKit
+import UIKit
 
 class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITableViewDelegate {
   private var viewModel = NodeViewModel()
@@ -24,7 +25,7 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
@@ -46,7 +47,7 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
     alertController.addAction(cancelAction)
     let sureAction = UIAlertAction(title: NSLocalizedString("restart", comment: ""), style: .default) { action in
       // 设置节点
-      IMKitClient.instance.repo.setNodeValue(isDomestic)
+      QChatKitClient.instance.getSettingRepo().setNodeValue(isDomestic)
       exit(0)
     }
     alertController.addAction(sureAction)
@@ -56,7 +57,7 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
   lazy var tableView: UITableView = {
     let table = UITableView()
     table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    table.backgroundColor = .ne_lightBackgroundColor
     table.dataSource = self
     table.delegate = self
     table.separatorColor = .clear
@@ -117,7 +118,7 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let header = UIView()
-    header.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    header.backgroundColor = .ne_lightBackgroundColor
     return header
   }
 }

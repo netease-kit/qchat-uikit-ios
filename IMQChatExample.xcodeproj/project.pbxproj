@@ -3,30 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0DB838F85C09EF899E431F78 /* Pods_IMQChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */; };
+		181EE6542B23512F0043817F /* NodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE63F2B23512F0043817F /* NodeViewModel.swift */; };
+		181EE6552B23512F0043817F /* MineSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6402B23512F0043817F /* MineSettingViewModel.swift */; };
+		181EE6562B23512F0043817F /* PersonInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6412B23512F0043817F /* PersonInfoViewModel.swift */; };
+		181EE6572B23512F0043817F /* MessageRemindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6422B23512F0043817F /* MessageRemindViewModel.swift */; };
+		181EE6582B23512F0043817F /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6432B23512F0043817F /* IntroduceViewModel.swift */; };
+		181EE6592B23512F0043817F /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6452B23512F0043817F /* MeViewController.swift */; };
+		181EE65A2B23512F0043817F /* NEAboutWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6462B23512F0043817F /* NEAboutWebViewController.swift */; };
+		181EE65B2B23512F0043817F /* NELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6472B23512F0043817F /* NELoginViewController.swift */; };
+		181EE65C2B23512F0043817F /* InputPersonInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6482B23512F0043817F /* InputPersonInfoController.swift */; };
+		181EE65D2B23512F0043817F /* MineSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6492B23512F0043817F /* MineSettingViewController.swift */; };
+		181EE65E2B23512F0043817F /* MessageRemindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE64A2B23512F0043817F /* MessageRemindViewController.swift */; };
+		181EE65F2B23512F0043817F /* NENodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE64B2B23512F0043817F /* NENodeViewController.swift */; };
+		181EE6602B23512F0043817F /* PersonInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE64C2B23512F0043817F /* PersonInfoViewController.swift */; };
+		181EE6612B23512F0043817F /* ConfigTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE64D2B23512F0043817F /* ConfigTestViewController.swift */; };
+		181EE6622B23512F0043817F /* IntroduceBrandViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE64E2B23512F0043817F /* IntroduceBrandViewController.swift */; };
+		181EE6632B23512F0043817F /* MineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6502B23512F0043817F /* MineTableViewCell.swift */; };
+		181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */; };
+		181EE6652B23512F0043817F /* NodeSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6522B23512F0043817F /* NodeSelectCell.swift */; };
+		181EE6662B23512F0043817F /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6532B23512F0043817F /* VersionCell.swift */; };
 		39572AAB28C6F74D007A9526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39572AAD28C6F74D007A9526 /* InfoPlist.strings */; };
 		39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A36F8028002CFF009B07A9 /* NETabBarController.swift */; };
 		39A39BA928C5A2B70001B638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39A39BAB28C5A2B80001B638 /* Localizable.strings */; };
-		39C3E69928F3B01600BB793A /* NodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68528F3B01600BB793A /* NodeViewModel.swift */; };
-		39C3E69A28F3B01600BB793A /* MineSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68628F3B01600BB793A /* MineSettingViewModel.swift */; };
-		39C3E69B28F3B01600BB793A /* PersonInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68728F3B01600BB793A /* PersonInfoViewModel.swift */; };
-		39C3E69C28F3B01600BB793A /* MessageRemindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68828F3B01600BB793A /* MessageRemindViewModel.swift */; };
-		39C3E69D28F3B01600BB793A /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68928F3B01600BB793A /* IntroduceViewModel.swift */; };
-		39C3E69E28F3B01600BB793A /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68B28F3B01600BB793A /* MeViewController.swift */; };
-		39C3E69F28F3B01600BB793A /* NEAboutWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68C28F3B01600BB793A /* NEAboutWebViewController.swift */; };
-		39C3E6A128F3B01600BB793A /* InputPersonInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68E28F3B01600BB793A /* InputPersonInfoController.swift */; };
-		39C3E6A228F3B01600BB793A /* MineSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E68F28F3B01600BB793A /* MineSettingViewController.swift */; };
-		39C3E6A328F3B01600BB793A /* MessageRemindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69028F3B01600BB793A /* MessageRemindViewController.swift */; };
-		39C3E6A428F3B01600BB793A /* NENodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69128F3B01600BB793A /* NENodeViewController.swift */; };
-		39C3E6A528F3B01600BB793A /* PersonInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69228F3B01600BB793A /* PersonInfoViewController.swift */; };
-		39C3E6A628F3B01600BB793A /* IntroduceBrandViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69328F3B01600BB793A /* IntroduceBrandViewController.swift */; };
-		39C3E6A728F3B01600BB793A /* MineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69528F3B01600BB793A /* MineTableViewCell.swift */; };
-		39C3E6A828F3B01600BB793A /* BirthdayDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69628F3B01600BB793A /* BirthdayDatePickerView.swift */; };
-		39C3E6A928F3B01600BB793A /* NodeSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69728F3B01600BB793A /* NodeSelectCell.swift */; };
-		39C3E6AA28F3B01600BB793A /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C3E69828F3B01600BB793A /* VersionCell.swift */; };
 		39F793C827E20434007F63FF /* NENavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F793C727E20434007F63FF /* NENavigationController.swift */; };
 		4B3B9BDF277AFEE50091A74E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3B9BDE277AFEE50091A74E /* AppDelegate.swift */; };
 		4B3B9BE3277AFEE50091A74E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3B9BE2277AFEE50091A74E /* ViewController.swift */; };
@@ -34,7 +37,6 @@
 		4B3B9BE8277AFEE70091A74E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B3B9BE7277AFEE70091A74E /* Assets.xcassets */; };
 		4B3B9BEB277AFEE70091A74E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3B9BE9277AFEE70091A74E /* LaunchScreen.storyboard */; };
 		9EA2014127BE4B4800F8BBD0 /* AppKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EA2014027BE4B4800F8BBD0 /* AppKey.swift */; };
-		EE4474740237C218DA22FB33 /* Pods_IMQChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69FB585FD10765A2EE6F5A32 /* Pods_IMQChatExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,7 +58,26 @@
 		01B0A28E2816CF41009065C5 /* IMUIKitExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IMUIKitExample.entitlements; sourceTree = "<group>"; };
 		01C0FC0F27BE754400C32949 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		01C0FC1027BE754500C32949 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		172A15274696686D17F8545D /* Pods-IMQChatExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.debug.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.debug.xcconfig"; sourceTree = "<group>"; };
+		10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMQChatExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		181EE63F2B23512F0043817F /* NodeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeViewModel.swift; sourceTree = "<group>"; };
+		181EE6402B23512F0043817F /* MineSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewModel.swift; sourceTree = "<group>"; };
+		181EE6412B23512F0043817F /* PersonInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonInfoViewModel.swift; sourceTree = "<group>"; };
+		181EE6422B23512F0043817F /* MessageRemindViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRemindViewModel.swift; sourceTree = "<group>"; };
+		181EE6432B23512F0043817F /* IntroduceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
+		181EE6452B23512F0043817F /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeViewController.swift; sourceTree = "<group>"; };
+		181EE6462B23512F0043817F /* NEAboutWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEAboutWebViewController.swift; sourceTree = "<group>"; };
+		181EE6472B23512F0043817F /* NELoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NELoginViewController.swift; sourceTree = "<group>"; };
+		181EE6482B23512F0043817F /* InputPersonInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputPersonInfoController.swift; sourceTree = "<group>"; };
+		181EE6492B23512F0043817F /* MineSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewController.swift; sourceTree = "<group>"; };
+		181EE64A2B23512F0043817F /* MessageRemindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRemindViewController.swift; sourceTree = "<group>"; };
+		181EE64B2B23512F0043817F /* NENodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NENodeViewController.swift; sourceTree = "<group>"; };
+		181EE64C2B23512F0043817F /* PersonInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonInfoViewController.swift; sourceTree = "<group>"; };
+		181EE64D2B23512F0043817F /* ConfigTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigTestViewController.swift; sourceTree = "<group>"; };
+		181EE64E2B23512F0043817F /* IntroduceBrandViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroduceBrandViewController.swift; sourceTree = "<group>"; };
+		181EE6502B23512F0043817F /* MineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineTableViewCell.swift; sourceTree = "<group>"; };
+		181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdayDatePickerView.swift; sourceTree = "<group>"; };
+		181EE6522B23512F0043817F /* NodeSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSelectCell.swift; sourceTree = "<group>"; };
+		181EE6532B23512F0043817F /* VersionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
 		18D0A2A428D564CB00788205 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A628D564DF00788205 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A828D5674400788205 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,23 +85,6 @@
 		39A36F8028002CFF009B07A9 /* NETabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NETabBarController.swift; sourceTree = "<group>"; };
 		39A39BAA28C5A2B80001B638 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		39A39BAC28C5A2BA0001B638 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		39C3E68528F3B01600BB793A /* NodeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeViewModel.swift; sourceTree = "<group>"; };
-		39C3E68628F3B01600BB793A /* MineSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewModel.swift; sourceTree = "<group>"; };
-		39C3E68728F3B01600BB793A /* PersonInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonInfoViewModel.swift; sourceTree = "<group>"; };
-		39C3E68828F3B01600BB793A /* MessageRemindViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRemindViewModel.swift; sourceTree = "<group>"; };
-		39C3E68928F3B01600BB793A /* IntroduceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
-		39C3E68B28F3B01600BB793A /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeViewController.swift; sourceTree = "<group>"; };
-		39C3E68C28F3B01600BB793A /* NEAboutWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEAboutWebViewController.swift; sourceTree = "<group>"; };
-		39C3E68E28F3B01600BB793A /* InputPersonInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputPersonInfoController.swift; sourceTree = "<group>"; };
-		39C3E68F28F3B01600BB793A /* MineSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewController.swift; sourceTree = "<group>"; };
-		39C3E69028F3B01600BB793A /* MessageRemindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRemindViewController.swift; sourceTree = "<group>"; };
-		39C3E69128F3B01600BB793A /* NENodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NENodeViewController.swift; sourceTree = "<group>"; };
-		39C3E69228F3B01600BB793A /* PersonInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonInfoViewController.swift; sourceTree = "<group>"; };
-		39C3E69328F3B01600BB793A /* IntroduceBrandViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroduceBrandViewController.swift; sourceTree = "<group>"; };
-		39C3E69528F3B01600BB793A /* MineTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineTableViewCell.swift; sourceTree = "<group>"; };
-		39C3E69628F3B01600BB793A /* BirthdayDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdayDatePickerView.swift; sourceTree = "<group>"; };
-		39C3E69728F3B01600BB793A /* NodeSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSelectCell.swift; sourceTree = "<group>"; };
-		39C3E69828F3B01600BB793A /* VersionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
 		39F793C727E20434007F63FF /* NENavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NENavigationController.swift; sourceTree = "<group>"; };
 		4B3B9BDB277AFEE50091A74E /* IMQChatExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMQChatExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B3B9BDE277AFEE50091A74E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -89,12 +93,10 @@
 		4B3B9BE7277AFEE70091A74E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B3B9BEA277AFEE70091A74E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4B3B9BEC277AFEE70091A74E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		69FB585FD10765A2EE6F5A32 /* Pods_IMQChatExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMQChatExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B5DED13449520A4CCC65A9A /* Pods-IMQChatExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.release.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.release.xcconfig"; sourceTree = "<group>"; };
+		9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.debug.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.debug.xcconfig"; sourceTree = "<group>"; };
 		9EA2014027BE4B4800F8BBD0 /* AppKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKey.swift; sourceTree = "<group>"; };
-		BFC3DBB21A107DF9593482F9 /* Pods_IMUIKitExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMUIKitExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.release.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.release.xcconfig"; sourceTree = "<group>"; };
 		DD4ADFA629878A8400C61D55 /* IMUIKitExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMUIKitExample-Bridging-Header.h"; sourceTree = "<group>"; };
-		FE26682F842DAFA0BCBAD5A4 /* Pods_IMUIKitExample_IMUIKitExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMUIKitExample_IMUIKitExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,21 +104,61 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE4474740237C218DA22FB33 /* Pods_IMQChatExample.framework in Frameworks */,
+				0DB838F85C09EF899E431F78 /* Pods_IMQChatExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		393759D1281033C9004F0AEC /* Mine */ = {
+		181EE63D2B23512F0043817F /* Mine */ = {
 			isa = PBXGroup;
 			children = (
-				39C3E68A28F3B01600BB793A /* Controller */,
-				39C3E69428F3B01600BB793A /* View */,
-				39C3E68428F3B01600BB793A /* ViewModel */,
+				181EE63E2B23512F0043817F /* ViewModel */,
+				181EE6442B23512F0043817F /* Controller */,
+				181EE64F2B23512F0043817F /* View */,
 			);
 			path = Mine;
+			sourceTree = "<group>";
+		};
+		181EE63E2B23512F0043817F /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				181EE63F2B23512F0043817F /* NodeViewModel.swift */,
+				181EE6402B23512F0043817F /* MineSettingViewModel.swift */,
+				181EE6412B23512F0043817F /* PersonInfoViewModel.swift */,
+				181EE6422B23512F0043817F /* MessageRemindViewModel.swift */,
+				181EE6432B23512F0043817F /* IntroduceViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		181EE6442B23512F0043817F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				181EE6452B23512F0043817F /* MeViewController.swift */,
+				181EE6462B23512F0043817F /* NEAboutWebViewController.swift */,
+				181EE6472B23512F0043817F /* NELoginViewController.swift */,
+				181EE6482B23512F0043817F /* InputPersonInfoController.swift */,
+				181EE6492B23512F0043817F /* MineSettingViewController.swift */,
+				181EE64A2B23512F0043817F /* MessageRemindViewController.swift */,
+				181EE64B2B23512F0043817F /* NENodeViewController.swift */,
+				181EE64C2B23512F0043817F /* PersonInfoViewController.swift */,
+				181EE64D2B23512F0043817F /* ConfigTestViewController.swift */,
+				181EE64E2B23512F0043817F /* IntroduceBrandViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		181EE64F2B23512F0043817F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				181EE6502B23512F0043817F /* MineTableViewCell.swift */,
+				181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */,
+				181EE6522B23512F0043817F /* NodeSelectCell.swift */,
+				181EE6532B23512F0043817F /* VersionCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		39A2F24128D9DF9100DDCAF2 /* Main */ = {
@@ -129,44 +171,6 @@
 				4B3B9BE2277AFEE50091A74E /* ViewController.swift */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		39C3E68428F3B01600BB793A /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				39C3E68528F3B01600BB793A /* NodeViewModel.swift */,
-				39C3E68628F3B01600BB793A /* MineSettingViewModel.swift */,
-				39C3E68728F3B01600BB793A /* PersonInfoViewModel.swift */,
-				39C3E68828F3B01600BB793A /* MessageRemindViewModel.swift */,
-				39C3E68928F3B01600BB793A /* IntroduceViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		39C3E68A28F3B01600BB793A /* Controller */ = {
-			isa = PBXGroup;
-			children = (
-				39C3E68B28F3B01600BB793A /* MeViewController.swift */,
-				39C3E68C28F3B01600BB793A /* NEAboutWebViewController.swift */,
-				39C3E68E28F3B01600BB793A /* InputPersonInfoController.swift */,
-				39C3E68F28F3B01600BB793A /* MineSettingViewController.swift */,
-				39C3E69028F3B01600BB793A /* MessageRemindViewController.swift */,
-				39C3E69128F3B01600BB793A /* NENodeViewController.swift */,
-				39C3E69228F3B01600BB793A /* PersonInfoViewController.swift */,
-				39C3E69328F3B01600BB793A /* IntroduceBrandViewController.swift */,
-			);
-			path = Controller;
-			sourceTree = "<group>";
-		};
-		39C3E69428F3B01600BB793A /* View */ = {
-			isa = PBXGroup;
-			children = (
-				39C3E69528F3B01600BB793A /* MineTableViewCell.swift */,
-				39C3E69628F3B01600BB793A /* BirthdayDatePickerView.swift */,
-				39C3E69728F3B01600BB793A /* NodeSelectCell.swift */,
-				39C3E69828F3B01600BB793A /* VersionCell.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		4B3B9BD2277AFEE50091A74E = {
@@ -190,8 +194,8 @@
 		4B3B9BDD277AFEE50091A74E /* IMQChatExample */ = {
 			isa = PBXGroup;
 			children = (
+				181EE63D2B23512F0043817F /* Mine */,
 				39A2F24128D9DF9100DDCAF2 /* Main */,
-				393759D1281033C9004F0AEC /* Mine */,
 				01B0A28E2816CF41009065C5 /* IMUIKitExample.entitlements */,
 				39A39BAB28C5A2B80001B638 /* Localizable.strings */,
 				4B3B9BE4277AFEE50091A74E /* Main.storyboard */,
@@ -210,9 +214,7 @@
 				18D0A2A828D5674400788205 /* CocoaLumberjack.framework */,
 				18D0A2A628D564DF00788205 /* CoreGraphics.framework */,
 				18D0A2A428D564CB00788205 /* UIKit.framework */,
-				FE26682F842DAFA0BCBAD5A4 /* Pods_IMUIKitExample_IMUIKitExampleUITests.framework */,
-				BFC3DBB21A107DF9593482F9 /* Pods_IMUIKitExampleTests.framework */,
-				69FB585FD10765A2EE6F5A32 /* Pods_IMQChatExample.framework */,
+				10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -220,8 +222,8 @@
 		F552B53527F5CDE6D78E0094 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				172A15274696686D17F8545D /* Pods-IMQChatExample.debug.xcconfig */,
-				7B5DED13449520A4CCC65A9A /* Pods-IMQChatExample.release.xcconfig */,
+				9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */,
+				D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -233,13 +235,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B3B9BEF277AFEE70091A74E /* Build configuration list for PBXNativeTarget "IMQChatExample" */;
 			buildPhases = (
-				565A1EE31105E1C02A8AD663 /* [CP] Check Pods Manifest.lock */,
+				9740DF6B83B63E65EE4A9825 /* [CP] Check Pods Manifest.lock */,
 				4B3B9BD7277AFEE50091A74E /* Sources */,
 				4B3B9BD8277AFEE50091A74E /* Frameworks */,
 				4B3B9BD9277AFEE50091A74E /* Resources */,
 				39722F9327998A14007BFC8B /* Embed Frameworks */,
-				7DEE0A1110A7FE6E9A9D64BE /* [CP] Embed Pods Frameworks */,
-				83E14568322A843C1BE3C32E /* [CP] Copy Pods Resources */,
+				2C8B365BAA9F409DC49C94CC /* [CP] Embed Pods Frameworks */,
+				137E50D1AD0E84C29605A298 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -302,7 +304,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		565A1EE31105E1C02A8AD663 /* [CP] Check Pods Manifest.lock */ = {
+		137E50D1AD0E84C29605A298 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2C8B365BAA9F409DC49C94CC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9740DF6B83B63E65EE4A9825 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -324,40 +360,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7DEE0A1110A7FE6E9A9D64BE /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		83E14568322A843C1BE3C32E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -365,28 +367,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				181EE6632B23512F0043817F /* MineTableViewCell.swift in Sources */,
+				181EE6612B23512F0043817F /* ConfigTestViewController.swift in Sources */,
+				181EE6662B23512F0043817F /* VersionCell.swift in Sources */,
 				39F793C827E20434007F63FF /* NENavigationController.swift in Sources */,
-				39C3E6A128F3B01600BB793A /* InputPersonInfoController.swift in Sources */,
-				39C3E69E28F3B01600BB793A /* MeViewController.swift in Sources */,
-				39C3E6AA28F3B01600BB793A /* VersionCell.swift in Sources */,
-				39C3E69A28F3B01600BB793A /* MineSettingViewModel.swift in Sources */,
+				181EE65C2B23512F0043817F /* InputPersonInfoController.swift in Sources */,
+				181EE6592B23512F0043817F /* MeViewController.swift in Sources */,
+				181EE6622B23512F0043817F /* IntroduceBrandViewController.swift in Sources */,
+				181EE6552B23512F0043817F /* MineSettingViewModel.swift in Sources */,
 				9EA2014127BE4B4800F8BBD0 /* AppKey.swift in Sources */,
-				39C3E69B28F3B01600BB793A /* PersonInfoViewModel.swift in Sources */,
-				39C3E6A228F3B01600BB793A /* MineSettingViewController.swift in Sources */,
+				181EE6562B23512F0043817F /* PersonInfoViewModel.swift in Sources */,
+				181EE65D2B23512F0043817F /* MineSettingViewController.swift in Sources */,
 				4B3B9BE3277AFEE50091A74E /* ViewController.swift in Sources */,
 				39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */,
-				39C3E69D28F3B01600BB793A /* IntroduceViewModel.swift in Sources */,
-				39C3E69F28F3B01600BB793A /* NEAboutWebViewController.swift in Sources */,
-				39C3E6A928F3B01600BB793A /* NodeSelectCell.swift in Sources */,
-				39C3E69928F3B01600BB793A /* NodeViewModel.swift in Sources */,
-				39C3E6A428F3B01600BB793A /* NENodeViewController.swift in Sources */,
-				39C3E6A828F3B01600BB793A /* BirthdayDatePickerView.swift in Sources */,
-				39C3E6A528F3B01600BB793A /* PersonInfoViewController.swift in Sources */,
-				39C3E6A728F3B01600BB793A /* MineTableViewCell.swift in Sources */,
-				39C3E6A628F3B01600BB793A /* IntroduceBrandViewController.swift in Sources */,
+				181EE6582B23512F0043817F /* IntroduceViewModel.swift in Sources */,
+				181EE6652B23512F0043817F /* NodeSelectCell.swift in Sources */,
+				181EE65A2B23512F0043817F /* NEAboutWebViewController.swift in Sources */,
+				181EE6542B23512F0043817F /* NodeViewModel.swift in Sources */,
+				181EE65F2B23512F0043817F /* NENodeViewController.swift in Sources */,
+				181EE6602B23512F0043817F /* PersonInfoViewController.swift in Sources */,
 				4B3B9BDF277AFEE50091A74E /* AppDelegate.swift in Sources */,
-				39C3E6A328F3B01600BB793A /* MessageRemindViewController.swift in Sources */,
-				39C3E69C28F3B01600BB793A /* MessageRemindViewModel.swift in Sources */,
+				181EE65E2B23512F0043817F /* MessageRemindViewController.swift in Sources */,
+				181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */,
+				181EE6572B23512F0043817F /* MessageRemindViewModel.swift in Sources */,
+				181EE65B2B23512F0043817F /* NELoginViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,7 +559,7 @@
 		};
 		4B3B9BF0277AFEE70091A74E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 172A15274696686D17F8545D /* Pods-IMQChatExample.debug.xcconfig */;
+			baseConfigurationReference = 9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -582,7 +586,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -591,7 +595,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.4.0;
+				MARKETING_VERSION = 9.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -605,7 +609,7 @@
 		};
 		4B3B9BF1277AFEE70091A74E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7B5DED13449520A4CCC65A9A /* Pods-IMQChatExample.release.xcconfig */;
+			baseConfigurationReference = D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -632,7 +636,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -641,7 +645,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.4.0;
+				MARKETING_VERSION = 9.5.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

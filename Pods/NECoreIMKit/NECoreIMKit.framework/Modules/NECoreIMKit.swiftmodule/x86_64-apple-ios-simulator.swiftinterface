@@ -1,0 +1,513 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
+// swift-module-flags: -target x86_64-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name NECoreIMKit
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import Foundation
+@_exported import NECoreIMKit
+import NECoreKit
+import NIMSDK
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+public enum OperationType : Swift.Int {
+  case add
+  case addRequest
+  case verify
+  case reject
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class AddFriendRequest : ObjectiveC.NSObject {
+  @objc public var account: Swift.String
+  public var operationType: NECoreIMKit.OperationType
+  @objc public var meassage: Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public protocol ChatExtendProviderDelegate : ObjectiveC.NSObjectProtocol {
+  @objc optional func onNotifySyncStickTopSessions(_ response: NIMSyncStickTopSessionResponse)
+  @objc optional func onNotifyAddStickTopSession(_ newInfo: NIMStickTopSessionInfo)
+  @objc optional func onNotifyRemoveStickTopSession(_ removedInfo: NIMStickTopSessionInfo)
+  @objc optional func onNotifyAddMessagePin(pinItem: NIMMessagePinItem)
+  @objc optional func onNotifyRemoveMessagePin(pinItem: NIMMessagePinItem)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class ChatExtendProvider : ObjectiveC.NSObject, NIMChatExtendManagerDelegate {
+  @objc public static let shared: NECoreIMKit.ChatExtendProvider
+  @objc public var stickTopInfos: [NIMSession : NIMStickTopSessionInfo]
+  @objc public func addDelegate(delegate: NECoreIMKit.ChatExtendProviderDelegate)
+  @objc public func removeDelegate(delegate: NECoreIMKit.ChatExtendProviderDelegate)
+  @objc public func sortRecentSessions(recentSessions: [NIMRecentSession], stickTopInfos: [NIMSession : NIMStickTopSessionInfo]) -> [NIMRecentSession]
+  @objc public func addStickTopSession(params: NIMAddStickTopSessionParams, _ completion: @escaping (Foundation.NSError?, NIMStickTopSessionInfo?) -> Swift.Void)
+  @objc public func removeStickTopSession(params: NIMStickTopSessionInfo, _ completion: @escaping (Foundation.NSError?, NIMStickTopSessionInfo?) -> Swift.Void)
+  @objc public func loadStickTopSessionInfos(_ completion: @escaping (Foundation.NSError?, [NIMSession : NIMStickTopSessionInfo]?) -> Swift.Void)
+  @objc public func stickTopInfoForSession(session: NIMSession) -> NIMStickTopSessionInfo?
+  @objc public func getStickTopInfos() -> [NIMSession : NIMStickTopSessionInfo]?
+  @objc public func isStickTopInfo(sessionId: Swift.String) -> Swift.Bool
+  @objc public func addCollection(_ info: NIMAddCollectParams, _ completion: @escaping (Foundation.NSError?, NIMCollectInfo?) -> Swift.Void)
+  @objc public func reply(_ message: NIMMessage, _ target: NIMMessage, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func pin(_ pinItem: NIMMessagePinItem, _ completion: @escaping (Swift.Error?, NIMMessagePinItem?) -> Swift.Void)
+  @objc public func removePin(_ pinItem: NIMMessagePinItem, _ completion: @escaping (Swift.Error?, NIMMessagePinItem?) -> Swift.Void)
+  @objc public func pinItem(_ message: NIMMessage) -> NIMMessagePinItem?
+  @objc public func fetchHistoryMessages(_ infos: [NIMChatExtendBasicInfo], _ syncToDB: Swift.Bool, _ completion: @escaping (Swift.Error?, Foundation.NSMapTable<NIMChatExtendBasicInfo, NIMMessage>?) -> Swift.Void)
+  @objc public func onNotifySyncStickTopSessions(_ response: NIMSyncStickTopSessionResponse)
+  @objc public func getTopSessionInfo(_ session: NIMSession) -> NIMStickTopSessionInfo
+  @objc public func fetchPinMessage(_ session: NIMSession, _ completion: @escaping (Swift.Error?, [NIMMessagePinItem]?) -> Swift.Void)
+  @objc public func onNotifyAddStickTopSession(_ newInfo: NIMStickTopSessionInfo)
+  @objc public func onNotifyRemoveStickTopSession(_ removedInfo: NIMStickTopSessionInfo)
+  @objc public func onNotifyAddMessagePin(_ item: NIMMessagePinItem)
+  @objc public func onNotifyUpdateMessagePin(_ item: NIMMessagePinItem)
+  @objc public func onNotifyRemoveMessagePin(_ item: NIMMessagePinItem)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class ChatProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.ChatProvider
+  @objc public func addDelegate(delegate: NIMChatManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMChatManagerDelegate)
+  @objc public func sendMessage(message: NIMMessage, session: NIMSession, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func getMessageHistory(session: NIMSession, message: NIMMessage?, limit: Swift.UInt, _ completion: @escaping (Swift.Error?, [NIMMessage]?) -> Swift.Void)
+  @objc public func markRead(param: NIMMessageReceipt, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func markReadInTeam(param: [NIMMessageReceipt], _ completion: @escaping (Swift.Error?, [NIMMessageReceipt]?) -> Swift.Void)
+  @objc public func resendMessage(message: NIMMessage) -> Foundation.NSError?
+  @objc public func revokeMessage(message: NIMMessage, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func fetchMessageAttachment(_ message: NIMMessage, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func downLoad(_ urlString: Swift.String, _ filePath: Swift.String, _ progress: NIMHttpProgressBlock?, _ completion: NIMDownloadCompleteBlock?)
+  @objc public func cancelTask(filepath: Swift.String)
+  @objc public func makeForwardMessage(_ message: NIMMessage) -> NIMMessage?
+  @objc public func sendForwardMessage(_ message: NIMMessage, _ session: NIMSession)
+  @objc public func forwardMessage(_ message: NIMMessage, _ session: NIMSession)
+  @objc public func refreshReceipts(_ messages: [NIMMessage])
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class ChatroomProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.ChatroomProvider
+  @objc public func addDelegate(delegate: NIMChatroomManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMChatroomManagerDelegate)
+  @objc public func enterChatroom(request: NIMChatroomEnterRequest, completion: NIMChatroomEnterHandler?)
+  @objc public func exitChatroom(roomId: Swift.String, completion: NIMChatroomHandler?)
+  @objc public func updateTags(tags: NIMChatroomTagsUpdate, completion: NIMChatroomHandler?)
+  @objc public func fetchChatroomMembers(request: NIMChatroomMemberRequest, completion: NIMChatroomMembersHandler?)
+  @objc public func updateMyChatroomMemberInfo(request: NIMChatroomMemberInfoUpdateRequest, completion: NIMChatroomHandler?)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class ConfigCenter : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.ConfigCenter
+  @objc public var teamEnable: Swift.Bool
+  @objc deinit
+}
+public let discussTeamKey: Swift.String
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class ConversationProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.ConversationProvider
+  @objc public func addDelegate(delegate: NIMConversationManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMConversationManagerDelegate)
+  @objc public func getAllRecentSessions() -> [NIMRecentSession]?
+  @objc public func fetchServerSessions(option: NIMFetchServerSessionOption, _ completion: @escaping (Foundation.NSError?, [NIMRecentSession]?) -> Swift.Void)
+  @objc public func deleteRecentConversation(_ params: NIMRecentSession, _ option: NIMDeleteRecentSessionOption, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func deleteServerSessions(_ sessions: [NIMSession], _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func deleteRecentSession(_ recentSession: NIMRecentSession)
+  @objc public func createRecentTeamSession(_ teamid: Swift.String) -> NIMSession
+  @objc public func markReadInSession(_ session: NIMSession, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func incompleteSessionInfo(session: NIMSession, _ completion: @escaping (Foundation.NSError?, [NIMIncompleteSessionInfo]?) -> Swift.Void)
+  @objc public func updateIncompleteSessions(messages: [NIMMessage], _ completion: @escaping (Foundation.NSError?, [NIMImportedRecentSession]?) -> Swift.Void)
+  @objc public func allUnreadCount(notify: Swift.Bool) -> ObjectiveC.NSInteger
+  @objc public func markAllMessagesRead()
+  @objc public func deleteMessage(message: NIMMessage)
+  @objc public func deleteServerMessage(message: NIMMessage, ext: Swift.String?, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func onMarkMessageReadComplete(in session: NIMSession, error: Swift.Error?)
+  @objc public func searchMessages(_ session: NIMSession, option: NIMMessageSearchOption, _ completion: @escaping (Foundation.NSError?, [NIMMessage]?) -> Swift.Void)
+  @objc public func messagesInSession(_ session: NIMSession, messageIds: [Swift.String]) -> [NIMMessage]?
+  @objc public func fetchMessageHistory(session: NIMSession, option: NIMHistoryMessageSearchOption, _ completion: @escaping (Foundation.NSError?, [NIMMessage]?) -> Swift.Void)
+  @objc public func saveMessageToDB(_ message: NIMMessage, _ session: NIMSession, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func getMessagesDynamically(_ param: NIMGetMessagesDynamicallyParam, _ completion: @escaping (Foundation.NSError?, Swift.Bool, [NIMMessage]?) -> Swift.Void)
+  @objc deinit
+}
+@objc public protocol FriendProviderDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onFriendChanged(user: NECoreIMKit.User)
+  @objc func onUserInfoChanged(user: NECoreIMKit.User)
+  @objc func onBlackListChanged()
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class FriendProvider : ObjectiveC.NSObject, NIMUserManagerDelegate {
+  @objc public static let shared: NECoreIMKit.FriendProvider
+  @objc public func addDelegate(delegate: NECoreIMKit.FriendProviderDelegate)
+  @objc public func removeDelegate(delegate: NECoreIMKit.FriendProviderDelegate)
+  @objc public func myFriends() -> [NIMUser]?
+  @objc public func getMyFriends(_ fetch: Swift.Bool = false, _ myFriends: [NIMUser]?, _ completion: @escaping ([NECoreIMKit.User]?, Foundation.NSError?) -> Swift.Void)
+  @objc public func getMyFriends(_ fetch: Swift.Bool = false, _ completion: @escaping ([NECoreIMKit.User]?, Foundation.NSError?) -> Swift.Void)
+  @objc public func fetchUserInfo(_ accids: [Swift.String], _ completion: @escaping (Swift.Error?, [NIMUser]?) -> Swift.Void)
+  @objc public func getUserInfoAdvanced(userIds: [Swift.String], _ completion: @escaping ([NECoreIMKit.User], Foundation.NSError?) -> Swift.Void)
+  @objc public func addFriend(request: NECoreIMKit.AddFriendRequest, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func deleteFriend(account: Swift.String, _ deleteAlias: Swift.Bool = false, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func isFriend(account: Swift.String) -> Swift.Bool
+  @objc public func updateUser(_ user: NECoreIMKit.User, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func removeFromBlackList(account: Swift.String, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func addBlackList(account: Swift.String, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func isBlack(account: Swift.String) -> Swift.Bool
+  @objc public func notify(userId: Swift.String?) -> Swift.Bool
+  @objc public func updateNotifyState(_ userId: Swift.String, _ notify: Swift.Bool, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func searchUser(option: NIMUserSearchOption, _ completion: @escaping (Foundation.NSError?, [NIMUser]?) -> Swift.Void)
+  @objc public func onFriendChanged(_ user: NIMUser)
+  @objc public func onBlackListChanged()
+  @objc public func onUserInfoChanged(_ user: NIMUser)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class IMKitClient : ObjectiveC.NSObject {
+  @objc public static let instance: NECoreIMKit.IMKitClient
+  @objc public func setupCoreKitIM(_ option: NIMSDKOption)
+  @objc public func sdkVersion() -> Swift.String
+  @objc public func appKey() -> Swift.String
+  @objc public func imAccid() -> Swift.String
+  @objc public func isLogined() -> Swift.Bool
+  @objc public func isInit() -> Swift.Bool
+  @objc public func isMySelf(_ accid: Swift.String?) -> Swift.Bool
+  @objc public func isUsingDemoAppKey() -> Swift.Bool
+  @objc public var serverSetting: NIMServerSetting {
+    @objc get
+    @objc set
+  }
+  @objc public var config: NIMSDKConfig {
+    @objc get
+  }
+  @objc public func setupIMConfig()
+  @objc public func register(appkey: Swift.String, cerName: Swift.String?)
+  @objc public func loginIM(_ account: Swift.String, _ token: Swift.String, _ block: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func loginIM(account: Swift.String, token: Swift.String, authType: Swift.Int32, loginExt: Swift.String, _ block: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func autoLogin(account: Swift.String, token: Swift.String)
+  @objc public func autoLogin(loginData: NIMAutoLoginData)
+  @objc public func logout(_ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateApnsToken(token: Foundation.Data) -> Swift.String
+  @objc public func updateApnsToken(data: Foundation.Data, key: Swift.String?) -> Swift.String
+  @objc public func updatePushKitToken(token: Foundation.Data)
+  @objc public func uploadLogs(_ completion: @escaping NIMUploadLogsHandler)
+  @objc public func addDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc public func removeDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc @available(*, deprecated, message: "Use isLogined() instead")
+  public func hasLogin() -> Swift.Bool
+  @objc @available(*, deprecated, message: "Use isInit() instead")
+  public func hasInit() -> Swift.Bool
+  @objc public func getSettingRepo() -> NECoreIMKit.SettingRepo
+  @objc public func getConfigCenter() -> NECoreIMKit.ConfigCenter
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @available(*, deprecated, message: "Use IMKitClient class instead")
+@objcMembers public class IMKitEngine : ObjectiveC.NSObject {
+  @objc public static let instance: NECoreIMKit.IMKitEngine
+  @objc public var repo: NECoreIMKit.SettingRepo
+  @objc public var imAccid: Swift.String
+  @objc public var imToken: Swift.String
+  @objc public func setupCoreKitIM(_ option: NIMSDKOption)
+  @objc public func setupIMConfig()
+  @objc public func register(appkey: Swift.String, cerName: Swift.String)
+  @objc public func loginIM(_ account: Swift.String, _ token: Swift.String, _ block: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func autoLogin(account: Swift.String, token: Swift.String)
+  @objc public func logout(_ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func isMySelf(_ accid: Swift.String?) -> Swift.Bool
+  @objc public func getAppkey() -> Swift.String?
+  @objc public func isUsingDemoAppKey() -> Swift.Bool
+  @objc public func updateApnsToken(token: Foundation.Data) -> Swift.String
+  @objc public func updateApnsToken(data: Foundation.Data, key: Swift.String) -> Swift.String
+  @objc public func updatePushKitToken(token: Foundation.Data)
+  @objc public func addDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc public func removeDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class IMKitLoginManager : ObjectiveC.NSObject {
+  @objc public static let instance: NECoreIMKit.IMKitLoginManager
+  @objc public func kickOtherClient(client: NIMLoginClient, comletion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func currentAccount() -> Swift.String
+  @objc public func isLogined() -> Swift.Bool
+  @objc public func currentAuthMode() -> NIMSDKAuthMode
+  @objc public func currentLoginClients() -> [NIMLoginClient]?
+  @objc public func queryServerTime(_ completion: @escaping (Swift.Error?, NIMServerTime) -> Swift.Void)
+  @objc public func addDelegate(delegate: NIMLoginManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMLoginManagerDelegate)
+  @objc override dynamic public init()
+  @objc deinit
+}
+public typealias FetchCallback = ([NECoreIMKit.User]?, Foundation.NSError?) -> Swift.Void
+public typealias UpdateCallback = (Foundation.NSError?) -> Swift.Void
+@objc public protocol IUserInfoDelegate : ObjectiveC.NSObjectProtocol {
+  @objc optional func getUserInfo(account: Swift.String) -> NECoreIMKit.User?
+  @objc(fetchUserInfoList:completion:) optional func fetchUserInfo(accountList list: [Swift.String], completion: NECoreIMKit.FetchCallback?)
+  @objc(updateUserInfo:completion:) optional func updateUserInfo(values: [Foundation.NSNumber : Any], completion: NECoreIMKit.UpdateCallback?)
+}
+open class MultiDelegate<T> {
+  public var isEmpty: Swift.Bool {
+    get
+  }
+  public init(strongReferences: Swift.Bool = false)
+  public init(options: Foundation.NSPointerFunctions.Options)
+  public func addDelegate(_ delegate: T)
+  public func removeDelegate(_ delegate: T)
+  public func invokeDelegates(_ invocation: (T) -> Swift.Void)
+  public func containsDelegate(_ delegate: T) -> Swift.Bool
+  @objc deinit
+}
+public func += <T>(left: NECoreIMKit.MultiDelegate<T>, right: T)
+public func -= <T>(left: NECoreIMKit.MultiDelegate<T>, right: T)
+precedencegroup MulticastPrecedence {
+  associativity: left
+  higherThan: TernaryPrecedence
+}
+infix operator |> : MulticastPrecedence
+public func |> <T>(left: NECoreIMKit.MultiDelegate<T>, right: (T) -> Swift.Void)
+extension NIMUser {
+  public func getShowName() -> Swift.String?
+}
+extension NIMTeam {
+  public func getShowName() -> Swift.String
+  public func isDisscuss() -> Swift.Bool
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class PassThroughProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.PassThroughProvider
+  @objc public func addDelegate(delegate: NIMPassThroughManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMPassThroughManagerDelegate)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class ResourceProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.ResourceProvider
+  @objc override dynamic public init()
+  @objc public func fetchNOSURL(targetUrl: Swift.String, _ completion: @escaping (Swift.Error?, Swift.String?) -> Swift.Void)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class SettingProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.SettingProvider
+  @objc public func getHandSetMode() -> Swift.Bool
+  @objc public func setHandSetMode(_ value: Swift.Bool)
+  @objc public func getMessageRead() -> Swift.Bool
+  @objc public func setMessageRead(_ value: Swift.Bool)
+  @objc public func getPushEnable() -> Swift.Bool
+  @objc public func setPushEnable(_ value: Swift.Bool)
+  @objc public func getPushDetailEnable() -> Swift.Bool
+  @objc public func setPushDetailEnable(_ value: Swift.Bool)
+  @objc public func getPcWebPushEnable() -> Swift.Bool
+  @objc public func updatePcWebPushEnable(_ value: Swift.Bool)
+  @objc public func getPushAudioEnable() -> Swift.Bool
+  @objc public func setPushAudioEnable(_ value: Swift.Bool)
+  @objc public func getPushShakeEnable() -> Swift.Bool
+  @objc public func setPushShakeEnable(_ value: Swift.Bool)
+  @objc public func setNodeConfig(_ value: Swift.Bool)
+  @objc public func getNodeConfig() -> Swift.Bool
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class SettingRepo : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.SettingRepo
+  @objc final public let settingProvider: NECoreIMKit.SettingProvider
+  @objc public func getHandsetMode() -> Swift.Bool
+  @objc public func setHandsetMode(_ value: Swift.Bool)
+  @objc public func getShowReadStatus() -> Swift.Bool
+  @objc public func setShowReadStatus(_ value: Swift.Bool)
+  @objc public func getPushShowDetail() -> Swift.Bool
+  @objc public func setPushShowDetail(_ value: Swift.Bool)
+  @objc public func getMultiPortPushMode() -> Swift.Bool
+  @objc public func updateMultiPortPushMode(_ value: Swift.Bool)
+  @objc public func getRingMode() -> Swift.Bool
+  @objc public func setRingMode(_ value: Swift.Bool)
+  @objc public func getVibrateMode() -> Swift.Bool
+  @objc public func setVibrateMode(_ value: Swift.Bool)
+  @objc public func getPushEnable() -> Swift.Bool
+  @objc public func setPushEnable(_ value: Swift.Bool)
+  @objc public func getNodeValue() -> Swift.Bool
+  @objc public func setNodeValue(_ value: Swift.Bool)
+  @objc deinit
+}
+public protocol SystemMessageProviderDelegate : ObjectiveC.NSObjectProtocol {
+  func onRecieveNotification(notification: NECoreIMKit.XNotification)
+  func onNotificationUnreadCountChanged(count: Swift.Int)
+  func onReceive(_ notification: NIMCustomSystemNotification)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class SystemMessageProvider : ObjectiveC.NSObject, NIMSystemNotificationManagerDelegate {
+  @objc public static let shared: NECoreIMKit.SystemMessageProvider
+  @objc public func getNotificationList(limit: Swift.Int) -> [NECoreIMKit.XNotification]
+  @objc public func getNotificationList(limit: Swift.Int, completion: @escaping ([NECoreIMKit.XNotification]) -> Swift.Void)
+  @objc public func onReceive(_ notification: NIMSystemNotification)
+  @objc public func onSystemNotificationCountChanged(_ unreadCount: Swift.Int)
+  @objc public func deleteNoti()
+  @objc public func getUnreadCount() -> Swift.Int
+  @objc public func clearUnreadCount()
+  @objc public func clearSingleUnreadCount(_ notification: NIMSystemNotification)
+  @objc public func sendNotificationMessage(_ noti: NIMCustomSystemNotification, _ session: NIMSession, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  public func addDelegate(delegate: NECoreIMKit.SystemMessageProviderDelegate)
+  public func removeDelegate(delegate: NECoreIMKit.SystemMessageProviderDelegate)
+  @objc public func onReceive(_ notification: NIMCustomSystemNotification)
+  @objc deinit
+}
+public enum TeamType : Swift.Int {
+  case normalTeam
+  case advancedTeam
+  case supereTeam
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @objcMembers public class Team : ObjectiveC.NSObject {
+  @objc public var teamId: Swift.String?
+  @objc public var teamName: Swift.String?
+  @objc public var avatarUrl: Swift.String?
+  @objc public var thumbAvatarUrl: Swift.String?
+  public var type: NECoreIMKit.TeamType?
+  @objc public var owner: Swift.String?
+  @objc public var intro: Swift.String?
+  @objc public var announcement: Swift.String?
+  public var memberNumber: Swift.Int?
+  public var level: Swift.Int?
+  public var createTime: Foundation.TimeInterval?
+  @objc public var nimTeam: NIMTeam?
+  @objc public init(teamInfo: NIMTeam?)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class TeamProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.TeamProvider
+  @objc public func addDelegate(delegate: NIMTeamManagerDelegate)
+  @objc public func removeDelegate(delegate: NIMTeamManagerDelegate)
+  @objc public func getTeamList() -> [NECoreIMKit.Team]
+  @objc public func teamInfo(teamId: Swift.String?) -> NECoreIMKit.Team?
+  @objc public func superTeamInfo(teamId: Swift.String?) -> NECoreIMKit.Team?
+  @objc public func fetchTeamInfoList(teamIds: [Swift.String], _ completion: @escaping (Foundation.NSError?, [NIMTeam]?) -> Swift.Void)
+  @objc public func fetchTeamInfo(teamId: Swift.String, _ completion: @escaping (Foundation.NSError?, NIMTeam?) -> Swift.Void)
+  @objc public func getTeam(teamId: Swift.String) -> NIMTeam?
+  @objc public func fetchTeamMember(_ teamId: Swift.String, _ completion: @escaping (Foundation.NSError?, [NIMTeamMember]?) -> Swift.Void)
+  @objc public func teamMember(_ userId: Swift.String, _ teamId: Swift.String) -> NIMTeamMember?
+  @objc public func notifyStateForNewMsg(teamId: Swift.String?) -> NIMTeamNotifyState
+  @objc public func createTeam(_ accids: [Swift.String], _ option: NIMCreateTeamOption, _ completion: @escaping (Foundation.NSError?, Swift.String?, [Swift.String]?) -> Swift.Void)
+  @objc public func updateTeamAvatar(_ url: Swift.String, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateTeamIntr(_ intr: Swift.String, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateTeamName(_ name: Swift.String, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateTeamCustomInfo(_ info: Swift.String, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func dismissTeam(_ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func quitTeam(_ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateTeamNick(_ uid: Swift.String, _ newNick: Swift.String, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateMuteState(_ mute: Swift.Bool, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateNoti(_ state: NIMTeamNotifyState, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateBeInviteMode(_ mode: NIMTeamBeInviteMode, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateInfoMode(_ mode: NIMTeamUpdateInfoMode, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func updateInviteMode(_ mode: NIMTeamInviteMode, _ teamId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func addTeamUsers(_ uids: [Swift.String], _ teamId: Swift.String, _ postscript: Swift.String?, _ attach: Swift.String?, _ completion: @escaping (Swift.Error?, [NIMTeamMember]?) -> Swift.Void)
+  @objc public func acceptInviteWithTeam(_ teamId: Swift.String, _ invitorId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func rejectInviteWithTeam(_ teamId: Swift.String, _ invitorId: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func searchTeam(option: NIMTeamSearchOption, _ completion: @escaping (Swift.Error?, [NIMTeam]?) -> Swift.Void)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class User : ObjectiveC.NSObject {
+  @objc public var userId: Swift.String?
+  @objc public var alias: Swift.String?
+  @objc public var ext: Swift.String?
+  @objc public var serverExt: Swift.String?
+  @objc public var userInfo: NECoreIMKit.UserInfo?
+  @objc public var imUser: NIMUser?
+  @objc override dynamic public init()
+  @objc public init(user: NIMUser?)
+  @objc public init(userId: Swift.String, nickName: Swift.String, avatarUrl: Swift.String)
+  @objc public func showName(_ showAlias: Swift.Bool = true) -> Swift.String?
+  @objc public func shortName(showAlias: Swift.Bool = true, count: Swift.Int) -> Swift.String?
+  @objc deinit
+}
+@objc public enum Gender : Swift.Int {
+  case unknown
+  case male
+  case female
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class UserInfo : ObjectiveC.NSObject {
+  @objc public var nickName: Swift.String?
+  @objc public var avatarUrl: Swift.String?
+  @objc public var thumbAvatarUrl: Swift.String?
+  @objc public var sign: Swift.String?
+  @objc public var gender: NECoreIMKit.Gender
+  @objc public var email: Swift.String?
+  @objc public var birth: Swift.String?
+  @objc public var mobile: Swift.String?
+  @objc public var ext: Swift.String?
+  @objc public init(nickName: Swift.String?, avatar: Swift.String?)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class UserInfoProvider : ObjectiveC.NSObject {
+  @objc public static let shared: NECoreIMKit.UserInfoProvider
+  @objc weak public var userDelegate: NECoreIMKit.IUserInfoDelegate?
+  @objc override dynamic public init()
+  @objc public func addDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc public func removeDelegate(_ delegate: NECoreIMKit.IUserInfoDelegate)
+  @objc public func getUserInfo(userId: Swift.String) -> NECoreIMKit.User?
+  @objc public func fetchUserInfo(_ accids: [Swift.String], _ completion: @escaping (Foundation.NSError?, [NECoreIMKit.User]?) -> Swift.Void)
+  @objc public func updateMyUserInfo(values: [Foundation.NSNumber : Any], _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func getBlacklist() -> [NECoreIMKit.User]
+  @objc deinit
+}
+public enum NotificationType : Swift.Int {
+  case teamApply
+  case teamApplyReject
+  case teamInvite
+  case teamInviteReject
+  case addFriendDirectly
+  case addFriendRequest
+  case addFriendVerify
+  case addFriendReject
+  case superTeamApply
+  case superTeamApplyReject
+  case superTeamInvite
+  case superTeamInviteReject
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum IMHandleStatus : ObjectiveC.NSInteger {
+  case HandleTypePending
+  case HandleTypeOk
+  case HandleTypeNo
+  case HandleTypeOutOfDate
+  public init?(rawValue: ObjectiveC.NSInteger)
+  public typealias RawValue = ObjectiveC.NSInteger
+  public var rawValue: ObjectiveC.NSInteger {
+    get
+  }
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class XNotification : ObjectiveC.NSObject {
+  @objc public var sourceName: Swift.String?
+  @objc public var targetName: Swift.String?
+  public var notificationId: Swift.Int64?
+  public var type: NECoreIMKit.NotificationType?
+  public var timestamp: Foundation.TimeInterval?
+  @objc public var sourceID: Swift.String?
+  @objc public var targetID: Swift.String?
+  @objc public var postscript: Swift.String?
+  public var read: Swift.Bool?
+  @objc public var unReadCount: Swift.Int
+  public var handleStatus: NECoreIMKit.IMHandleStatus
+  @objc public var notifyExt: Swift.String?
+  @objc public var attachment: NIMUserAddAttachment?
+  @objc public var serverExt: Swift.String?
+  @objc public var imNotification: NIMSystemNotification?
+  @objc public var userInfo: NECoreIMKit.User?
+  @objc public var teamInfo: NECoreIMKit.Team?
+  @objc public var msgList: [NECoreIMKit.XNotification]?
+  @objc public func isEqualTo(noti: NECoreIMKit.XNotification) -> Swift.Bool
+  @objc deinit
+}
+extension NECoreIMKit.OperationType : Swift.Equatable {}
+extension NECoreIMKit.OperationType : Swift.Hashable {}
+extension NECoreIMKit.OperationType : Swift.RawRepresentable {}
+extension NECoreIMKit.TeamType : Swift.Equatable {}
+extension NECoreIMKit.TeamType : Swift.Hashable {}
+extension NECoreIMKit.TeamType : Swift.RawRepresentable {}
+extension NECoreIMKit.Gender : Swift.Equatable {}
+extension NECoreIMKit.Gender : Swift.Hashable {}
+extension NECoreIMKit.Gender : Swift.RawRepresentable {}
+extension NECoreIMKit.NotificationType : Swift.Equatable {}
+extension NECoreIMKit.NotificationType : Swift.Hashable {}
+extension NECoreIMKit.NotificationType : Swift.RawRepresentable {}
+extension NECoreIMKit.IMHandleStatus : Swift.Equatable {}
+extension NECoreIMKit.IMHandleStatus : Swift.Hashable {}
+extension NECoreIMKit.IMHandleStatus : Swift.RawRepresentable {}

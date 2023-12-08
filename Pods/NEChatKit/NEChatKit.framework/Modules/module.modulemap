@@ -1,0 +1,11 @@
+framework module NEChatKit {
+  umbrella header "NEChatKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module NEChatKit.Swift {
+  header "NEChatKit-Swift.h"
+  requires objc
+}

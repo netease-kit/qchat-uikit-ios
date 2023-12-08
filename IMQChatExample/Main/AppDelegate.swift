@@ -10,6 +10,7 @@ import NECoreKit
 import NIMSDK
 import NEQChatUIKit
 import NECoreIMKit
+import NECoreQChatKit
 import NEConversationUIKit
 import NETeamUIKit
 import NEChatUIKit
@@ -40,24 +41,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let option = NIMSDKOption()
         option.appKey = AppKey.appKey
         option.apnsCername = AppKey.pushCerName
-        IMKitClient.instance.setupCoreKitIM(option)
+        QChatKitClient.instance.setupCoreKitQChat(option)
 
         NEKeyboardManager.shared.enable = true
         NEKeyboardManager.shared.shouldResignOnTouchOutside = true
         weak var weakSelf = self
-        IMKitClient.instance.loginIM(account, token) { error in
+        let param = QChatLoginParam(account, token)
+        
+        QChatKitClient.instance.loginQChat(param) { error, result in
             if let err = error {
-                print("im login error : ", err)
+                print("qchatLogin failed, error : ", err)
             }else {
-                ChatRouter.setupInit()
-                let param = QChatLoginParam(account,token)
-                IMKitClient.instance.loginQchat(param) { error, response in
-                    if let err = error {
-                        print("qchatLogin failed, error : ", err)
-                    }else {
-                        weakSelf?.initializePage()
-                    }
-                }
+                weakSelf?.initializePage()
             }
         }
     }
@@ -112,6 +107,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         TeamRouter.register()
         ConversationRouter.register()
         
+        // 关闭群聊
+        ConfigCenter.shared.teamEnable = false
+        
         //地图map初始化
         NEMapClient.shared().setupMapClient(withAppkey: AppKey.gaodeMapAppkey)
         
@@ -124,13 +122,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
          */
         
         //呼叫组件初始化
-        let option = NERtcCallOptions()
-        option.apnsCerName = AppKey.pushCerName
-        let uiConfig = NERtcCallUIConfig()
-        uiConfig.option = option
-        uiConfig.appKey = AppKey.appKey
-        uiConfig.uiConfig.showCallingSwitchCallType = option.supportAutoJoinWhenCalled
-        NERtcCallKit.sharedInstance().timeOutSeconds = 30
+        let setupConfig = NESetupConfig(appkey: AppKey.appKey)
+        NECallEngine.sharedInstance().setup(setupConfig)
+        NECallEngine.sharedInstance().setTimeout(30)
+        
+        let uiConfig = NECallUIKitConfig()
         NERtcCallUIKit.sharedInstance().setup(with: uiConfig)
         
         

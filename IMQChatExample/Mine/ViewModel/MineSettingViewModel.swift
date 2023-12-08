@@ -4,11 +4,13 @@
 // found in the LICENSE file.
 
 import Foundation
+import NECoreQChatKit
 import NETeamUIKit
 
 public protocol MineSettingViewModelDelegate: NSObjectProtocol {
   func didMessageRemindClick()
   func didClickCleanCache()
+  func didClickConfigTest()
 }
 
 @objcMembers
@@ -24,26 +26,33 @@ public class MineSettingViewModel: NSObject {
   private func getFirstSection() -> SettingSectionModel {
     let model = SettingSectionModel()
     weak var weakSelf = self
-    let remind = SettingCellModel()
-    remind.cellName = NSLocalizedString("message_remind", comment: "")
-    remind.type = SettingCellType.SettingArrowCell.rawValue
-//        remind.cornerType = .topLeft.union(.topRight)
-    remind.cornerType = .topLeft.union(.topRight).union(.bottomLeft).union(.bottomRight)
-    remind.cellClick = {
-      weakSelf?.delegate?.didMessageRemindClick()
-    }
+//    let remind = SettingCellModel()
+//    remind.cellName = NSLocalizedString("message_remind", comment: "")
+//    remind.type = SettingCellType.SettingArrowCell.rawValue
+//    remind.cellClick = {
+//      weakSelf?.delegate?.didMessageRemindClick()
+//    }
+//    model.cellModels.append(remind)
 
 //        let cleanCache = SettingCellModel()
 //        cleanCache.cellName = "清理缓存"
 //        cleanCache.type = SettingCellType.SettingArrowCell.rawValue
-//        cleanCache.cornerType = .bottomLeft.union(.bottomRight)
 //        cleanCache.cellClick = {
 //            weakSelf?.delegate?.didClickCleanCache()
 //        }
 //        model.cellModels.append(contentsOf: [remind, cleanCache])
 
-    model.cellModels.append(contentsOf: [remind])
+    #if DEBUG
+      let configTest = SettingCellModel()
+      configTest.cellName = "配置测试页"
+      configTest.type = SettingCellType.SettingArrowCell.rawValue
+      configTest.cellClick = {
+        weakSelf?.delegate?.didClickConfigTest()
+      }
+      model.cellModels.append(configTest)
+    #endif
 
+    model.setCornerType()
     return model
   }
 
@@ -53,12 +62,11 @@ public class MineSettingViewModel: NSObject {
     let receiverModel = SettingCellModel()
     receiverModel.cellName = NSLocalizedString("receiver_mode", comment: "")
     receiverModel.type = SettingCellType.SettingSwitchCell.rawValue
-    receiverModel.cornerType = .topLeft.union(.topRight)
 //        receiverModel.switchOpen = CoreKitEngine.instance.repo.getHandSetMode()
-    receiverModel.switchOpen = IMKitEngine.instance.repo.getHandsetMode()
+    receiverModel.switchOpen = QChatKitClient.instance.getSettingRepo().getHandsetMode()
 
     receiverModel.swichChange = { isOpen in
-      IMKitEngine.instance.repo.setHandsetMode(isOpen)
+      QChatKitClient.instance.getSettingRepo().setHandsetMode(isOpen)
     }
 //        //过滤通知
 //        let filterNotify = SettingCellModel()
@@ -74,23 +82,24 @@ public class MineSettingViewModel: NSObject {
 //    let deleteFriend = SettingCellModel()
 //    deleteFriend.cellName = NSLocalizedString("delete_friend", comment: "")
 //    deleteFriend.type = SettingCellType.SettingSwitchCell.rawValue
-//    deleteFriend.switchOpen = IMKitEngine.instance.repo.getDeleteFriendAlias()
+//    deleteFriend.switchOpen = QChatKitClient.instance.getSettingRepo().getDeleteFriendAlias()
 //
 //    deleteFriend.swichChange = { isOpen in
-//      IMKitEngine.instance.repo.setDeleteFriendAlias(isOpen)
+//      QChatKitClient.instance.getSettingRepo().setDeleteFriendAlias(isOpen)
 //    }
 
     // 消息已读未读功能
     let hasRead = SettingCellModel()
     hasRead.cellName = NSLocalizedString("message_read_function", comment: "")
     hasRead.type = SettingCellType.SettingSwitchCell.rawValue
-    hasRead.cornerType = .bottomLeft.union(.bottomRight)
 //        hasRead.switchOpen = true
-    hasRead.switchOpen = IMKitEngine.instance.repo.getShowReadStatus()
+    hasRead.switchOpen = QChatKitClient.instance.getSettingRepo().getShowReadStatus()
     hasRead.swichChange = { isOpen in
-      IMKitEngine.instance.repo.setShowReadStatus(isOpen)
+      QChatKitClient.instance.getSettingRepo().setShowReadStatus(isOpen)
     }
     model.cellModels.append(contentsOf: [receiverModel, hasRead])
+
+    model.setCornerType()
     return model
   }
 }

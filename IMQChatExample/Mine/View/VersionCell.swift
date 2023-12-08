@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NETeamUIKit
+import UIKit
 
 enum IntroduceCellType: Int {
   case version = 0

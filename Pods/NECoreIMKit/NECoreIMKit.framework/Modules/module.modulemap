@@ -1,0 +1,11 @@
+framework module NECoreIMKit {
+  umbrella header "NECoreIMKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module NECoreIMKit.Swift {
+  header "NECoreIMKit-Swift.h"
+  requires objc
+}

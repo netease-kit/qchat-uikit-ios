@@ -1,0 +1,1498 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
+// swift-module-flags: -target x86_64-apple-ios10.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name NEQChatUIKit
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFoundation
+import CoreAudio
+import CoreGraphics
+import CoreMedia
+import Foundation
+import MJRefresh
+import MapKit
+import MobileCoreServices
+import NECommonKit
+@_exported import NECommonUIKit
+@_exported import NECoreIMKit
+@_exported import NECoreKit
+import NECoreQChatKit
+import NEQChatKit
+@_exported import NEQChatUIKit
+import NIMSDK
+import Photos
+import SDWebImageSVGKitPlugin
+import SDWebImageWebPCoder
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+@objc public protocol EmojiPageViewDataSource : ObjectiveC.NSObjectProtocol {
+  @objc optional func numberOfPages(pageView: NEQChatUIKit.EmojiPageView?) -> ObjectiveC.NSInteger
+  @objc optional func pageView(pageView: NEQChatUIKit.EmojiPageView?, index: ObjectiveC.NSInteger) -> UIKit.UIView
+}
+@objc public protocol EmojiPageViewDelegate : ObjectiveC.NSObjectProtocol {
+  @objc optional func pageViewScrollEnd(_ pageView: NEQChatUIKit.EmojiPageView?, currentIndex: Swift.Int, totolPages: Swift.Int)
+  @objc optional func pageViewDidScroll(_ pageView: NEQChatUIKit.EmojiPageView?)
+  @objc optional func needScrollAnimation() -> Swift.Bool
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class EmojiPageView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) weak public var dataSource: NEQChatUIKit.EmojiPageViewDataSource?
+  @_Concurrency.MainActor(unsafe) weak public var pageViewDelegate: NEQChatUIKit.EmojiPageViewDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public var frame: CoreFoundation.CGRect {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) public func scrollToPage(page: ObjectiveC.NSInteger)
+  @_Concurrency.MainActor(unsafe) public func reloadData()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func layoutSubviews()
+  @objc deinit
+}
+extension NEQChatUIKit.EmojiPageView : UIKit.UIScrollViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidScroll(_ scrollView: UIKit.UIScrollView)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func scrollViewDidEndDecelerating(_ scrollView: UIKit.UIScrollView)
+}
+@objc public protocol InputEmoticonContainerViewDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func selectedEmoticon(emoticonID: Swift.String, emotCatalogID: Swift.String, description: Swift.String)
+  @objc func didPressSend(sender: UIKit.UIButton)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class InputEmoticonContainerView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.InputEmoticonContainerViewDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @objc deinit
+}
+extension NEQChatUIKit.InputEmoticonContainerView : NEQChatUIKit.EmojiPageViewDelegate, NEQChatUIKit.EmojiPageViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func numberOfPages(pageView: NEQChatUIKit.EmojiPageView?) -> ObjectiveC.NSInteger
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func pageView(pageView: NEQChatUIKit.EmojiPageView?, index: ObjectiveC.NSInteger) -> UIKit.UIView
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func needScrollAnimation() -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func pageViewDidScroll(_ pageView: NEQChatUIKit.EmojiPageView?)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func pageViewScrollEnd(_ pageView: NEQChatUIKit.EmojiPageView?, currentIndex: Swift.Int, totolPages: Swift.Int)
+}
+extension NEQChatUIKit.InputEmoticonContainerView : NEQChatUIKit.InputEmoticonTabViewDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tabView(_ tabView: NEQChatUIKit.InputEmoticonTabView?, didSelectTabIndex index: Swift.Int)
+}
+extension NEQChatUIKit.InputEmoticonContainerView : NEQChatUIKit.NIMInputEmoticonButtonDelegate {
+  @_Concurrency.MainActor(unsafe) public func selectedEmoticon(emotion: NEQChatUIKit.NIMInputEmoticon, catalogID: Swift.String)
+}
+@objc public protocol InputEmoticonTabViewDelegate : ObjectiveC.NSObjectProtocol {
+  @objc optional func tabView(_ tabView: NEQChatUIKit.InputEmoticonTabView?, didSelectTabIndex index: Swift.Int)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class InputEmoticonTabView : UIKit.UIControl {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.InputEmoticonTabViewDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) public func selectTabIndex(_ index: Swift.Int)
+  @_Concurrency.MainActor(unsafe) public func loadCatalogs(_ emoticonCatalogs: [NEQChatUIKit.NIMInputEmoticonCatalog]?)
+  @_Concurrency.MainActor(unsafe) public var sendButton: UIKit.UIButton {
+    get
+    set
+  }
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class NEEmotionAttachment : UIKit.NSTextAttachment {
+  public var emotion: NEQChatUIKit.NIMInputEmoticon? {
+    get
+    set
+  }
+  @available(iOS 7.0, *)
+  @objc override dynamic public init(data contentData: Foundation.Data?, ofType uti: Swift.String?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class NEEmotionTool : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol NIMInputEmoticonButtonDelegate : ObjectiveC.NSObjectProtocol {
+  func selectedEmoticon(emotion: NEQChatUIKit.NIMInputEmoticon, catalogID: Swift.String)
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class NIMInputEmoticonButton : UIKit.UIButton {
+  @_Concurrency.MainActor(unsafe) public var emotionData: NEQChatUIKit.NIMInputEmoticon?
+  @_Concurrency.MainActor(unsafe) public var catalogID: Swift.String?
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.NIMInputEmoticonButtonDelegate?
+  @_Concurrency.MainActor(unsafe) public class func iconButtonWithData(data: NEQChatUIKit.NIMInputEmoticon, catalogID: Swift.String, delegate: NEQChatUIKit.NIMInputEmoticonButtonDelegate) -> NEQChatUIKit.NIMInputEmoticonButton
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(frame: CoreFoundation.CGRect)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public let NIMKit_EmojiCatalog: Swift.String
+public let NIMKit_EmojiPath: Swift.String
+public let NIMKit_ChartletChartletCatalogPath: Swift.String
+public let NIMKit_ChartletChartletCatalogContentPath: Swift.String
+public let NIMKit_ChartletChartletCatalogIconPath: Swift.String
+public let NIMKit_ChartletChartletCatalogIconsSuffixNormal: Swift.String
+public let NIMKit_ChartletChartletCatalogIconsSuffixHighLight: Swift.String
+public let NIMKit_EmojiLeftMargin: Swift.Int
+public let NIMKit_EmojiRightMargin: Swift.Int
+public let NIMKit_EmojiTopMargin: Swift.Int
+public let NIMKit_DeleteIconWidth: Swift.Double
+public let NIMKit_DeleteIconHeight: Swift.Double
+public let NIMKit_EmojCellHeight: Swift.Double
+public let NIMKit_EmojImageHeight: Swift.Double
+public let NIMKit_EmojImageWidth: Swift.Double
+public let NIMKit_EmojRows: Swift.Int
+public let NIMKit_PicCellHeight: Swift.Double
+public let NIMKit_PicImageHeight: Swift.Double
+public let NIMKit_PicImageWidth: Swift.Double
+public let NIMKit_PicRows: Swift.Int
+public enum NIMEmoticonType : ObjectiveC.NSInteger {
+  case file
+  case unicode
+  public init?(rawValue: ObjectiveC.NSInteger)
+  public typealias RawValue = ObjectiveC.NSInteger
+  public var rawValue: ObjectiveC.NSInteger {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class NIMInputEmoticon : ObjectiveC.NSObject {
+  public var type: NEQChatUIKit.NIMEmoticonType {
+    get
+  }
+  public var emoticonID: Swift.String?
+  public var tag: Swift.String?
+  public var fileName: Swift.String?
+  public var unicode: Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class NIMInputEmoticonLayout : ObjectiveC.NSObject {
+  public var rows: Swift.Int
+  public var columes: Swift.Int
+  public var itemCountInPage: Swift.Int
+  public var cellWidth: CoreFoundation.CGFloat
+  public var cellHeight: CoreFoundation.CGFloat
+  public var imageWidth: CoreFoundation.CGFloat
+  public var imageHeight: CoreFoundation.CGFloat
+  public var emoji: Swift.Bool?
+  public init(width: CoreFoundation.CGFloat)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class NIMInputEmoticonCatalog : ObjectiveC.NSObject {
+  public var layout: NEQChatUIKit.NIMInputEmoticonLayout?
+  public var catalogID: Swift.String?
+  public var title: Swift.String?
+  public var id2Emoticons: [Swift.String : NEQChatUIKit.NIMInputEmoticon]?
+  public var tag2Emoticons: [Swift.String : NEQChatUIKit.NIMInputEmoticon]?
+  public var emoticons: [NEQChatUIKit.NIMInputEmoticon]?
+  public var icon: Swift.String?
+  public var iconPressed: Swift.String?
+  public var pagesCount: Swift.Int
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class NIMInputEmoticonManager : ObjectiveC.NSObject {
+  public static let shared: NEQChatUIKit.NIMInputEmoticonManager
+  @objc override dynamic public init()
+  public func emoticonCatalog(catalogID: Swift.String) -> NEQChatUIKit.NIMInputEmoticonCatalog?
+  public func emoticonByTag(tag: Swift.String) -> NEQChatUIKit.NIMInputEmoticon?
+  public func emoticonByID(emoticonID: Swift.String) -> NEQChatUIKit.NIMInputEmoticon?
+  public func emoticonByCatalogID(catalogID: Swift.String, emoticonID: Swift.String) -> NEQChatUIKit.NIMInputEmoticon?
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class ObserverUnreadInfoResultHelper : ObjectiveC.NSObject, NIMLoginManagerDelegate {
+  public static let shared: NEQChatUIKit.ObserverUnreadInfoResultHelper
+  @objc public func onLogin(_ step: NIMLoginStep)
+  public func getTotalUnreadCountForServer() -> Swift.UInt
+  public func getUnreadCountForServer(serverId: Swift.UInt64) -> Swift.UInt
+  public func appendUnreadCountForServer(serverId: Swift.UInt64, count: Swift.UInt)
+  public func clearAllUnreadCount()
+  public func clearUnreadCountForServer(serverId: Swift.UInt64)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatAddMemberVC : NEQChatUIKit.QChatSearchVC {
+  @_Concurrency.MainActor(unsafe) public var channel: NECoreQChatKit.ChatChannel?
+  @_Concurrency.MainActor(unsafe) public init(channel: NECoreQChatKit.ChatChannel?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatAddRoleGroupVC : NEQChatUIKit.QChatSearchVC {
+  @_Concurrency.MainActor(unsafe) public var channel: NECoreQChatKit.ChatChannel?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatAllChannelData : ObjectiveC.NSObject {
+  @objc public var nextTimetag: Swift.Double
+  @objc deinit
+}
+public protocol QChatAnncEditMemberViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  func didClickRemoveAdmin()
+  func didRefresh()
+  func showErrorToast(_ error: Foundation.NSError)
+  func showToastInView(_ string: Swift.String)
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatAnncEditMemberViewModel : ObjectiveC.NSObject {
+  @objc final public let repo: NEQChatKit.QChatRepo
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objcMembers @_Concurrency.MainActor(unsafe) open class QChatAnncManagerViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.QChatMemberSelectControllerDelegate, NEQChatUIKit.QChatAnncCellDelegate, NEQChatUIKit.QChatAnncManagerViewModelDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var isManager: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var qchatServer: NECoreQChatKit.QChatServer?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @objc @_Concurrency.MainActor(unsafe) public func didClickRemove(index: Swift.Int)
+  @objc @_Concurrency.MainActor(unsafe) public func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+  @objc @_Concurrency.MainActor(unsafe) public func didNeedRefreshUI()
+  @objc @_Concurrency.MainActor(unsafe) public func didNeedBack()
+  @objc @_Concurrency.MainActor(unsafe) public func didReloadTableData()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol QChatAnncManagerViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  func didNeedRefreshUI()
+  func didNeedBack()
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatAnncManagerViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  weak public var delegate: NEQChatUIKit.QChatAnncManagerViewModelDelegate?
+  @objc override dynamic public init()
+  @objc public func inviteMembersToServer(serverId: Swift.UInt64, accids: [Swift.String], _ completion: @escaping (Foundation.NSError?, [Swift.String]?) -> Swift.Void)
+  public func getExistingServerRoleMembersByAccids(_ param: NECoreQChatKit.GetExistingServerRoleMembersByAccidsParam, _ completion: @escaping (Swift.Error?, [Swift.String]) -> Swift.Void)
+  public func addManagerMember(_ serverId: Swift.UInt64?, _ roleId: Swift.UInt64?, _ accids: [Swift.String]?, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  public func removeNormalMeber(_ serverId: Swift.UInt64?, _ accid: [Swift.String]?, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  public func removeManagerMember(_ serverId: Swift.UInt64?, _ roleId: Swift.UInt64?, _ accids: [Swift.String]?, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func checkPermission(_ server: NECoreQChatKit.QChatServer?, _ completion: @escaping (Foundation.NSError?, Swift.Bool) -> Swift.Void)
+  public func addMemberRole(_ serverId: Swift.UInt64?, _ channelId: Swift.UInt64?, _ accid: Swift.String?)
+  public func removeMemberRole(_ serverId: Swift.UInt64?, _ channelId: Swift.UInt64?, _ accid: Swift.String?)
+  @objc public func loadMoreManagerMemberData(_ completion: @escaping (Foundation.NSError?, Swift.Bool) -> Swift.Void)
+  @objc public func loadMoreNormalMemberData(_ completion: @escaping (Foundation.NSError?, Swift.Bool) -> Swift.Void)
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+  @objc deinit
+}
+public protocol QChatAnncCellDelegate : ObjectiveC.NSObjectProtocol {
+  func didClickRemove(index: Swift.Int)
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class QChatAnncMemberCell : NEQChatUIKit.QChatMemberManagerCell {
+  @_Concurrency.MainActor(unsafe) weak public var deletate: NEQChatUIKit.QChatAnncCellDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var indexRow: Swift.Int
+  @objc @_Concurrency.MainActor(unsafe) public var nameLabelRight: UIKit.NSLayoutConstraint?
+  @_Concurrency.MainActor(unsafe) @objc override open func setupNameLabel()
+  @_Concurrency.MainActor(unsafe) @objc override open func setupTailorImage()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatAnncMemberEditViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate, NEQChatUIKit.QChatAnncEditMemberViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) public var cellClassDic: [Swift.Int : NEQChatUIKit.QChatCornerCell.Type]
+  @objc @_Concurrency.MainActor(unsafe) public var headerView: NEQChatUIKit.QChatHeaderView {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickRemoveAdmin()
+  @objc @_Concurrency.MainActor(unsafe) public func didRefresh()
+  @objc @_Concurrency.MainActor(unsafe) public func showErrorToast(_ error: Foundation.NSError)
+  @objc @_Concurrency.MainActor(unsafe) public func showToastInView(_ string: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @objc deinit
+}
+@objc public enum QChatChannelChangeType : Swift.Int {
+  case ChannelName = 0
+  case ChannelDesc
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public protocol QChatAnncNameEditViewControllerDelegate : ObjectiveC.NSObjectProtocol {
+  func updatedChannelName(name: Swift.String?)
+}
+@_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) open class QChatAnncNameEditViewController : NECommonUIKit.NEBaseViewController, UIKit.UITextViewDelegate, NIMQChatMessageManagerDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var type: NEQChatUIKit.QChatChannelChangeType
+  @objc @_Concurrency.MainActor(unsafe) public var repo: NEQChatKit.QChatRepo
+  @objc @_Concurrency.MainActor(unsafe) public var textLimit: Swift.Int
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatAnncNameEditViewControllerDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var backViewHeightConstraint: UIKit.NSLayoutConstraint?
+  @objc @_Concurrency.MainActor(unsafe) final public let backView: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) public var countLabel: UIKit.UILabel {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var textView: UIKit.UITextView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var clearButton: UIKit.UIButton {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) open func setupUI()
+  @objc @_Concurrency.MainActor(unsafe) open func disableSubmit()
+  @objc @_Concurrency.MainActor(unsafe) open func enableSubmit()
+  @objc @_Concurrency.MainActor(unsafe) open func hideSubmit()
+  @objc @_Concurrency.MainActor(unsafe) open func showSubmit()
+  @objc @_Concurrency.MainActor(unsafe) open func saveName()
+  @_Concurrency.MainActor(unsafe) @objc public func textView(_ textView: UIKit.UITextView, shouldChangeTextIn range: Foundation.NSRange, replacementText text: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func textViewDidChange(_ textView: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+}
+public protocol QChatAnncSettingViewControllerDelegate : ObjectiveC.NSObjectProtocol {
+  func didEmotionEnableChanged(_ enable: Swift.Bool)
+  func didChannelNameChanged(_ name: Swift.String?)
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatAnncSettingViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, UIKit.UINavigationControllerDelegate, NEQChatUIKit.SettingModelDelegate, NEQChatUIKit.QChatAnncNameEditViewControllerDelegate {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatAnncSettingViewControllerDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var isAdministrator: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public var cellClassDic: [Swift.Int : NEQChatUIKit.QChatCornerCell.Type]
+  @objc @_Concurrency.MainActor(unsafe) public init(server: NECoreQChatKit.QChatServer?, isAdministrator: Swift.Bool = true)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func setupTable()
+  @objc @_Concurrency.MainActor(unsafe) public func updatedChannelName(name: Swift.String?)
+  @objc @_Concurrency.MainActor(unsafe) public func didClickChannelName()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickChannelDesc()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickAdministrator()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickSubscriber()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickHistory()
+  @objc @_Concurrency.MainActor(unsafe) public func didClickEmotionReplyEnable(_ isOpen: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func didClickLeave(_ isOwner: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func didRefresh()
+  @objc @_Concurrency.MainActor(unsafe) public func didReloadData(_ isAdmin: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func didUpdateServerInfo(_ server: NECoreQChatKit.QChatServer?)
+  @objc @_Concurrency.MainActor(unsafe) public func showToastInView(_ string: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public func uploadHeadImage(image: UIKit.UIImage)
+  @objc deinit
+}
+public typealias QChatAuthCompletion = (_ granted: Swift.Bool) -> Swift.Void
+@_inheritsConvenienceInitializers @objc public class QChatAuthManager : ObjectiveC.NSObject {
+  @objc public class func hasCameraAuthorization() -> Swift.Bool
+  @objc public class func requestCameraAuthorization(_ completion: NEQChatUIKit.QChatAuthCompletion?)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatAuthoritySettingViewModel : ObjectiveC.NSObject {
+  public var channel: NECoreQChatKit.ChatChannel?
+  public var rolesData: NEQChatUIKit.QChatRoles
+  public var rolesLimitData: NEQChatUIKit.QChatRoles
+  public var membersData: NEQChatUIKit.QChatRoles
+  public func removeChannelRole(role: NECoreQChatKit.ChannelRole?, index: Swift.Int, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  public func removeMemberRole(member: NECoreQChatKit.MemberRole?, index: Swift.Int, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  public func insertLocalMemberAtHead(member: NECoreQChatKit.MemberRole)
+  public func insertLocalRoleAtHead(role: NECoreQChatKit.ChannelRole)
+  @objc deinit
+}
+extension Foundation.Bundle {
+  public class func nim_defaultEmojiBundle() -> Foundation.Bundle?
+  public class func nim_EmojiPlistFile() -> Swift.String?
+  public class func nim_EmojiImage(imageName: Swift.String) -> Swift.String?
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatChannelAuthoritySettingVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatChannelMembersVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) public var channel: NECoreQChatKit.ChatChannel?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatChannelSettingVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatChannelTypeVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatChannelViewController : NEQChatUIKit.QChatTableViewController {
+  @objc @_Concurrency.MainActor(unsafe) public init(serverId: Swift.UInt64)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+public protocol QChatChannelViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  func didNeedRefreshData()
+  func didReRequestData()
+  func didCheckPermission()
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatChannelViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  @objc public var serverId: Swift.UInt64
+  @objc public var name: Swift.String?
+  @objc public var topic: Swift.String?
+  public var type: NECoreQChatKit.ChannelType
+  @objc public var isPrivate: Swift.Bool
+  @objc public var lastMsgDic: [Swift.UInt64 : NEQChatUIKit.QChatLastMessageModel]
+  weak public var delegate: NEQChatUIKit.QChatChannelViewModelDelegate?
+  @objc final public let repo: NEQChatKit.QChatRepo
+  @objc public init(serverId: Swift.UInt64)
+  @objc override dynamic public init()
+  public func createChannel(_ completion: @escaping (Foundation.NSError?, NECoreQChatKit.ChatChannel?) -> Swift.Void)
+  public func getChannelsByPage(_ serverid: Swift.UInt64?, _ timeTag: Foundation.TimeInterval, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatGetChannelsByPageResult?) -> Swift.Void)
+  public func getChannelsByPage(parameter: NECoreQChatKit.QChatGetChannelsByPageParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatGetChannelsByPageResult?) -> Swift.Void)
+  @objc public func onRecvMessages(_ messages: [NIMQChatMessage])
+  @objc public func send(_ message: NIMQChatMessage, didCompleteWithError error: Swift.Error?)
+  @objc public func onMessageUpdate(_ event: NIMQChatUpdateMessageEvent)
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+  @objc deinit
+}
+extension UIKit.UIColor {
+  public static let ne_darkText: UIKit.UIColor
+  public static let ne_greyText: UIKit.UIColor
+  public static let ne_lightText: UIKit.UIColor
+  public static let ne_blueText: UIKit.UIColor
+  public static let ne_disableBlueText: UIKit.UIColor
+  public static let ne_redText: UIKit.UIColor
+  public static let ne_disableRedText: UIKit.UIColor
+  public static let ne_backcolor: UIKit.UIColor
+  public static let ne_emptyTitleColor: UIKit.UIColor
+  public static let ne_lightBackgroundColor: UIKit.UIColor
+  public static let ne_defautAvatarColor: UIKit.UIColor
+  public static let ne_greenColor: UIKit.UIColor
+  public static let ne_borderColor: UIKit.UIColor
+  public static let ne_greyLine: UIKit.UIColor
+  public static let ne_redColor: UIKit.UIColor
+  public static let ne_adminLabelTextColor: UIKit.UIColor
+  public static let ne_adminLabelBackColor: UIKit.UIColor
+  public static let ne_adminLabelBorderColor: UIKit.UIColor
+  public static let ne_noInteractionColor: UIKit.UIColor
+  public static let ne_noticeTagBackgroundColor: UIKit.UIColor
+}
+@objc public protocol ViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func dataDidChange()
+  @objc func dataDidError(_ error: Swift.Error)
+  @objc optional func dataNoMore()
+}
+public let ModuleName: Swift.String
+public let qChat_cell_margin: Swift.Double
+public let qChat_margin: Swift.Double
+public let qChat_headWH: Swift.Double
+public let qChat_timeCellH: Swift.Double
+public let qChat_pic_size: CoreFoundation.CGSize
+public let qChat_angle_w: Swift.Double
+public let qChat_min_h: Swift.Double
+public let qChat_content_margin: Swift.Double
+public let qChat_content_maxW: (Swift.Double)
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class QChatCornerCell : NECommonUIKit.CornerCell {
+  @objc @_Concurrency.MainActor(unsafe) open func configure(model: NEQChatUIKit.QChatSettingModel)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatCreateGroupViewController : NECommonUIKit.NEBaseTableViewController, NEQChatUIKit.QChatMemberSelectControllerDelegate, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) public func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatCreateGroupViewModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatCreateServerViewController : NECommonUIKit.NEBaseViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @objc @_Concurrency.MainActor(unsafe) weak public var rootController: UIKit.UIViewController?
+  @objc @_Concurrency.MainActor(unsafe) public var serverViewModel: NEQChatUIKit.QChatCreateServerViewModel
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatCreateServerViewModel : ObjectiveC.NSObject {
+  public var dataArray: [(Swift.String, Swift.String)] {
+    get
+    set
+  }
+  @objc public func inviteMembersToServer(serverId: Swift.UInt64, accids: [Swift.String], _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatEditMemberViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatEditMemberViewModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatEmojiCell : UIKit.UICollectionViewCell {
+  @objc @_Concurrency.MainActor(unsafe) public var imageView: UIKit.UIImageView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public func setupUI()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatEmojiCommentCell : NEQChatUIKit.QChatEmojiCell {
+  @objc @_Concurrency.MainActor(unsafe) public var countLabel: UIKit.UILabel {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var imageViewLeftConstraint: UIKit.NSLayoutConstraint?
+  @_Concurrency.MainActor(unsafe) @objc override public func setupUI()
+  @objc @_Concurrency.MainActor(unsafe) public func addCountLabel(_ label: Swift.String, width: CoreFoundation.CGFloat)
+  @objc @_Concurrency.MainActor(unsafe) public func removeCountLabel()
+  @objc @_Concurrency.MainActor(unsafe) public func setCountLabel(highlight: Swift.Bool)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatGroupPermissionSettingVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) public var cRole: NECoreQChatKit.ChannelRole?
+  @_Concurrency.MainActor(unsafe) public init(cRole: NECoreQChatKit.ChannelRole?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatHeaderCameraView : NEQChatUIKit.QChatHeaderView {
+  @objc @_Concurrency.MainActor(unsafe) public var cameraBtn: NECommonUIKit.ExpandButton {
+    @objc get
+    @objc set
+  }
+  @_Concurrency.MainActor(unsafe) @objc override public func setupUI()
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatHeaderView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) open func setupUI()
+  @objc @_Concurrency.MainActor(unsafe) open func configure(iconUrl: Swift.String?, name: Swift.String?, uid: Swift.UInt64)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc @objcMembers @_Concurrency.MainActor(unsafe) open class QChatHomeChannelCell : UIKit.UITableViewCell {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func awakeFromNib()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func setSelected(_ selected: Swift.Bool, animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func setHighlighted(_ highlighted: Swift.Bool, animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) public var channelModel: NECoreQChatKit.ChatChannel? {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public func setLastMessage(_ text: Swift.String?)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc @objcMembers @_Concurrency.MainActor(unsafe) open class QChatHomeViewController : UIKit.UIViewController, NEQChatUIKit.ViewModelDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var serverViewModel: NEQChatUIKit.QChatHomeViewModel
+  @objc @_Concurrency.MainActor(unsafe) public var serverListArray: [NECoreQChatKit.QChatServer]
+  @objc @_Concurrency.MainActor(unsafe) public var visitorServer: NECoreQChatKit.QChatServer? {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var recordServer: NECoreQChatKit.QChatServer?
+  @objc @_Concurrency.MainActor(unsafe) public var noticeServerSet: Swift.Set<Swift.UInt64>
+  @objc @_Concurrency.MainActor(unsafe) public var delegate: NEQChatUIKit.QChatServerDelegate? {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var serverContentView: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) public var visitorBannerView: NEQChatUIKit.QChatVisitorBannerView
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) public func setCurrentServer(server: NECoreQChatKit.QChatServer)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension NEQChatUIKit.QChatHomeViewController : UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) dynamic open func visitorJoinServer(_ sender: UIKit.UIButton)
+}
+extension NEQChatUIKit.QChatHomeViewController : NIMQChatMessageManagerDelegate {
+  @_Concurrency.MainActor(unsafe) @objc dynamic public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+}
+@objc public protocol QChatServerDelegate : ObjectiveC.NSObjectProtocol {
+  @objc optional func serverUnReadTotalCountChange(count: Swift.UInt)
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatHomeViewModel : ObjectiveC.NSObject, NEQChatKit.QChatRepoMessageDelegate {
+  @objc public var serverDelgate: NEQChatUIKit.QChatServerDelegate?
+  @objc public var visitorServerCache: [Swift.UInt64]
+  @objc override dynamic public init()
+  @objc public func onUnReadChange(_ unreads: [NIMQChatUnreadInfo]?, _ lastUnreads: [NIMQChatUnreadInfo]?)
+  @objc public func serverUnreadInfoChanged(_ serverUnreadInfoDic: [Foundation.NSNumber : NIMQChatServerUnreadInfo])
+  public func createServer(parameter: NECoreQChatKit.CreateServerParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.CreateServerResult?) -> Swift.Void)
+  public func getServers(parameter: NECoreQChatKit.QChatGetServersParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatGetServersResult?) -> Swift.Void)
+  public func getServerList(parameter: NECoreQChatKit.GetServersByPageParam, _ completion: @escaping (Foundation.NSError?, [NECoreQChatKit.QChatServer]?) -> Swift.Void)
+  public func getServerMemberList(parameter: NECoreQChatKit.QChatGetServerMembersParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatGetServerMembersResult?) -> Swift.Void)
+  public func getServerMembersByPage(parameter: NECoreQChatKit.QChatGetServerMembersByPageParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatGetServerMembersResult?) -> Swift.Void)
+  public func applyServerJoin(parameter: NECoreQChatKit.QChatApplyServerJoinParam, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  @objc public func inviteMembersToServer(serverId: Swift.UInt64, accids: [Swift.String], _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  public func updateMyServerMember(_ param: NECoreQChatKit.UpdateMyMemberInfoParam, _ completion: @escaping (Swift.Error?, NECoreQChatKit.ServerMemeber) -> Swift.Void)
+  public func updateServerMember(_ param: NECoreQChatKit.UpdateServerMemberInfoParam, _ completion: @escaping (Swift.Error?, NECoreQChatKit.ServerMemeber) -> Swift.Void)
+  @objc public func getUnread(_ servers: [NECoreQChatKit.QChatServer])
+  @objc public func subscribeChannel(_ param: NIMQChatSubscribeChannelAsVisitorParam, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func subscribeAsVisitor(_ param: NIMQChatSubscribeServerAsVisitorParam, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func visitorSubcribeAllChannel(_ serverId: Swift.UInt64)
+  @objc public func findFirstNormalServer(_ servers: [NECoreQChatKit.QChatServer]?) -> NECoreQChatKit.QChatServer?
+  @objc public func deleteInvalidServers(_ servers: [NECoreQChatKit.QChatServer])
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class QChatIdGroupMemberCell : NEQChatUIKit.QChatCornerCell {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) open func setupNameLabel()
+  @objc @_Concurrency.MainActor(unsafe) open func setupTailorImage()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatIdGroupModel : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  public init(_ serverRole: NECoreQChatKit.ServerRole)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatIdGroupSortController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, moveRowAt sourceIndexPath: Foundation.IndexPath, to destinationIndexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, shouldIndentWhileEditingRowAt indexPath: Foundation.IndexPath) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: Foundation.IndexPath, toProposedIndexPath proposedDestinationIndexPath: Foundation.IndexPath) -> Foundation.IndexPath
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, canEditRowAt indexPath: Foundation.IndexPath) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, canMoveRowAt indexPath: Foundation.IndexPath) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, editingStyleForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell.EditingStyle
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatIdGroupSortViewModel : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatIdGroupViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func dataNoMore()
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatIdGroupViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  @objc deinit
+  public func checkPermission(_ serverId: Swift.UInt64?, _ completion: @escaping (Foundation.NSError?, Swift.Bool) -> Swift.Void)
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+}
+extension UIKit.UIImage {
+  public class func ne_imageNamed(name: Swift.String?) -> UIKit.UIImage?
+  public class func ne_bundleImage(name: Swift.String) -> UIKit.UIImage
+}
+@objc public enum QChatMenuType : Swift.Int {
+  case text = 0
+  case audio
+  case emoji
+  case image
+  case addMore
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol QChatInputViewDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func sendText(text: Swift.String?)
+  @objc func willSelectItem(button: UIKit.UIButton, index: Swift.Int)
+  @objc func startRecord()
+  @objc func moveOutView()
+  @objc func moveInView()
+  @objc func endRecord(insideView: Swift.Bool)
+  @objc func textChanged(text: Swift.String) -> Swift.Bool
+  @objc func textFieldDidChange(_ textField: UIKit.UITextView)
+  @objc func textFieldDidEndEditing(_ textField: UIKit.UITextView)
+  @objc func textDelete(range: Foundation.NSRange, text: Swift.String) -> Swift.Bool
+  @objc func textFieldDidBeginEditing(_ textField: UIKit.UITextView)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatInputView : UIKit.UIView, NEQChatUIKit.QChatRecordViewDelegate, NEQChatUIKit.InputEmoticonContainerViewDelegate, UIKit.UITextViewDelegate {
+  @objc @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatInputViewDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var currentType: NEQChatUIKit.QChatMenuType
+  @objc @_Concurrency.MainActor(unsafe) public var contentSubView: UIKit.UIView?
+  @objc @_Concurrency.MainActor(unsafe) public var currentButton: UIKit.UIButton?
+  @objc @_Concurrency.MainActor(unsafe) public var contentHeight: Swift.Double
+  @objc @_Concurrency.MainActor(unsafe) public var menuHeight: Swift.Double
+  @objc @_Concurrency.MainActor(unsafe) public var buttons: [UIKit.UIButton]
+  @objc @_Concurrency.MainActor(unsafe) public var emojiView: NEQChatUIKit.InputEmoticonContainerView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var coverLabel: UIKit.UILabel {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public func startRecord()
+  @objc @_Concurrency.MainActor(unsafe) public func moveOutView()
+  @objc @_Concurrency.MainActor(unsafe) public func moveInView()
+  @objc @_Concurrency.MainActor(unsafe) public func endRecord(insideView: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func stopRecordAnimation()
+  @_Concurrency.MainActor(unsafe) @objc public func selectedEmoticon(emoticonID: Swift.String, emotCatalogID: Swift.String, description: Swift.String)
+  @_Concurrency.MainActor(unsafe) @objc public func didPressSend(sender: UIKit.UIButton)
+  @_Concurrency.MainActor(unsafe) @objc public func textViewDidChange(_ textView: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func textViewDidEndEditing(_ textView: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func textViewDidBeginEditing(_ textView: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func textViewShouldBeginEditing(_ textView: UIKit.UITextView) -> Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public func textFieldShouldBeginEditing(_ textField: UIKit.UITextField) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func textView(_ textView: UIKit.UITextView, shouldChangeTextIn range: Foundation.NSRange, replacementText text: Swift.String) -> Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public func setVisitorModel(isVisitorMode: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatJoinOtherServiceController : NECommonUIKit.NEBaseViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, UIKit.UITextFieldDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var serversArray: [NECoreQChatKit.QChatServer]
+  @objc @_Concurrency.MainActor(unsafe) public var viewmodel: NEQChatUIKit.QChatJoinServerViewModel
+  @objc @_Concurrency.MainActor(unsafe) public var channelViewModel: NEQChatUIKit.QChatChannelViewModel
+  @objc @_Concurrency.MainActor(unsafe) public var isAnnouncement: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) weak public var rootController: UIKit.UIViewController?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatJoinServerViewModel : ObjectiveC.NSObject {
+  @objc public var isAnnouncement: Swift.Bool
+  public func getServers(parameter: NECoreQChatKit.QChatGetServersParam, _ completion: @escaping (Foundation.NSError?, [NECoreQChatKit.QChatServer]) -> Swift.Void)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class QChatLastMessageModel : ObjectiveC.NSObject {
+  public var isRevoked: Swift.Bool
+  public var isDeleted: Swift.Bool
+  public var message: NIMQChatMessage
+  public init(message: NIMQChatMessage)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatMemberListViewController : NECommonUIKit.NEBaseViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @objc @_Concurrency.MainActor(unsafe) public var serverViewModel: NEQChatUIKit.QChatCreateServerViewModel
+  @objc @_Concurrency.MainActor(unsafe) public var memberViewModel: NEQChatUIKit.QChatMemberListViewModel
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatMemberListViewModel : ObjectiveC.NSObject {
+  public var memberInfomationArray: [NECoreQChatKit.QChatMember]?
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) open class QChatMemberManagerCell : NEQChatUIKit.QChatIdGroupMemberCell {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(style: UIKit.UITableViewCell.CellStyle, reuseIdentifier: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatMemberManagerController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.ViewModelDelegate, NEQChatUIKit.QChatMemberSelectControllerDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) public func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func dataNoMore()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForFooterInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatMemberManagerViewModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatMemberPermissionSettingVC : NEQChatUIKit.QChatTableViewController {
+  @_Concurrency.MainActor(unsafe) public var channel: NECoreQChatKit.ChatChannel?
+  @_Concurrency.MainActor(unsafe) public var memberRole: NECoreQChatKit.MemberRole?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc deinit
+}
+public protocol QChatMemberSelectControllerDelegate : ObjectiveC.NSObjectProtocol {
+  func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatMemberSelectController : NECommonUIKit.NEBaseTableViewController, NEQChatUIKit.MemberSelectViewModelDelegate, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatMemberSelectControllerDelegate?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGSize
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc public protocol MemberSelectViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatMemberSelectViewModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class QChatMessageFrame : ObjectiveC.NSObject {
+  public var showTime: Swift.Bool
+  public var time: Swift.String? {
+    get
+    set
+  }
+  public var showAvatar: Swift.Bool
+  public var avatar: Swift.String?
+  public var nickname: Swift.String?
+  public var timeFrame: CoreFoundation.CGRect
+  public var headFrame: CoreFoundation.CGRect?
+  public var contentSize: CoreFoundation.CGSize
+  public var contentFrame: CoreFoundation.CGRect?
+  public var cellHeight: CoreFoundation.CGFloat
+  public var startX: CoreFoundation.CGFloat
+  public var isPlaying: Swift.Bool
+  public var duration: Swift.Int
+  public var attributeStr: Foundation.NSAttributedString?
+  public var isFromLocalCache: Swift.Bool
+  public var isRevoked: Swift.Bool
+  public var revokeText: Swift.String?
+  public var enableQuickComment: Swift.Bool {
+    get
+    set
+  }
+  public var quickCommentsFrame: CoreFoundation.CGRect
+  public var quickCommentCountWidth: [Swift.Int : CoreFoundation.CGFloat]
+  public var quickComments: [NIMQChatMessageQuickCommentsDetail]? {
+    get
+    set
+  }
+  public var message: NIMQChatMessage? {
+    get
+    set
+  }
+  public func setFrame()
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class QChatMessageHelper {
+  public class func getSizeWithMaxSize(_ maxSize: CoreFoundation.CGSize, size: CoreFoundation.CGSize, miniWH: CoreFoundation.CGFloat) -> CoreFoundation.CGSize
+  public static func getCountLabel(_ count: Swift.Int) -> Swift.String
+  public static func avalibleOperationsForMessage(_ model: NEQChatUIKit.QChatMessageFrame?, enableEdit: Swift.Bool, isAnnouncement: Swift.Bool = false) -> [NEQChatUIKit.QChatOperationItem]?
+  public static func isRevokeMessage(event: NIMQChatUpdateMessageEvent) -> (Swift.Bool, Swift.String?)
+  public static func isRevokeMessage(message: NIMQChatMessage) -> (Swift.Bool, Swift.String?)
+  public static func isDeleteMessage(event: NIMQChatUpdateMessageEvent) -> Swift.Bool
+  public static func quickEmojiIDList() -> [Swift.String]
+  @objc deinit
+}
+public protocol QChatMessageOperationViewDelegate : AnyObject {
+  func didSelectedItem(item: NEQChatUIKit.QChatOperationItem)
+  func didSelectedEmoji(emoji: NEQChatUIKit.NIMInputEmoticon)
+}
+@objc @objcMembers @_Concurrency.MainActor(unsafe) open class QChatMessageOperationView : UIKit.UIView, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegate {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatMessageOperationViewDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public var items: [NEQChatUIKit.QChatOperationItem] {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var quickEmojiItems: [NEQChatUIKit.NIMInputEmoticon]
+  @objc @_Concurrency.MainActor(unsafe) public var allEmojiItems: [NEQChatUIKit.NIMInputEmoticon]
+  @objc @_Concurrency.MainActor(unsafe) public var emoticonCatalog: NEQChatUIKit.NIMInputEmoticonCatalog?
+  @objc @_Concurrency.MainActor(unsafe) public var oldFrameHeight: CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public var showEmoji: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var showMoreButton: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var viewUnderMessage: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public init(frame: CoreFoundation.CGRect, showEmoji: Swift.Bool = false)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public var emojiBackView: UIKit.UIView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var moreButton: UIKit.UIButton {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var emojiCollection: UIKit.UICollectionView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var emojiAllCollection: UIKit.UICollectionView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) public var operationCollection: UIKit.UICollectionView {
+    @objc get
+    @objc set
+  }
+  @objc @_Concurrency.MainActor(unsafe) open func setupUI()
+  @objc @_Concurrency.MainActor(unsafe) open func setEmoticonCatalog(catalog: NEQChatUIKit.NIMInputEmoticonCatalog, _ quickEmojis: [Swift.String]?)
+  @objc @_Concurrency.MainActor(unsafe) open func setQuickEmojis(emotionIds: [Swift.String])
+  @objc @_Concurrency.MainActor(unsafe) open func setQuickEmojis(emotions: [NEQChatUIKit.NIMInputEmoticon])
+  @objc @_Concurrency.MainActor(unsafe) open func showAllEmoji()
+  @objc @_Concurrency.MainActor(unsafe) open func showOperation()
+  @objc @_Concurrency.MainActor(unsafe) open func moreButtonAction()
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatMineCreateServerController : NECommonUIKit.NEBaseViewController, UIKit.UINavigationControllerDelegate, UIKit.UITextFieldDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var serverViewModel: NEQChatUIKit.QChatMineCreateViewModel
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @objc @_Concurrency.MainActor(unsafe) public func uploadHeadImage(image: UIKit.UIImage)
+  @_Concurrency.MainActor(unsafe) @objc public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatMineCreateViewModel : ObjectiveC.NSObject {
+  public func createAnncServer(parameter: inout NECoreQChatKit.CreateServerParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.QChatServer?) -> Swift.Void)
+  public func createServer(parameter: NECoreQChatKit.CreateServerParam, _ completion: @escaping (Foundation.NSError?, NECoreQChatKit.CreateServerResult?) -> Swift.Void)
+  @objc public func updateEveryoneRolePermission(server: NECoreQChatKit.QChatServer)
+  @objc public func deleteInvalidServer(server: NECoreQChatKit.QChatServer)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatNavigationController : UIKit.UINavigationController {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func pushViewController(_ viewController: UIKit.UIViewController, animated: Swift.Bool)
+  @available(iOS 5.0, *)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(navigationBarClass: Swift.AnyClass?, toolbarClass: Swift.AnyClass?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(rootViewController: UIKit.UIViewController)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatOperationCell : UIKit.UICollectionViewCell {
+  @objc @_Concurrency.MainActor(unsafe) public var imageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) public var label: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) public var model: NEQChatUIKit.QChatOperationItem? {
+    @objc get
+    @objc set
+  }
+  @objc deinit
+}
+@objc public enum OperationType : Swift.Int {
+  case copy = 1
+  case reply
+  case forward
+  case pin
+  case removePin
+  case multiSelect
+  case collection
+  case delete
+  case recall
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatOperationItem : ObjectiveC.NSObject {
+  @objc public var text: Swift.String
+  @objc public var imageName: Swift.String
+  public var type: NEQChatUIKit.OperationType?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatPermissionCellModel : NEQChatUIKit.QChatSettingModel {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatPermissionModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatPermissionViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, NEQChatUIKit.ViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidChange()
+  @_Concurrency.MainActor(unsafe) @objc public func dataDidError(_ error: Swift.Error)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class QChatPermissionViewModel : ObjectiveC.NSObject {
+  @objc deinit
+}
+public protocol QChatRecordViewDelegate : ObjectiveC.NSObjectProtocol {
+  func startRecord()
+  func moveOutView()
+  func moveInView()
+  func endRecord(insideView: Swift.Bool)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatRecordView : UIKit.UIView, UIKit.UIGestureRecognizerDelegate {
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.QChatRecordViewDelegate?
+  @objc @_Concurrency.MainActor(unsafe) public func stopRecordAnimation()
+  @objc deinit
+}
+public enum RoundedType {
+  case none
+  case top
+  case bottom
+  case all
+  public static func == (a: NEQChatUIKit.RoundedType, b: NEQChatUIKit.RoundedType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct RoleModel {
+  public var role: NECoreQChatKit.ChannelRole?
+  public var member: NECoreQChatKit.MemberRole?
+  public var title: Swift.String?
+  public var corner: NEQChatUIKit.RoundedType?
+  public var isPlacehold: Swift.Bool
+}
+public struct QChatRoles {
+  public var roles: [NEQChatUIKit.RoleModel]
+  public var timeTag: Foundation.TimeInterval?
+  public var pageSize: Swift.Int
+}
+public struct QChatRoleStatusInfoExt {
+  public var status: NECoreQChatKit.RoleStatusInfo?
+  public var title: Swift.String?
+  public init(status: NECoreQChatKit.RoleStatusInfo?)
+}
+public enum QChatRouter {
+  public static func register()
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatSearchVC : NECommonUIKit.NEBaseViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatServerMemberModel : ObjectiveC.NSObject {
+  public var serverMemberModel: NECoreQChatKit.ServerMemeber?
+  @objc public var imName: Swift.String?
+  @objc public var idGroupData: [Swift.String]?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatServerSettingViewController : NECommonUIKit.NEBaseTableViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource, UIKit.UITextFieldDelegate, UIKit.UINavigationControllerDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public init(server: NECoreQChatKit.QChatServer?)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func setupTable()
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldDidChangeSelection(_ textField: UIKit.UITextField)
+  @_Concurrency.MainActor(unsafe) @objc public func numberOfSections(in tableView: UIKit.UITableView) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, didSelectRowAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, viewForHeaderInSection section: Swift.Int) -> UIKit.UIView?
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForHeaderInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForFooterInSection section: Swift.Int) -> CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public func uploadHeadImage(image: UIKit.UIImage)
+  @_Concurrency.MainActor(unsafe) @objc public func textField(_ textField: UIKit.UITextField, shouldChangeCharactersIn range: Foundation.NSRange, replacementString string: Swift.String) -> Swift.Bool
+  @objc deinit
+}
+@objc public enum QChatSettingCellType : Swift.Int {
+  case SettingTextCell = 0
+  case SettingArrowCell
+  case SettingDestructiveCell
+  case SettingSwitchCell
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatSettingModel : ObjectiveC.NSObject {
+  public typealias SwitchChangeCompletion = (Swift.Bool) -> Swift.Void
+  public typealias CellClick = () -> Swift.Void
+  @objc public var type: Swift.Int
+  @objc public var switchOpen: Swift.Bool
+  @objc public var swichChange: NEQChatUIKit.QChatSettingModel.SwitchChangeCompletion?
+  @objc public var cellClick: NEQChatUIKit.QChatSettingModel.CellClick?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class QChatSettingSectionModel : ObjectiveC.NSObject {
+  @objc public var cellModels: [NEQChatUIKit.QChatSettingModel]
+  @objc override dynamic public init()
+  @objc open func setCornerType()
+  @objc deinit
+}
+public protocol SettingModelDelegate : ObjectiveC.NSObjectProtocol {
+  func didClickChannelName()
+  func didClickChannelDesc()
+  func didClickAdministrator()
+  func didClickSubscriber()
+  func didClickHistory()
+  func didClickEmotionReplyEnable(_ isOpen: Swift.Bool)
+  func didClickLeave(_ isOwner: Swift.Bool)
+  func didRefresh()
+  func didReloadData(_ isAdmin: Swift.Bool)
+  func didUpdateServerInfo(_ server: NECoreQChatKit.QChatServer?)
+  func showToastInView(_ string: Swift.String)
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatSettingViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  @objc final public let repo: NEQChatKit.QChatRepo
+  @objc deinit
+  @objc public func isMyServer() -> Swift.Bool
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc @objcMembers @_Concurrency.MainActor(unsafe) open class QChatSquareCollectionViewCell : UIKit.UICollectionViewCell {
+  @objc @_Concurrency.MainActor(unsafe) public var squareImageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) public var iconImageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) public var squareTitleLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) public var contentLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) public var hasJoinTagView: UIKit.UIView
+  @objc @_Concurrency.MainActor(unsafe) public var hasJoinLabel: UIKit.UILabel
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc @_Concurrency.MainActor(unsafe) public func configureData(server: NEQChatUIKit.QChatSquareServer)
+  @objc deinit
+}
+public protocol SquareDataSourceDelegate : ObjectiveC.NSObjectProtocol {
+  func requestSquareSearchType(_ completion: @escaping ([NEQChatUIKit.QChatSquarePageInfo], Foundation.NSError?) -> Swift.Void)
+  func requestServerInfoForSearchType(_ searchType: Swift.Int, _ completion: @escaping ([NEQChatUIKit.QChatSquareServer], Foundation.NSError?) -> Swift.Void)
+  func didSelectSquareServer(server: NEQChatUIKit.QChatSquareServer)
+}
+@objc @_inheritsConvenienceInitializers @objcMembers @_Concurrency.MainActor(unsafe) open class QChatSquareHomeViewController : UIKit.UIViewController, NECommonUIKit.NEPagingContentViewControllerDataSource, NECommonUIKit.NEPagingMenuViewControllerDataSource, NECommonUIKit.NEPagingMenuViewControllerDelegate, NECommonUIKit.NEPagingContentViewControllerDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var menuViewController: NECommonUIKit.NEPagingMenuViewController
+  @objc @_Concurrency.MainActor(unsafe) public var contentViewController: NECommonUIKit.NEPagingContentViewController
+  @_Concurrency.MainActor(unsafe) weak public var delegate: NEQChatUIKit.SquareDataSourceDelegate?
+  @objc @_Concurrency.MainActor(unsafe) final public let focusView: NECommonUIKit.NEUnderlineFocusView
+  @objc @_Concurrency.MainActor(unsafe) final public let viewmodel: NEQChatUIKit.QChatSquareHomeViewModel
+  @objc @_Concurrency.MainActor(unsafe) final public let tabLoadingImageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) final public let contentLoadingImageView: UIKit.UIImageView
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func menuViewController(viewController: NECommonUIKit.NEPagingMenuViewController, cellForItemAt index: Swift.Int) -> NECommonUIKit.NEPagingMenuViewCell
+  @objc @_Concurrency.MainActor(unsafe) public func menuViewController(viewController: NECommonUIKit.NEPagingMenuViewController, widthForItemAt index: Swift.Int) -> CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) public func numberOfItemsForMenuViewController(viewController: NECommonUIKit.NEPagingMenuViewController) -> Swift.Int
+  @objc @_Concurrency.MainActor(unsafe) public func menuViewController(viewController: NECommonUIKit.NEPagingMenuViewController, didSelect page: Swift.Int, previousPage: Swift.Int)
+  @_Concurrency.MainActor(unsafe) public func menuViewController(viewController: NECommonUIKit.NEPagingMenuViewController, willAnimateFocusViewTo index: Swift.Int, with coordinator: NECommonUIKit.PagingMenuFocusViewAnimationCoordinator)
+  @objc @_Concurrency.MainActor(unsafe) public func numberOfItemsForContentViewController(viewController: NECommonUIKit.NEPagingContentViewController) -> Swift.Int
+  @objc @_Concurrency.MainActor(unsafe) public func contentViewController(viewController: NECommonUIKit.NEPagingContentViewController, viewControllerAt index: Swift.Int) -> UIKit.UIViewController
+  @objc @_Concurrency.MainActor(unsafe) public func contentViewController(viewController: NECommonUIKit.NEPagingContentViewController, didManualScrollOn index: Swift.Int, percent: CoreFoundation.CGFloat)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc @objcMembers open class QChatSquareHomeViewModel : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers open class QChatSquarePageInfo : ObjectiveC.NSObject {
+  public var type: Swift.Int
+  public var title: Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc @objcMembers open class QChatSquareServer : ObjectiveC.NSObject {
+  @objc public var server: NECoreQChatKit.QChatServer?
+  @objc public var isJoinedServer: Swift.Bool
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @objcMembers @_Concurrency.MainActor(unsafe) open class QChatSquareViewController : UIKit.UIViewController, UIKit.UICollectionViewDelegate, UIKit.UICollectionViewDataSource, UIKit.UICollectionViewDelegateFlowLayout, NEQChatUIKit.QChatSquareViewModelDelegate {
+  @_Concurrency.MainActor(unsafe) public var delegate: NEQChatUIKit.SquareDataSourceDelegate?
+  @objc @_Concurrency.MainActor(unsafe) final public let viewmodel: NEQChatUIKit.QChatSquareViewModel
+  @objc @_Concurrency.MainActor(unsafe) public var type: Swift.Int
+  @objc @_Concurrency.MainActor(unsafe) final public let contentLoadingImageView: UIKit.UIImageView
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, cellForItemAt indexPath: Foundation.IndexPath) -> UIKit.UICollectionViewCell
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, numberOfItemsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func collectionView(_ collectionView: UIKit.UICollectionView, didSelectItemAt indexPath: Foundation.IndexPath)
+  @_Concurrency.MainActor(unsafe) @objc open func collectionView(_ collectionView: UIKit.UICollectionView, layout collectionViewLayout: UIKit.UICollectionViewLayout, sizeForItemAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGSize
+  @objc @_Concurrency.MainActor(unsafe) public func didNeedRefreshData()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+public protocol QChatSquareViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  func didNeedRefreshData()
+}
+@objc @_inheritsConvenienceInitializers public class QChatSquareViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  @objc override dynamic public init()
+  @objc deinit
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+}
+public enum RightStyle {
+  case none
+  case indicate
+  case delete
+  public static func == (a: NEQChatUIKit.RightStyle, b: NEQChatUIKit.RightStyle) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) open class QChatStateCell : NEQChatUIKit.QChatCornerCell {
+  @objc @_Concurrency.MainActor(unsafe) public var rightImage: UIKit.UIImageView
+  @_Concurrency.MainActor(unsafe) public var rightStyle: NEQChatUIKit.RightStyle {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func awakeFromNib()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic open func setSelected(_ selected: Swift.Bool, animated: Swift.Bool)
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) public class QChatTableHeaderView : UIKit.UIView {
+  @_Concurrency.MainActor(unsafe) public var titleLabel: UIKit.UILabel {
+    get
+    set
+  }
+  @_Concurrency.MainActor(unsafe) public func setTitle(_ name: Swift.String)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatTableViewController : NECommonUIKit.NEBaseViewController, UIKit.UITableViewDelegate, UIKit.UITableViewDataSource {
+  @objc @_Concurrency.MainActor(unsafe) public var tableView: UIKit.UITableView
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) open class QChatTextArrowCell : NEQChatUIKit.QChatTextCell {
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @_Concurrency.MainActor(unsafe) @objc override open func configure(model: NEQChatUIKit.QChatSettingModel)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor(unsafe) open class QChatTextCell : NEQChatUIKit.QChatStateCell {
+  @objc @_Concurrency.MainActor(unsafe) public var titleLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) public var detailLabel: UIKit.UILabel
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatUpdateChannelViewModel : ObjectiveC.NSObject {
+  public var channel: NECoreQChatKit.ChatChannel?
+  public var channelTmp: NECoreQChatKit.ChatChannel?
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class QChatUtil : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) public class QChatViewController : NECommonUIKit.NEBaseViewController, UIKit.UINavigationControllerDelegate, NEQChatUIKit.QChatInputViewDelegate, NEQChatUIKit.QChatViewModelDelegate, UIKit.UITableViewDataSource, UIKit.UITableViewDelegate, NIMMediaManagerDelegate, NEQChatUIKit.QChatMessageOperationViewDelegate, NEQChatUIKit.QChatAnncSettingViewControllerDelegate {
+  @objc @_Concurrency.MainActor(unsafe) public var isVisitorMode: Swift.Bool
+  @objc @_Concurrency.MainActor(unsafe) public var menuView: NEQChatUIKit.QChatInputView
+  @objc @_Concurrency.MainActor(unsafe) public var operationView: NEQChatUIKit.QChatMessageOperationView?
+  @objc @_Concurrency.MainActor(unsafe) public var isAdministrator: Swift.Bool
+  @_Concurrency.MainActor(unsafe) public init(channel: NECoreQChatKit.ChatChannel?, server: NECoreQChatKit.QChatServer? = nil)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  @objc deinit
+  @objc @_Concurrency.MainActor(unsafe) open func setVisitorMode(isVisitor: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) open func visitorJoinServer(_ sender: UIKit.UIButton)
+  @objc @_Concurrency.MainActor(unsafe) open func viewTap(tap: UIKit.UITapGestureRecognizer)
+  @_Concurrency.MainActor(unsafe) @objc open func gestureRecognizer(_ gestureRecognizer: UIKit.UIGestureRecognizer, shouldReceive touch: UIKit.UITouch) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func sendText(text: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc public func willSelectItem(button: UIKit.UIButton, index: Swift.Int)
+  @_Concurrency.MainActor(unsafe) @objc public func imagePickerController(_ picker: UIKit.UIImagePickerController, didFinishPickingMediaWithInfo info: [UIKit.UIImagePickerController.InfoKey : Any])
+  @_Concurrency.MainActor(unsafe) @objc public func onRecvMessages(_ messages: [NIMQChatMessage])
+  @_Concurrency.MainActor(unsafe) @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+  @_Concurrency.MainActor(unsafe) @objc public func send(_ message: NIMQChatMessage, progress: Swift.Float)
+  @_Concurrency.MainActor(unsafe) @objc public func send(_ message: NIMQChatMessage, didCompleteWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func willSend(_ message: NIMQChatMessage)
+  @_Concurrency.MainActor(unsafe) @objc public func onDeleteMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+  @_Concurrency.MainActor(unsafe) @objc public func onRevokeMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+  @_Concurrency.MainActor(unsafe) @objc public func onReloadMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+  @objc @_Concurrency.MainActor(unsafe) public func didEmotionEnableChanged(_ enable: Swift.Bool)
+  @objc @_Concurrency.MainActor(unsafe) public func didChannelNameChanged(_ name: Swift.String?)
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @_Concurrency.MainActor(unsafe) @objc public func tableView(_ tableView: UIKit.UITableView, heightForRowAt indexPath: Foundation.IndexPath) -> CoreFoundation.CGFloat
+  @objc @_Concurrency.MainActor(unsafe) open func tableViewDeleteIndexs(_ indexs: [Foundation.IndexPath])
+  @objc @_Concurrency.MainActor(unsafe) open func tableViewReloadIndexs(_ indexs: [Foundation.IndexPath])
+  @_Concurrency.MainActor(unsafe) @objc public func scrollViewWillBeginDragging(_ scrollView: UIKit.UIScrollView)
+  @_Concurrency.MainActor(unsafe) @objc public func startRecord()
+  @_Concurrency.MainActor(unsafe) @objc public func moveOutView()
+  @_Concurrency.MainActor(unsafe) @objc public func moveInView()
+  @_Concurrency.MainActor(unsafe) @objc public func endRecord(insideView: Swift.Bool)
+  @_Concurrency.MainActor(unsafe) @objc public func playAudio(_ filePath: Swift.String, progress value: Swift.Float)
+  @_Concurrency.MainActor(unsafe) @objc public func playAudioInterruptionEnd()
+  @_Concurrency.MainActor(unsafe) @objc public func playAudioInterruptionBegin()
+  @_Concurrency.MainActor(unsafe) @objc public func playAudio(_ filePath: Swift.String, didBeganWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func playAudio(_ filePath: Swift.String, didCompletedWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func stopPlayAudio(_ filePath: Swift.String, didCompletedWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func recordAudio(_ filePath: Swift.String?, didBeganWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func recordAudio(_ filePath: Swift.String?, didCompletedWithError error: Swift.Error?)
+  @_Concurrency.MainActor(unsafe) @objc public func textDelete(range: Foundation.NSRange, text: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func textChanged(text: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldDidChange(_ textField: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldDidEndEditing(_ textField: UIKit.UITextView)
+  @_Concurrency.MainActor(unsafe) @objc public func textFieldDidBeginEditing(_ textField: UIKit.UITextView)
+}
+extension NEQChatUIKit.QChatViewController {
+  @_Concurrency.MainActor(unsafe) public func didTapReeditButton(_ cell: UIKit.UITableViewCell, _ messageFrame: NEQChatUIKit.QChatMessageFrame?)
+  @_Concurrency.MainActor(unsafe) public func didSelectedItem(item: NEQChatUIKit.QChatOperationItem)
+  @_Concurrency.MainActor(unsafe) public func didSelectedEmoji(emoji: NEQChatUIKit.NIMInputEmoticon)
+  @_Concurrency.MainActor(unsafe) public func clickEmoji(_ type: Swift.Int64, _ messageFrame: NEQChatUIKit.QChatMessageFrame?)
+  @_Concurrency.MainActor(unsafe) public func copyMessage()
+  @_Concurrency.MainActor(unsafe) public func revokeMessage()
+  @_Concurrency.MainActor(unsafe) public func deleteMessage()
+}
+@objc public protocol QChatViewModelDelegate : ObjectiveC.NSObjectProtocol {
+  @objc func onRecvMessages(_ messages: [NIMQChatMessage])
+  @objc func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+  @objc func willSend(_ message: NIMQChatMessage)
+  @objc func send(_ message: NIMQChatMessage, didCompleteWithError error: Swift.Error?)
+  @objc func send(_ message: NIMQChatMessage, progress: Swift.Float)
+  @objc func onDeleteMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+  @objc func onRevokeMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+  @objc func onReloadMessage(_ message: NIMQChatMessage, atIndexs: [Foundation.IndexPath])
+}
+@objc @_hasMissingDesignatedInitializers @objcMembers public class QChatViewModel : ObjectiveC.NSObject, NIMQChatMessageManagerDelegate {
+  public var channel: NECoreQChatKit.ChatChannel?
+  @objc public var server: NECoreQChatKit.QChatServer?
+  @objc public var messages: [NEQChatUIKit.QChatMessageFrame]
+  @objc weak public var delegate: NEQChatUIKit.QChatViewModelDelegate?
+  @objc public var repo: NEQChatKit.QChatRepo
+  @objc public var operationModel: NEQChatUIKit.QChatMessageFrame?
+  @objc deinit
+  @objc public func sendTextMessage(text: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func sendImageMessage(image: UIKit.UIImage, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func sendAudioMessage(path: Swift.String, _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func getMessageHistory(_ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func getMoreMessageHistory(_ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func downloadAudioAttachment(_ messages: [NIMQChatMessage])
+  @objc public func getUserInfo(userIds: [Swift.String], _ completion: @escaping (Swift.Error?) -> Swift.Void)
+  @objc public func markMessageRead(time: Foundation.TimeInterval)
+  @objc public func getUrls() -> [Swift.String]
+  @objc public func indexOfMessage(message: NIMQChatMessage) -> Swift.Int
+  @objc public func revokeMessage(_ completion: NIMQChatUpdateMessageHandler?)
+  @objc public func deleteMessage(_ completion: NIMQChatUpdateMessageHandler?)
+  @objc public func addQuickComment(type: Swift.Int64, to message: NIMQChatMessage, completion: NIMQChatHandler?)
+  public func addQuickCommentUpdateUI(_ type: Swift.Int64, _ message: NIMQChatMessage, selfReply: Swift.Bool?)
+  @objc public func deleteQuickComment(type: Swift.Int64, to message: NIMQChatMessage, completion: NIMQChatHandler?)
+  public func deleteQuickCommentUpdateUI(_ type: Swift.Int64, _ message: NIMQChatMessage, selfReply: Swift.Bool?)
+  @objc public func fetchQuickComments(messages: [NIMQChatMessage], completion: @escaping NIMQChatFetchQuickCommentsByMsgsHandler)
+  @objc public func onRecvMessages(_ messages: [NIMQChatMessage])
+  @objc public func onRecvSystemNotification(_ result: NIMQChatReceiveSystemNotificationResult)
+  @objc public func onMessageUpdate(_ event: NIMQChatUpdateMessageEvent)
+  @objc public func willSend(_ message: NIMQChatMessage)
+  @objc public func send(_ message: NIMQChatMessage, progress: Swift.Float)
+  @objc public func send(_ message: NIMQChatMessage, didCompleteWithError error: Swift.Error?)
+  public func applyServerJoin(parameter: NECoreQChatKit.QChatApplyServerJoinParam, _ completion: @escaping (Foundation.NSError?) -> Swift.Void)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers @_Concurrency.MainActor(unsafe) open class QChatVisitorBannerView : UIKit.UIView {
+  @objc @_Concurrency.MainActor(unsafe) public var imageView: UIKit.UIImageView
+  @objc @_Concurrency.MainActor(unsafe) public var titleLabel: UIKit.UILabel
+  @objc @_Concurrency.MainActor(unsafe) public var joinButton: NECommonUIKit.ExpandButton
+  @objc @_Concurrency.MainActor(unsafe) public var backgroundImageView: UIKit.UIImageView
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_Concurrency.MainActor(unsafe) public class QChatWhiteBlackListVC : NEQChatUIKit.QChatTableViewController, NEQChatUIKit.QChatMemberSelectControllerDelegate {
+  @_Concurrency.MainActor(unsafe) public var type: NECoreQChatKit.RoleType
+  @_Concurrency.MainActor(unsafe) public var channel: NECoreQChatKit.ChatChannel?
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, numberOfRowsInSection section: Swift.Int) -> Swift.Int
+  @_Concurrency.MainActor(unsafe) @objc override public func tableView(_ tableView: UIKit.UITableView, cellForRowAt indexPath: Foundation.IndexPath) -> UIKit.UITableViewCell
+  @objc @_Concurrency.MainActor(unsafe) public func filterMembers(accid: [Swift.String]?, _ filterMembers: @escaping ([Swift.String]?) -> Swift.Void)
+  @_Concurrency.MainActor(unsafe) @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @_Concurrency.MainActor(unsafe) @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension NEQChatUIKit.NIMEmoticonType : Swift.Equatable {}
+extension NEQChatUIKit.NIMEmoticonType : Swift.Hashable {}
+extension NEQChatUIKit.NIMEmoticonType : Swift.RawRepresentable {}
+extension NEQChatUIKit.QChatChannelChangeType : Swift.Equatable {}
+extension NEQChatUIKit.QChatChannelChangeType : Swift.Hashable {}
+extension NEQChatUIKit.QChatChannelChangeType : Swift.RawRepresentable {}
+extension NEQChatUIKit.QChatMenuType : Swift.Equatable {}
+extension NEQChatUIKit.QChatMenuType : Swift.Hashable {}
+extension NEQChatUIKit.QChatMenuType : Swift.RawRepresentable {}
+extension NEQChatUIKit.OperationType : Swift.Equatable {}
+extension NEQChatUIKit.OperationType : Swift.Hashable {}
+extension NEQChatUIKit.OperationType : Swift.RawRepresentable {}
+extension NEQChatUIKit.RoundedType : Swift.Equatable {}
+extension NEQChatUIKit.RoundedType : Swift.Hashable {}
+extension NEQChatUIKit.QChatSettingCellType : Swift.Equatable {}
+extension NEQChatUIKit.QChatSettingCellType : Swift.Hashable {}
+extension NEQChatUIKit.QChatSettingCellType : Swift.RawRepresentable {}
+extension NEQChatUIKit.RightStyle : Swift.Equatable {}
+extension NEQChatUIKit.RightStyle : Swift.Hashable {}

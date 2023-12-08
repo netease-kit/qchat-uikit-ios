@@ -10,6 +10,7 @@ target 'IMQChatExample' do
   pod 'YXLogin', '1.0.0'
 
   # 基础 Kit 库
+  pod 'NIMSDK_LITE','9.14.0'
 pod 'NECoreKit', '9.6.5'
 pod 'NECoreIMKit', '9.6.5'
 pod 'NEChatKit', '9.6.5'
@@ -29,8 +30,8 @@ pod 'NEQChatUIKit', '9.5.3'
 pod 'NEMapKit', '9.6.5'         
 
 # 扩展库-呼叫组件
-pod 'NERtcCallKit', '2.2.0'
-pod 'NERtcCallUIKit', '2.2.0'
+ pod 'NERtcCallKit/NOS_Special', '2.2.0'
+ pod 'NERtcCallUIKit/NOS_Special', '2.2.0'
 
 # 扩展库，依次为 RTC 音视频基础组件、RTC 音视频神经网络组件（使用背景虚化功能需要集成）、RTC 音视频背景分割组件（使用背景虚化功能需要集成）
 pod 'NERtcSDK/RtcBasic', '5.5.2'        
@@ -43,22 +44,12 @@ pod 'NERtcSDK/Segment'
 
 end
 
-#fix bug in Xcode 14
+#⚠️如果pod依赖报错，可打开以下注释
 post_install do |installer|
   installer.pods_project.targets.each do |target|
-    if target.name == 'RSKPlaceholderTextView'
-      target.build_configurations.each do |config|
-        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      end
+    target.build_configurations.each do |config|
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
     end
   end
 end
-
-#⚠️如果pod依赖报错，可打开以下注释
-#post_install do |installer|
-#  installer.pods_project.targets.each do |target|
-#    target.build_configurations.each do |config|
-#      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-#    end
-#  end
-#end

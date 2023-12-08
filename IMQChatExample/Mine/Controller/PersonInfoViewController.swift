@@ -2,11 +2,12 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreKit
-import NETeamUIKit
 import NEChatUIKit
+import NECoreKit
+import NECoreQChatKit
+import NETeamUIKit
 import NIMSDK
+import UIKit
 
 @objcMembers
 class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
@@ -29,12 +30,12 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(false, animated: false)
   }
 
   func initialConfig() {
     title = NSLocalizedString("person_info", comment: "")
-    view.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    view.backgroundColor = .ne_lightBackgroundColor
+    navigationView.backgroundColor = .ne_lightBackgroundColor
     viewModel.delegate = self
     NIMSDK.shared().userManager.add(self)
   }
@@ -44,11 +45,11 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
-    cellClassDic.forEach { (key: Int, value: BaseTeamSettingCell.Type) in
+    cellClassDic.forEach { (key: Int, value: NEBaseTeamSettingCell.Type) in
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
   }
@@ -76,7 +77,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     alert.addAction(first)
     alert.addAction(second)
     alert.addAction(cancel)
-
+    fixAlertOnIpad(alert)
     present(alert, animated: true, completion: nil)
   }
 
@@ -104,7 +105,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
   lazy var tableView: UITableView = {
     let table = UITableView()
     table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    table.backgroundColor = .clear
     table.dataSource = self
     table.delegate = self
     table.separatorColor = .clear
@@ -130,7 +131,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
   // MARK: NIMUserManagerDelegate
 
   func onUserInfoChanged(_ user: NIMUser) {
-    if user.userId == IMKitEngine.instance.imAccid {
+    if user.userId == QChatKitClient.instance.imAccid() {
       viewModel.getData()
       tableView.reloadData()
     }
@@ -151,7 +152,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     weak var weakSelf = self
     if let imageData = image.jpegData(compressionQuality: 0.6) as NSData? {
       let filePath = NSHomeDirectory().appending("/Documents/")
-        .appending(IMKitEngine.instance.imAccid)
+        .appending(QChatKitClient.instance.imAccid())
       let succcess = imageData.write(toFile: filePath, atomically: true)
       if succcess {
         NIMSDK.shared().resourceManager
@@ -294,7 +295,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     if let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(model.type)",
       for: indexPath
-    ) as? BaseTeamSettingCell {
+    ) as? NEBaseTeamSettingCell {
       cell.configure(model)
       return cell
     }
@@ -325,7 +326,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let header = UIView()
-    header.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    header.backgroundColor = .ne_lightBackgroundColor
     return header
   }
 }

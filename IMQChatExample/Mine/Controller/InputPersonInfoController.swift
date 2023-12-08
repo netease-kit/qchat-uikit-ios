@@ -3,9 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreKit
 import NEChatUIKit
+import NECoreKit
+import UIKit
 
 public enum EditType: Int {
   case nickName = 0
@@ -24,41 +24,25 @@ class InputPersonInfoController: NEBaseViewController, UITextFieldDelegate {
 
   public var callBack: ResultCallBack?
   private var limitNumberCount = 0
+
   override func viewDidLoad() {
     super.viewDidLoad()
     setupSubviews()
     initialConfig()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: DispatchWorkItem(block: { [weak self] in
+      self?.textField.becomeFirstResponder()
+    }))
   }
 
   func setupSubviews() {
     view.addSubview(textfieldBgView)
-    if #available(iOS 11.0, *) {
-      NSLayoutConstraint.activate([
-        textfieldBgView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20.0),
-        textfieldBgView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-        textfieldBgView.topAnchor.constraint(
-          equalTo: view.safeAreaLayoutGuide.topAnchor,
-          constant: 12
-        ),
-        textfieldBgView.heightAnchor.constraint(equalToConstant: 50),
-      ])
-    } else {
-      if #available(iOS 10.0, *) {
-        NSLayoutConstraint.activate([
-          textfieldBgView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20.0),
-          textfieldBgView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-          textfieldBgView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12),
-          textfieldBgView.heightAnchor.constraint(equalToConstant: 50),
-        ])
-      } else {
-        NSLayoutConstraint.activate([
-          textfieldBgView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20.0),
-          textfieldBgView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-          textfieldBgView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12 + kNavigationHeight + KStatusBarHeight),
-          textfieldBgView.heightAnchor.constraint(equalToConstant: 50),
-        ])
-      }
-    }
+    NSLayoutConstraint.activate([
+      textfieldBgView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20.0),
+      textfieldBgView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+      textfieldBgView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12 + topConstant),
+      textfieldBgView.heightAnchor.constraint(equalToConstant: 50),
+    ])
 
     textfieldBgView.addSubview(textField)
     NSLayoutConstraint.activate([
@@ -70,15 +54,16 @@ class InputPersonInfoController: NEBaseViewController, UITextFieldDelegate {
   }
 
   func initialConfig() {
+    view.backgroundColor = .ne_lightBackgroundColor
     addRightAction(NSLocalizedString("save", comment: ""), #selector(saveName), self)
-    view.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    navigationView.setMoreButtonTitle(NSLocalizedString("save", comment: ""))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(saveName))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
   }
 
   @objc func saveName() {
-    weak var weakSelf = self
     if let block = callBack {
       block(textField.text ?? "")
-//      weakSelf?.navigationController?.popViewController(animated: true)
     }
   }
 
@@ -90,9 +75,11 @@ class InputPersonInfoController: NEBaseViewController, UITextFieldDelegate {
     case .cellphone:
       title = NSLocalizedString("phone", comment: "")
       limitNumberCount = 11
+      textField.keyboardType = .phonePad
     case .email:
       title = NSLocalizedString("email", comment: "")
       limitNumberCount = 30
+      textField.keyboardType = .emailAddress
     case .specialSign:
       title = NSLocalizedString("individuality_sign", comment: "")
       limitNumberCount = 50
@@ -108,7 +95,6 @@ class InputPersonInfoController: NEBaseViewController, UITextFieldDelegate {
     text.font = UIFont.systemFont(ofSize: 14)
     text.delegate = self
     text.clearButtonMode = .always
-    text.becomeFirstResponder()
     text.addTarget(self, action: #selector(textFieldChange), for: .editingChanged)
     return text
   }()
