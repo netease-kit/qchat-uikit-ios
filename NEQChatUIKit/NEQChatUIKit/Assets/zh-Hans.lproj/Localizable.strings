@@ -13,14 +13,14 @@
 
 
 //MARK: Server
-"qchat_setting"="服务器设置";
-"qchat_delete_server"="删除服务器";
-"qchat_leave_server"="退出服务器";
-"qchat_permisssion"="权限";
-"qchat_server_theme"="服务器主题";
-"qchat_server_name"="服务器名称";
+"qchat_setting"="社区设置";
+"qchat_delete_server"="删除社区";
+"qchat_leave_server"="退出社区";
+"qchat_permission"="权限";
+"qchat_server_theme"="社区主题";
+"qchat_server_name"="社区名称";
 "qchat_id_group"="身份组";
-"qchat_group_default_permission"="所有服务器成员默认权限";
+"qchat_group_default_permission"="所有社区成员默认权限";
 "qchat_sort"="排序";
 "qchat_create_new_id_group"="创建新身份组";
 "qchat_group_name"="身份组名称";
@@ -29,77 +29,121 @@
 "qchat_save"="保存";
 "qchat_nickname"="昵称";
 "qcaht_edit_nickname"="编辑昵称";
-"qchat_kick_out"="踢除他人";
+"qchat_kick_out"="踢除";
 "qchat_prohibit"="封禁";
-"qchat_manager_server"="管理服务器";
-"qchat_manager_channel"="管理所有频道属性";
+"qchat_manager_server"="管理社区";
+"qchat_manager_channel"="管理所有话题属性";
 "qchat_manager_role"="管理角色";
 "qchat_send_message"="发送消息";
-"qchat_delete_message"="所有频道中删除他人消息";
-"qchat_recall_message"="所有频道撤回他人消息";
+"qchat_delete_message"="所有话题中删除他人消息";
+"qchat_recall_message"="所有话题撤回他人消息";
 "qchat_at_any"="@任意人的权限";
 "qchat_at_all"="@所有人的权限";
-"qchat_modify_own_server"="修改自己服务器成员信息";
-"qchat_modify_other_server"="修改他人服务器成员信息";
-"qchat_invite_member"="邀请他人进入server权限";
-"qchat_kickout_member"="踢人";
-"qchat_manager_channel_list"="管理频道名单";
+"qchat_modify_own_server"="修改自己社区成员信息";
+"qchat_modify_other_server"="修改他人社区成员信息";
+"qchat_invite_member"="邀请他人进入社区权限";
+"qchat_kickout_member"="踢除他人";
+"qchat_manager_channel_list"="管理话题名单";
 "qchat_common_permission"="通用权限";
 "qchat_message_permission"="消息权限";
 "qchat_member_permission"="成员权限";
 "qchat_member"="成员";
 "qchat_id_group_sort"="身份组排序";
+"group_sort_tip"="你只能管理比自己身份更低的身份组";
 "qchat_sure"="确定";
 "qchat_cancel"="取消";
 "qchat_tip"="提示";
 "qchat_select"="选择";
-"qchat_please_input_topic"="请输入主题";
-"qchat_not_empty_servername"="服务器名不能为空";
+"qchat_please_input_topic"="输入主题";
+"qchat_not_empty_servername"="社区名不能为空";
 "qchat_not_empty_header_url"="请先上传头像";
 "qchat_not_empty_select_memeber"="请选择用户";
 "qchat_please_input_role_name"="请输入身份组名称";
-"qchat_sure_delete_user"="确定删除当前用户?";
 "qchat_delete_success"="删除成功";
 "qchat_add_success"="添加成功";
-"qchat_add_Server"="创建服务器";
+"qchat_add_Server"="创建社区";
 "qchat_mine_add"="自己创建";
-"qchat_join_otherServer"="加入别人服务器";
+"qchat_join_otherServer"="加入别人社区";
+"qchat_create_public_server"="创建公告频道";
+"qchat_join_public_server"="加入公告频道";
 "space_not_support"="不支持全空格";
+"Invitation_sent"="邀请信息已发送";
+
+//MARK: announcement
+"enter_noticeName"="请输入公告频道名称";
+"search_public_serverId"="搜索公告频道ID";
+"notice_setting"="频道设置";
+"copy_seccess"="复制成功";
+"shared_link"="分享公告频道ID（可搜索加入）";
+"channel_info"="频道信息";
+"notice_name"="频道名称";
+"channel_description"="频道说明";
+"member_info"="成员信息";
+"administrator"="管理员";
+"subscriber"="订阅者";
+"message_manage"="消息管理";
+"history_record"="历史记录";
+"message_remind"="消息提醒";
+"emoticon_reply_enable"="允许表情回复";
+"dismiss_channel"="解散频道";
+"leave_channel"="退出频道";
+"sure_dismiss_channel"="确定解散“%@”频道吗?";
+"sure_remove_admin"="确定移除“%@”成员吗?";
+"sure_leave_channel"="确定退出“%@”频道吗?";
+"administrator_manage"="管理员管理";
+"subscriber_manage"="订阅者管理";
+"channel_read_only"="该频道为只读";
+
+//MARK: 公告频道管理员编辑页面
+"authority_list"="权限列表";
+"send_message"="发消息";
+"edit_channel_info"="编辑频道信息";
+"delete_message"="删除他人消息";
+"manage_subscribers"="管理订阅者";
+"manage_emotion_comment"="管理表情评论";
+"remove_administrator"="移除管理员";
 
 //MARK: Channel
-"create_channel"="创建新频道";
-"delete_channel"="删除频道";
-"channel_deleted"="此频道已删除";
-"confirm_delete_channel"="确认要移除";
+"create_channel"="创建新话题";
+"delete_channel"="删除话题";
+"channel_deleted"="此话题已删除";
+"confirm_delete_text"="确认要移除“%@”";
+"question_mark"="吗?";
 
 "create"="创建";
 "cancel"="取消";
-"channel_name"="频道名称";
-"channel_topic"="频道主题";
-"channel_type"="频道类型";
+"channel_name"="话题名称";
+"channel_topic"="话题主题";
+"channel_type"="话题类型";
 "input_channel_name"="请输入名称";
 "input_channel_topic"="请输入主题";
 "public"="公开";
 "private"="私密";
 "online"="在线";
 "offline"="离线";
-"first_channel"="频道1";
-"second_channel"="频道2";
+"first_channel"="话题1";
+"second_channel"="话题2";
 "see_more"="查看更多";
 "pick_up"="收起";
 "has_no_role"="暂无身份组可添加";
 "send_to"="发送给";
-"image_is_nil"= "图片为空";
+"image_is_nil"="图片为空";
 
 
 
-//MARK:toast
+//MARK: toast
+"copy_success"="复制成功";
 "update_channel_suscess"="保存成功";
+"save_failed"="保存失败";
 "delete_channel_suscess"="删除成功";
 "open_soon"="暂未开放";
+"editable_time_expired"="已超过可编辑时间";
+"ravokable_time_expired"="已超过时间无法撤回";
+"comment_limit_expired"="表情数已超限";
+"comment_not_support"="表情回复功能已关闭";
 
 //MARK: channel_setting
-"channel_setting"="频道设置";
+"channel_setting"="话题设置";
 "save"="保存";
 "close"="关闭";
 "authority"="权限";
@@ -107,7 +151,7 @@
 "list"="名单";
 "white_list"="白名单";
 "black_list"="黑名单";
-"channel_member"="频道成员";
+"channel_member"="话题成员";
 
 
 "add_group"="添加身份组";
@@ -119,40 +163,33 @@
 "removeRole"="移除身份组";
 
 //MARK:身份组权限设置
-"auth1"="ManageServer";
-"auth2"="管理频道属性";
-"auth3"="管理频道权限";
-"auth4"="发送消息";
-"auth5"="ModifySelfInfo";
-"auth6"="InviteToServer";
-"auth7"="KickOthersInServer";
-"auth8"="ModifyOthersInfoInServer";
-"auth9"="频道中撤回他人消息";
-"auth10"="频道中删除他人消息";
-"auth11"="RemindOther";
-"auth12"="RemindAll";
-"auth13"="管理频道名单";
+"auth_manageChannel"="管理话题属性";
+"auth_manageRole"="管理话题权限";
+"auth_sendMsg"="发送消息";
+"auth_revokeMsg"="话题中撤回他人消息";
+"auth_deleteOtherMsg"="话题中删除他人消息";
+"auth_manageBlackWhiteList"="管理话题名单";
 
 //supplement
 "delete"="删除";
 "share_thoughts"="分享心得";
 "noMember_add"="暂无成员";
-"search_serverId"="搜索服务器ID";
-"no_serverId"="暂无你要的服务器ID";
+"search_serverId"="搜索社区ID";
+"no_serverId"="暂无你要的社区ID";
 "know"="知道了";
 "upload_headImage"="上传头像";
-"enter_serverName"="请输入服务器名称";
+"enter_serverName"="请输入社区名称";
 "request_sended"="请求已发送";
-"message_channel"="消息频道";
-"server_nochannel"="该服务器下暂无频道";
+"message_channel"="消息话题";
+"server_nochannel"="该社区下暂无话题";
 "applied"="已申请";
+"joined"="已加入";
 "join"="加入";
 "modify_nickname"="请点击编辑后修改昵称";
-"sure_exit_server"="确定退出当前服务器?";
-"sure_delete_server"="确定删除当前服务器?";
-"serverId_notbe_empty"="服务器id不能为空";
+"sure_exit_server"="确定退出当前社区?";
+"sure_delete_server"="确定删除当前社区?";
+"serverId_notbe_empty"="社区id不能为空";
 "enter_name"="输入名称";
-"kick_currentMember"="确定踢出当前成员?";
 "sure_delete"="确定删除";
 "current_identity"="当前身份组";
 "hm"="HH:mm";
@@ -162,14 +199,14 @@
 //MARK：error toast
 "param_error"="Parameter error";
 "no_permession"="暂无权限";
-"no_permession_to_send"="暂无权限在该频道发言";
-"channelName_cannot_be_empty"="频道名称不能为空";
+"no_permession_to_send"="暂无权限在该话题发言";
+"channelName_cannot_be_empty"="话题名称不能为空";
 "roleName_cannot_be_empty"="身份组名称不能为空";
-"network_error"="当前网络错误";
-"cant_join"="无法加入？";
-"blocked_from_server_cant_join"="你被该服务器封禁，无法加入。";
-"serverName_limit"="服务器命名不超过50个字符";
-"add_favorite_service"="暂无服务器，\n赶紧去添加心仪的服务器吧";
+"network_error"="当前网络不可用，请检查你的网络设置";
+"cant_join"="无法加入?";
+"blocked_from_server_cant_join"="你被该社区封禁，无法加入。";
+"serverName_limit"="社区命名不超过50个字符";
+"add_favorite_service"="暂无社区，\n赶紧去添加心仪的社区吧";
 "nickName_not_empty"="昵称不能为空";
 "accid_not_empty"="accid 不能为空";
 
@@ -182,3 +219,61 @@
 "send"="发送";
 
 "copy"="拷贝";
+
+"message_recalled"="此消息已撤回";
+"message_reedit"="重新编辑";
+"message_revoke_confirm"="确认要撤回该消息吗?";
+"message_delete_confirm"="确认要删除该消息吗?";
+
+
+//MARK: operation
+"operation_copy"="复制";
+"operation_replay"="回复";
+"operation_forward"="转发";
+"operation_pin"="标记";
+"operation_cancel_pin"="取消标记";
+"operation_select"="多选";
+"operation_collection"="收藏";
+"operation_delete"="删除";
+"operation_recall"="撤回";
+"message_has_be_withdrawn" = "此消息已撤回";
+"message_reedit" = "重新编辑";
+
+"voice"="[语音消息]";
+"picture"="[图片消息]";
+"video"="[视频消息]";
+"location"="[地理位置]";
+"file"="[文件消息]";
+"unknown"="[未知消息体]";
+
+"visitor_banner_text"="当前为游客模式，快加入一起聊天！";
+"visitor_banner_join"="加入";
+"qchat_visitor_chat_join_tip"="加入社区后方可发言";
+
+"qchat_public_server_name_placeholder"="请输入公告频道名称";
+"manage_manager"="管理员管理";
+"manage_subscriber"="订阅者管理";
+"qchat_remove"="移除";
+
+"qchat_notice_channel_creator"="创建者";
+"qchat_notice_channel_admin"="管理员";
+
+"qchat_select_limit"="最多选择%d人";
+
+"failed_operation"="操作失败";
+
+"empty_data"="暂无数据";
+
+"role_not_exist"="身份组不存在";
+
+"role_has_exist"="身份组已添加";
+
+"qchat_member_no_exist"="成员不存在";
+
+"qchat_member_exised"="成员已添加";
+
+"delete_failed"="删除失败";
+
+"delete_role_failed"="身份组删除失败";
+
+"delete_member_failed"="成员删除失败";

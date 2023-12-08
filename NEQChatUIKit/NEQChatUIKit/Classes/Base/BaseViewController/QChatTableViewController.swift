@@ -3,42 +3,27 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreKit
+import UIKit
 
 public class QChatTableViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
   public var tableView: UITableView = .init(frame: .zero, style: .grouped)
-  public var topConstraint: NSLayoutConstraint?
-  public var bottomConstraint: NSLayoutConstraint?
 
   override public func viewDidLoad() {
     super.viewDidLoad()
     tableView.separatorStyle = .none
     tableView.delegate = self
     tableView.dataSource = self
+    tableView.backgroundColor = .clear
     tableView.translatesAutoresizingMaskIntoConstraints = false
     view.addSubview(tableView)
     NSLayoutConstraint.activate([
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
+      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
     ])
-
-    if #available(iOS 11.0, *) {
-      self.topConstraint = self.tableView.topAnchor.constraint(
-        equalTo: self.view.safeAreaLayoutGuide.topAnchor,
-        constant: 0
-      )
-      self.bottomConstraint = self.tableView.bottomAnchor
-        .constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
-
-    } else {
-      // Fallback on earlier versions
-      topConstraint = tableView.topAnchor.constraint(equalTo: view.topAnchor)
-      bottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-    }
-    topConstraint?.isActive = true
-    bottomConstraint?.isActive = true
 
     tableView.sectionHeaderHeight = 38
     tableView.sectionFooterHeight = 0

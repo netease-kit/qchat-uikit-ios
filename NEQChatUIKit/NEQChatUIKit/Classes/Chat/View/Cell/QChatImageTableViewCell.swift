@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 
 import Foundation
-import UIKit
 import NIMSDK
+import UIKit
 class QChatImageTableViewCell: QChatBaseTableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,10 +27,10 @@ class QChatImageTableViewCell: QChatBaseTableViewCell {
     didSet {
       let imageObject = messageFrame?.message?.messageObject as! NIMImageObject
       contentImageView.frame = CGRect(
-        x: qChat_margin,
+        x: messageFrame?.startX ?? 0,
         y: qChat_margin,
-        width: contentBtn.width - 2 * qChat_margin,
-        height: contentBtn.height - 2 * qChat_margin
+        width: messageFrame?.contentSize.width ?? 0,
+        height: messageFrame?.contentSize.height ?? 0
       )
       if let path = imageObject.path, FileManager.default.fileExists(atPath: path) {
         contentImageView.sd_setImage(

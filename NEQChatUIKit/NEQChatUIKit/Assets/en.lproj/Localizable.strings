@@ -12,79 +12,116 @@
 "items"="items";
 
 
-//MARK: Server
-"qchat_setting"="Server Settings";
-"qchat_delete_server"="Delete Server";
-"qchat_leave_server"="Exit Server";
-"qchat_permisssion"="Permission";
-"qchat_server_theme"="Server Theme";
-"qchat_server_name"="Server Name";
+//MARK: Community
+"qchat_setting"="Community Settings";
+"qchat_delete_server"="Delete Community";
+"qchat_leave_server"="Exit Community";
+"qchat_permission"="Permission";
+"qchat_server_theme"="Community Theme";
+"qchat_server_name"="Community Name";
 "qchat_id_group"="Role";
 "qchat_group_default_permission"="Default Permission for everyone";
 "qchat_sort"="sort";
 "qchat_create_new_id_group"="Create new Role";
 "qchat_group_name"="Role Name";
 "qchat_manager_member"="Role management";
-"qchat_edit"="Edit";
+"qchat_edit"="edit";
 "qchat_save"="Save";
 "qchat_nickname"="Nick Name";
 "qcaht_edit_nickname"="Edit Nick Name";
 "qchat_kick_out"="Kick out";
 "qchat_prohibit"="Prohibit";
-"qchat_manager_server"="Manage Server";
+"qchat_manager_server"="Manage Community";
 "qchat_manager_channel"="Manage all cannel info";
 "qchat_manager_role"="Manage Role";
 "qchat_send_message"="Send Message";
-"qchat_delete_message"="Delete other's message in Server";
-"qchat_recall_message"="Recall other's message in Server";
+"qchat_delete_message"="Delete other's message in Community";
+"qchat_recall_message"="Recall other's message in Community";
 "qchat_at_any"="@ anyone";
 "qchat_at_all"="@ everyone";
-"qchat_modify_own_server"="Edit my info in Server";
-"qchat_modify_other_server"="Edit other's Server info";
+"qchat_modify_own_server"="Edit my info in Community";
+"qchat_modify_other_server"="Edit other's Community info";
 "qchat_invite_member"="Invite Permission";
 "qchat_kickout_member"="Kick out";
-"qchat_manager_channel_list"="Manage channel members";
+"qchat_manager_channel_list"="Manage topic members";
 "qchat_common_permission"="Common Permission";
 "qchat_message_permission"="Message Permission";
 "qchat_member_permission"="Member Permission";
 "qchat_member"="Member";
 "qchat_id_group_sort"="Role Sort";
-"qchat_sure"="Ok";
-"qchat_cancel"="cancel";
+"group_sort_tip"="You can only manage groups lower than yourself";
+"qchat_sure"="Comfirm";
+"qchat_cancel"="Cancel";
 "qchat_tip"="Tip";
 "qchat_select"="Select";
 "qchat_please_input_topic"="Please enter the theme";
-"qchat_not_empty_servername"="Please Name the server";
+"qchat_not_empty_servername"="Please Name the community";
 "qchat_not_empty_header_url"="Please upload Avator";
 "qchat_not_empty_select_memeber"="Please Select member";
 "qchat_please_input_role_name"="Please set the role name";
-"qchat_sure_delete_user"="wether to delete this member";
 "qchat_delete_success"="Delete successfully";
 "qchat_add_success"="Add successfully";
-"qchat_add_Server"="create Server";
+"qchat_add_Server"="create Community";
 "qchat_mine_add"="create";
-"qchat_join_otherServer"="Join other Server";
+"qchat_join_otherServer"="Join other Community";
+"qchat_create_public_server"="Create public Community";
+"qchat_join_public_server"="Join other public Community";
 "space_not_support"="All Spaces are not supported";
+"Invitation_sent"="Invitation message sent";
 
-//MARK: Channel
-"create_channel"="Create New Channel";
-"delete_channel"="Delete Channel";
-"channel_deleted"="Channel Deleted";
-"confirm_delete_channel"="Sure to Remove ？";
+// Announcement
+"enter_noticeName"="Enter Channel Name";
+"notice_setting"="Channel Settings";;
+"copy_seccess"="Copy Seccess";
+"shared_link"="Share channel ID";
+"channel_info"="Channel info";
+"notice_name"="Channel name";
+"channel_description"="Channel introduce";
+"member_info"="Member info";
+"administrator"="admin";
+"subscriber"="subscriber";
+"message_manage"="Message Manage";
+"history_record"="History Record";
+"message_remind"="Message Remind";
+"emoticon_reply_enable"="Allowed emoji comment";
+"dismiss_channel"="Dissolve Channel";
+"leave_channel"="Quit Channel";
+"sure_dismiss_channel"="Whether dissolve '%@' channel?";
+"sure_remove_admin"="Whether remove '%@'?";
+"sure_leave_channel"="Whether quit '%@' channel?";
+"administrator_manage"="Administrator Manage";
+"subscriber_manage"="Subscriber Manage";
+"channel_read_only"="Only Read";
+
+// 公告频道管理员编辑页面
+"authority_list"="authority list";
+"send_message"="Send message";
+"edit_channel_info"="Edit channel info";
+"delete_message"="Delete message";
+"manage_subscribers"="Manage subscriber";
+"manage_emotion_comment"="Manage emoji comment";
+"remove_administrator"="Remove";
+
+//MARK: Topic
+"create_channel"="Create New Topic";
+"delete_channel"="Delete Topic";
+"channel_deleted"="Topic Deleted";
+"confirm_delete_text"="Sure to Remove '%@'";
+"question_mark"="?";
 
 "create"="Creat";
 "cancel"="Cancel";
-"channel_name"="Channel Name";
-"channel_topic"="Channel Theme";
-"channel_type"="Channel Type";
+"channel_name"="Topic Name";
+"channel_topic"="Topic Theme";
+"channel_type"="Topic Type";
 "input_channel_name"="Enter Name";
 "input_channel_topic"="Enter Theme";
 "public"="Public";
 "private"="Private";
 "online"="Online";
 "offline"="Offline";
-"first_channel"="Channel 1";
-"second_channel"="channel 2";
+"first_channel"="Topic 1";
+"second_channel"="Topic 2";
 "see_more"="See More";
 "pick_up"="Pick Up";
 "has_no_role"="No more role";
@@ -93,12 +130,18 @@
 
 
 //MARK:toast
-"update_channel_suscess"="Save Successfully";
-"delete_channel_suscess"="Delete Successfully";
+"copy_success"="Copy successful";
+"update_channel_suscess"="Save successful";
+"save_failed"="Save failed";
+"delete_channel_suscess"="Delete successful";
 "open_soon"="Not Open";
+"editable_time_expired"="Editable time has expired";
+"ravokable_time_expired"="Ravokable time has expired";
+"comment_limit_expired"="exceeds the limit";
+"comment_not_support"="emoji comment closed";
 
-//MARK: channel_setting
-"channel_setting"="Channel Setting";
+//MARK: topic_setting
+"channel_setting"="Topic Setting";
 "save"="Save";
 "close"="Close";
 "authority"="Permission";
@@ -106,8 +149,8 @@
 "list"="List";
 "white_list"="whitelist";
 "black_list"="blacklist";
-"channel_member"="Channel Member";
-"delete_channel"="Delete Channel";
+"channel_member"="Topic Member";
+"delete_channel"="Delete Topic";
 
 "add_group"="Add Role";
 "add_member"="Add member";
@@ -117,41 +160,35 @@
 "removeRole"="Remove Role";
 
 //MARK:身份组权限设置
-"auth1"="ManageServer";
-"auth2"="Manage Channel Info";
-"auth3"="Manage Channel Permission";
-"auth4"="Send Message";
-"auth5"="ModifySelfInfo";
-"auth6"="InviteToServer";
-"auth7"="KickOthersInServer";
-"auth8"="ModifyOthersInfoInServer";
-"auth9"="Recall other's Message";
-"auth10"="Delete other's Message";
-"auth11"="RemindOther";
-"auth12"="RemindAll";
-"auth13"="Manage Channel Memeber";
+"auth_manageChannel"="Manage Topic Info";
+"auth_manageRole"="Manage Topic Permission";
+"auth_sendMsg"="Send Message";
+"auth_revokeMsg"="Recall other's Message";
+"auth_deleteOtherMsg"="Delete other's Message";
+"auth_manageBlackWhiteList"="Manage Topic Memeber";
 
 //supplement
 "delete"="delete";
 "share_thoughts"="Share Thoughts";
 "noMember_add"="No member to add";
-"search_serverId"="Search ServerID";
+"search_serverId"="Search CommunityID";
+"search_public_serverId"="Search Channel ID";
 "no_serverId"="Not Found";
 "know"="ok";
 "upload_headImage"="Upload Avator";
-"enter_serverName"="Please enter server name";
+"enter_serverName"="Please enter community name";
 "request_sended"="invit sent";
-"message_channel"="Message Channel";
-"server_nochannel"="No Channel";
+"message_channel"="Message Topic";
+"server_nochannel"="No Topic";
 "applied"="Applied";
+"joined"="Joined";
 "join"="Join";
 "modify_nickname"="Click to edit nick name";
-"sure_exit_server"="wether to exit server？";
-"sure_delete_server"="wether to delete server？";
+"sure_exit_server"="Whether to exit community？";
+"sure_delete_server"="Whether to delete community？";
 "serverId_notbe_empty"="Cannot be empty ";
 "enter_name"="Enter Name";
-"kick_currentMember"="Wether to kick out this member？";
-"sure_delete"=" Wether to delete？";
+"sure_delete"=" Whether to delete？";
 "current_identity"="Current Identity Group";
 "hm"="HH:mm";
 "mdhm"="MM.dd HH:mm";
@@ -163,11 +200,11 @@
 "no_permession_to_send"="No permission to send message";
 "channelName_cannot_be_empty"="Cannot be empty";
 "roleName_cannot_be_empty"="Cannot be empty";
-"network_error"="No internet";
+"network_error"="No internet, Please check your setting";
 "cant_join"="Cannot join？";
-"blocked_from_server_cant_join"="You are blocked by this server and cannot join";
+"blocked_from_server_cant_join"="You are blocked by this community and cannot join";
 "serverName_limit"="Cannot exceed 50 characters";
-"add_favorite_service"="No Server, Let's join or create one";
+"add_favorite_service"="No Community, Let's join or create one";
 "nickName_not_empty"="Cannot be empty ";
 "accid_not_empty"="Cannot be empty";
 
@@ -180,3 +217,64 @@
 "send"="send";
 
 "copy"="copy";
+
+"message_recalled"="message recalled";
+"message_reedit" = "reedit";
+"message_revoke_confirm"="Whether to recall this message";
+"message_delete_confirm"="Whether to delete this message";
+
+
+//MARK: operation
+"operation_copy"="copy";
+"operation_replay"="reply";
+"operation_forward"="forward";
+"operation_pin"="pin";
+"operation_cancel_pin"="unpin";
+"operation_select"="multi-select";
+"operation_collection"="favorite";
+"operation_delete"="delete";
+"operation_recall"="recall";
+"message_has_be_withdrawn" = "message recalled";
+"message_reedit" = "reedit";
+
+"voice"="[aduio Message]";
+"picture"="[picture Message]";
+"video"="[Video Message]";
+"location"="[Geographic Loaction]";
+"file"="[File Message]";
+"unknown"="[Unknown Message]";
+
+
+"visitor_banner_text"="Guest mode, join us for a chat!";
+"visitor_banner_join"="Join";
+"qchat_visitor_chat_join_tip"="join the community to chat.";
+
+
+"qchat_public_server_name_placeholder"="Please enter the name of the Announcement.";
+"manage_manager"="Manager Manage";
+"manage_subscriber"="Subscriber Manage";
+"qchat_remove"="Remove";
+
+
+"qchat_notice_channel_creator"="Creator";
+"qchat_notice_channel_admin"="admin";
+
+"qchat_select_limit"="Select up to %d person";
+
+"failed_operation"="Failed Operation";
+
+"empty_data"="No Data";
+
+"role_not_exist"="Identity group does not exist.";
+
+"role_has_exist"="Identity group has been added.";
+
+"qchat_member_no_exist"="Member does not exist";
+
+"qchat_member_exised"="Member added";
+
+"delete_failed"="Delete failed";
+
+"delete_role_failed"="Delete role failed";
+
+"delete_member_failed"="Delete member failed";

@@ -5,7 +5,7 @@
 
 import UIKit
 
-class QChatIdGroupCell: QChatBaseCell {
+class QChatIdGroupCell: QNEChatBaseCell {
   lazy var headImage: UIImageView = {
     let image = UIImageView()
     image.translatesAutoresizingMaskIntoConstraints = false
@@ -68,11 +68,13 @@ class QChatIdGroupCell: QChatBaseCell {
     // Initialization code
   }
 
-  override func setSelected(_ selected: Bool, animated: Bool) {
-    super.setSelected(selected, animated: animated)
-
-    // Configure the view for the selected state
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
     setupUI()
+  }
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
   }
 
   func setupUI() {
@@ -131,7 +133,7 @@ class QChatIdGroupCell: QChatBaseCell {
     ])
   }
 
-  func configure(_ model: IdGroupModel) {
+  func configure(_ model: QChatIdGroupModel) {
     titleLabel.text = model.idName
     subTitleLabel.text = model.subTitle
   }

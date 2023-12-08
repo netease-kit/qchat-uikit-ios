@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreIMKit
+import NECoreQChatKit
 import NEQChatKit
 
 @objcMembers
@@ -14,7 +14,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   public var rolesLimitData = QChatRoles()
   public var membersData = QChatRoles()
 
-  private var repo = QChatRepo()
+  private var repo = QChatRepo.shared
   private let className = "QChatAuthoritySettingViewModel"
 
   init(channel: ChatChannel?) {
@@ -196,6 +196,14 @@ public class QChatAuthoritySettingViewModel: NSObject {
       } else {
         rolesData.roles[0].corner = .top
         rolesData.roles[rolesData.roles.count - 1].corner = .bottom
+      }
+    }
+    if rolesLimitData.roles.count > 0 {
+      if rolesLimitData.roles.count == 1 {
+        rolesLimitData.roles[0].corner = .all
+      } else {
+        rolesLimitData.roles[0].corner = .top
+        rolesLimitData.roles[rolesLimitData.roles.count - 1].corner = .bottom
       }
     }
     if membersData.roles.count > 0 {

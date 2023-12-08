@@ -13,7 +13,9 @@ class QChatMemberInfoView: UIView {
   var contentView: UIView = .init()
   public var avatar = UIImageView()
   public var shortName = UILabel()
-  public var name = UILabel()
+  public var nameLabel = UILabel()
+  public var nameLabelRightConstraint: NSLayoutConstraint?
+  public var uidLabel = UILabel()
   public var groupView = UIView()
 
 //    private var onlineView = UIView()
@@ -150,15 +152,25 @@ class QChatMemberInfoView: UIView {
       shortName.bottomAnchor.constraint(equalTo: avatar.bottomAnchor),
     ])
 
-    name.translatesAutoresizingMaskIntoConstraints = false
-    name.font = .boldSystemFont(ofSize: 24)
-    name.textColor = .ne_darkText
-    contentView.addSubview(name)
+    nameLabel.translatesAutoresizingMaskIntoConstraints = false
+    nameLabel.font = .boldSystemFont(ofSize: 24)
+    nameLabel.textColor = .ne_darkText
+    contentView.addSubview(nameLabel)
+    nameLabelRightConstraint = nameLabel.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -180)
     NSLayoutConstraint.activate([
-      name.topAnchor.constraint(equalTo: avatar.bottomAnchor, constant: 14),
-      name.leftAnchor.constraint(equalTo: avatar.leftAnchor),
-      name.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-      name.heightAnchor.constraint(equalToConstant: 30),
+      nameLabel.topAnchor.constraint(equalTo: avatar.bottomAnchor, constant: 14),
+      nameLabel.leftAnchor.constraint(equalTo: avatar.leftAnchor),
+      nameLabelRightConstraint!,
+      nameLabel.heightAnchor.constraint(equalToConstant: 30),
+    ])
+
+    uidLabel.translatesAutoresizingMaskIntoConstraints = false
+    uidLabel.textColor = .ne_greyText
+    contentView.addSubview(uidLabel)
+    NSLayoutConstraint.activate([
+      uidLabel.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
+      uidLabel.leftAnchor.constraint(equalTo: nameLabel.rightAnchor, constant: qChat_margin),
+      uidLabel.widthAnchor.constraint(equalToConstant: 160),
     ])
 
     let groupName = UILabel()
@@ -168,8 +180,8 @@ class QChatMemberInfoView: UIView {
     groupName.textColor = .ne_darkText
     contentView.addSubview(groupName)
     NSLayoutConstraint.activate([
-      groupName.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 30),
-      groupName.leftAnchor.constraint(equalTo: name.leftAnchor),
+      groupName.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 30),
+      groupName.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
       groupName.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
       groupName.heightAnchor.constraint(equalToConstant: 20),
     ])
@@ -180,8 +192,8 @@ class QChatMemberInfoView: UIView {
     contentView.addSubview(line)
     NSLayoutConstraint.activate([
       line.topAnchor.constraint(equalTo: groupName.bottomAnchor, constant: 8),
-      line.leftAnchor.constraint(equalTo: name.leftAnchor),
-      line.rightAnchor.constraint(equalTo: name.rightAnchor),
+      line.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
+      line.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
       line.heightAnchor.constraint(equalToConstant: 1),
     ])
 
@@ -190,8 +202,8 @@ class QChatMemberInfoView: UIView {
     contentView.addSubview(groupView)
     NSLayoutConstraint.activate([
       groupView.topAnchor.constraint(equalTo: line.bottomAnchor, constant: 2),
-      groupView.leftAnchor.constraint(equalTo: name.leftAnchor),
-      groupView.rightAnchor.constraint(equalTo: name.rightAnchor),
+      groupView.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
+      groupView.rightAnchor.constraint(equalTo: nameLabel.rightAnchor),
       groupView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
     ])
   }
@@ -306,7 +318,13 @@ class QChatMemberInfoView: UIView {
 
   public func setup(accid: String?, nickName: String?, avatarUrl: String?) {
     let name = nickName?.count ?? 0 > 0 ? nickName : accid
-    self.name.text = name
+    nameLabel.text = name
+    if name == accid {
+      uidLabel.isHidden = true
+      nameLabelRightConstraint?.constant = -20
+    } else {
+      uidLabel.text = accid
+    }
     self.accid = accid
     if let atr = avatarUrl, !atr.isEmpty {
       avatar.sd_setImage(with: URL(string: atr))

@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
 import UIKit
-import NECoreIMKit
 
 protocol QChatPermissionSettingCellDelegate: AnyObject {
   func didSelected(cell: QChatPermissionSettingCell?, model: RoleStatusInfo?)
@@ -12,7 +12,7 @@ protocol QChatPermissionSettingCellDelegate: AnyObject {
 
 class QChatPermissionSettingCell: QChatCornerCell {
   public weak var delegate: QChatPermissionSettingCellDelegate?
-  private var model: RoleStatusInfoExt?
+  private var model: QChatRoleStatusInfoExt?
   private var button: UIButton?
   private var titleLabel = UILabel()
   private var enable: Bool {
@@ -42,6 +42,8 @@ class QChatPermissionSettingCell: QChatCornerCell {
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
+    dividerLine.isHidden = false
+
     titleLabel.font = UIFont.systemFont(ofSize: 16)
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
     titleLabel.textColor = .ne_darkText
@@ -108,7 +110,7 @@ class QChatPermissionSettingCell: QChatCornerCell {
     ])
   }
 
-  public func updateModel(model: RoleStatusInfoExt?) {
+  public func updateModel(model: QChatRoleStatusInfoExt?) {
     self.model = model
     titleLabel.text = model?.title
     index = (model?.status?.status.rawValue ?? 0) + 1

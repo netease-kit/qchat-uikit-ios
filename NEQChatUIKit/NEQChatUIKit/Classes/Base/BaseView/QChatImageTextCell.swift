@@ -45,7 +45,7 @@ class QChatImageTextCell: QChatStateCell {
     line.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(line)
     NSLayoutConstraint.activate([
-      line.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+      line.leftAnchor.constraint(equalTo: circleView.leftAnchor),
       line.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
       line.heightAnchor.constraint(equalToConstant: 1),
       line.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -1),

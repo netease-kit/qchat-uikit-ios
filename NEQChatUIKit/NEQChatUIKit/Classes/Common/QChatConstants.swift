@@ -4,9 +4,9 @@
 // found in the LICENSE file.
 
 import Foundation
-@_exported import NECoreKit
 @_exported import NECommonUIKit
 @_exported import NECoreIMKit
+@_exported import NECoreKit
 
 let coreLoader = CoreLoader<QChatBaseViewController>()
 func localizable(_ key: String) -> String {
@@ -93,6 +93,8 @@ let HexRGBAlpha: ((Int, Float) -> UIColor) = { (rgbValue: Int, alpha: Float) -> 
 enum NotificationName {
   // 参数 serverId: string
   static let createServer = Notification.Name(rawValue: "qchat.createServer")
+  // 参数  QChatServer
+  static let createAnnouncement = Notification.Name(rawValue: "qchat.createAnnouncement")
   // param channel: ChatChannel
   static let createChannel = Notification.Name(rawValue: "qchat.createChannel")
   static let updateChannel = Notification.Name(rawValue: "qchat.updateChannel")

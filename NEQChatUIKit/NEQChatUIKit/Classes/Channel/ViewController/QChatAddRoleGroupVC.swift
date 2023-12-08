@@ -3,9 +3,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreIMKit
 import MJRefresh
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
 
 typealias AddChannelRoleBlock = (_ role: ChannelRole?) -> Void
 public class QChatAddRoleGroupVC: QChatSearchVC {
@@ -14,12 +15,12 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
   private var channelRoles: [ChannelRole]?
 //    public var didAddChannelRole: AddChannelRoleBlock?
   private var priority: Int?
-  private lazy var placeholderView: EmptyDataView = .init(
-    imageName: "rolePlaceholder",
+  private lazy var placeholderView: NEEmptyDataView = .init(
+    image: UIImage.ne_imageNamed(name: "rolePlaceholder"),
     content: localizable("has_no_role"),
     frame: CGRect(
       x: 0,
-      y: 60,
+      y: topConstant,
       width: self.view.bounds.size.width,
       height: self.view.bounds.size.height
     )
@@ -28,6 +29,9 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
   override public func viewDidLoad() {
     super.viewDidLoad()
     title = localizable("add_group")
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
+
     tableView.register(
       QChatTextArrowCell.self,
       forCellReuseIdentifier: "\(QChatTextArrowCell.self)"
@@ -62,9 +66,15 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
     param.priority = priority
     print("thread:\(Thread.current)")
     QChatRoleProvider.shared.getRoles(param) { [weak self] error, roles, sets in
-      print("sRoles:\(roles) error:\(error)")
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
         // 空白页
         self?.placeholderView.isHidden = false
       } else {
@@ -128,9 +138,15 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
     param.limit = 50
     param.priority = priority
     QChatRoleProvider.shared.getRoles(param) { [weak self] error, roles, sets in
-      print("sRoles:\(roles) error:\(error)")
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         if let roleArray = roles, !roleArray.isEmpty {
           self?.priority = roleArray.last?.priority
@@ -206,10 +222,23 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
           let roleId = role?.roleId else {
       return
     }
-    // 1.添加到频道下
+    // 1.添加到话题下
     let param = AddChannelRoleParam(serverId: sId, channelId: cId, parentRoleId: roleId)
     QChatRoleProvider.shared.addChannelRole(param: param) { [weak self] error, cRole in
-      if error == nil {
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        case errorCode_NoExist:
+          self?.showToast(localizable("role_not_exist"))
+        case errorCode_Existed:
+          self?.showToast(localizable("role_has_exist"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
+      } else {
         // 2.跳转到身份组权限设置
         self?.navigationController?.pushViewController(
           QChatGroupPermissionSettingVC(cRole: cRole),
@@ -226,8 +255,6 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
 //                if let block = self?.didAddChannelRole {
 //                    block(cRole)
 //                }
-      } else {
-        self?.view.makeToast(error?.localizedDescription)
       }
     }
   }

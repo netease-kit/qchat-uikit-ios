@@ -6,13 +6,13 @@
 import UIKit
 
 class QChatHeaderCell: QChatCornerCell {
-  var user: UserInfo? {
+  var user: QChatUserInfo? {
     didSet {
       if let name = user?.nickName {
-        headerView.configHeadData(headUrl: user?.avatar, name: name)
+        headerView.configHeadData(headUrl: user?.avatar, name: name, uid: user?.accid ?? "")
         nameLabel.text = name
       } else if let aid = user?.accid {
-        headerView.configHeadData(headUrl: user?.avatar, name: aid)
+        headerView.configHeadData(headUrl: user?.avatar, name: aid, uid: user?.accid ?? "")
         nameLabel.text = aid
       }
       headerView.backgroundColor = user?.color

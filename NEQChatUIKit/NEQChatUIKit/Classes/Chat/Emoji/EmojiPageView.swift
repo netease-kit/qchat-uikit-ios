@@ -24,7 +24,7 @@ public class EmojiPageView: UIView {
   public weak var pageViewDelegate: EmojiPageViewDelegate?
   private var currentPage: NSInteger = 0
   private var pages = [AnyObject]()
-  private let className = "EmojiPageView"
+  private let className = "QChatEmojiPageView"
 
   override public init(frame: CGRect) {
     super.init(frame: frame)

@@ -5,7 +5,7 @@
 
 import UIKit
 
-class QChatIdGroupSortButtonCell: QChatBaseCell {
+class QChatIdGroupSortButtonCell: QNEChatBaseCell {
   lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false

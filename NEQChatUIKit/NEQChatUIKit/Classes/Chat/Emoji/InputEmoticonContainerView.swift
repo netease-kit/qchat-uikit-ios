@@ -3,15 +3,15 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreIMKit
+import UIKit
 @objc public protocol InputEmoticonContainerViewDelegate: NSObjectProtocol {
   func selectedEmoticon(emoticonID: String, emotCatalogID: String, description: String)
   func didPressSend(sender: UIButton)
 }
 
 public class InputEmoticonContainerView: UIView {
-  private let classTag = "InputEmoticonContainerView"
+  private let classTag = "NIMInputEmoticonContainerView"
   public weak var delegate: InputEmoticonContainerViewDelegate?
 
   private var _totalCatalogData: [NIMInputEmoticonCatalog]?
@@ -149,6 +149,7 @@ public class InputEmoticonContainerView: UIView {
   // MAKR: lazy method
   private lazy var emoticonPageView: EmojiPageView = {
     let pageView = EmojiPageView(frame: self.bounds)
+    pageView.translatesAutoresizingMaskIntoConstraints = false
     pageView.dataSource = self
     pageView.pageViewDelegate = self
     return pageView
@@ -209,6 +210,7 @@ extension InputEmoticonContainerView {
           catalogID: id,
           delegate: self
         )
+        button.accessibilityIdentifier = "id.emoji"
         rowIndex = indexInPage / layout.columes
         coloumnIndex = indexInPage % layout.columes
         let x = coloumnIndex * Int(layout.cellWidth) + startX
