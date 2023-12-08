@@ -19,7 +19,7 @@ class QChatSwitchCell: QChatCornerCell {
     return q
   }()
 
-  var permissionLabel: UILabel = {
+  var leftLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.textColor = .ne_darkText
@@ -27,17 +27,24 @@ class QChatSwitchCell: QChatCornerCell {
     return label
   }()
 
-  var model: PermissionCellModel? {
+  var model: QChatSettingModel? {
     didSet {
-      permissionLabel.text = model?.showName
+      leftLabel.text = model?.title
 
       if let type = model?.cornerType {
         cornerType = type
       }
-      if let value = model?.hasPermission {
-        qSwitch.isOn = value
+      if let model = model as? QChatPermissionCellModel {
+        qSwitch.isOn = model.hasPermission
       }
     }
+  }
+
+  override func configure(model: QChatSettingModel) {
+    super.configure(model: model)
+    self.model = model
+    leftLabel.text = model.title
+    qSwitch.isOn = model.switchOpen
   }
 
   override func awakeFromNib() {
@@ -60,29 +67,22 @@ class QChatSwitchCell: QChatCornerCell {
     ])
     qSwitch.addTarget(self, action: #selector(valueChange(_:)), for: .valueChanged)
 
-    contentView.addSubview(permissionLabel)
+    contentView.addSubview(leftLabel)
     NSLayoutConstraint.activate([
-      permissionLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 36),
-      permissionLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -95),
-      permissionLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+      leftLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 36),
+      leftLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -95),
+      leftLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
     ])
   }
 
   @objc func valueChange(_ s: UISwitch) {
-    model?.hasPermission = s.isOn
+    if let model = model as? QChatPermissionCellModel {
+      model.hasPermission = s.isOn
+    }
+    if let block = model?.swichChange {
+      block(s.isOn)
+      return
+    }
     delegate?.didChangeSwitchValue(self)
-    /*
-     if s.isOn == true {
-         if let key = model?.permissionKey {
-             print("add key : ", key)
-             model?.permission?.changeMap[key] = true
-         }
-     }else {
-         if let key = model?.permissionKey {
-             print("rm key : ", key)
-             model?.permission?.changeMap[key] = false
-         }
-     }*/
-    print("change maps : ", model?.permission?.changeMap as Any)
   }
 }

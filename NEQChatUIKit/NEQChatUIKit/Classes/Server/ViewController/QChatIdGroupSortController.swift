@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreIMKit
+import NEQChatKit
+import UIKit
 
 // typealias SortCompletion = (_ array: NSMutableArray) -> Void
 
@@ -16,7 +17,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
 
   var isOwer = false
 
-  let viewmodel = IdGroupSortViewModel()
+  let viewmodel = QChatIdGroupSortViewModel()
 
 //    let dataArray = NSMutableArray()
 
@@ -42,15 +43,41 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
   }
 
   func setupUI() {
-    setupTable()
     title = localizable("qchat_id_group_sort")
     addRightAction(localizable("qchat_save"), #selector(saveSort), self)
+    navigationView.setMoreButtonTitle(localizable("qchat_save"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(saveSort))
+    navigationView.titleBarBottomLine.isHidden = false
+    navigationView.backgroundColor = .white
+
+    let tipLabel = UILabel()
+    tipLabel.translatesAutoresizingMaskIntoConstraints = false
+    tipLabel.text = localizable("group_sort_tip")
+    tipLabel.font = UIFont.systemFont(ofSize: 12)
+    tipLabel.textColor = .ne_emptyTitleColor
+    tipLabel.textAlignment = .center
+    view.addSubview(tipLabel)
+    NSLayoutConstraint.activate([
+      tipLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+      tipLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
+      tipLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
+      tipLabel.heightAnchor.constraint(equalToConstant: 40),
+    ])
+
     tableView.backgroundColor = .white
     tableView.delegate = self
     tableView.dataSource = self
     tableView.register(QChatSortCell.self, forCellReuseIdentifier: "\(QChatSortCell.self)")
     tableView.isEditing = true
     tableView.allowsSelectionDuringEditing = true
+
+    view.addSubview(tableView)
+    NSLayoutConstraint.activate([
+      tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+      tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      tableView.topAnchor.constraint(equalTo: tipLabel.bottomAnchor),
+      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+    ])
   }
 
   @objc func saveSort() {
@@ -82,7 +109,16 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
 
   public func dataDidError(_ error: Error) {
     view.hideToastActivity()
-    showToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   public func numberOfSections(in tableView: UITableView) -> Int {
@@ -109,12 +145,12 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
     //            cell.configure(model)
     //            cell.tailImage.isHighlighted = true
     //        }else if indexPath.section == 1 {
-    //            if let model = viewmodel.datas[indexPath.row] as? IdGroupModel {
+    //            if let model = viewmodel.datas[indexPath.row] as? QChatIdGroupModel {
     //                cell.configure(model)
     //                cell.tailImage.isHighlighted = !model.hasPermission
     //            }
     //        }
-    if let model = viewmodel.datas[indexPath.row] as? IdGroupModel {
+    if let model = viewmodel.datas[indexPath.row] as? QChatIdGroupModel {
       cell.configure(model)
       cell.tailImage.isHighlighted = !model.hasPermission
     }
@@ -137,7 +173,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
     }
 
     viewmodel.datas.forEach { user in
-      if let u = user as? IdGroupModel {
+      if let u = user as? QChatIdGroupModel {
         print("change name : ", u.idName as Any)
         print("change p: ", u.role?.priority as Any)
       }
@@ -155,7 +191,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
   }
 
   public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if let model = viewmodel.datas[indexPath.row] as? IdGroupModel {
+    if let model = viewmodel.datas[indexPath.row] as? QChatIdGroupModel {
       weak var weakSelf = self
       if model.hasPermission == true {
         showAlert(
@@ -166,6 +202,9 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
             NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(weakSelf?.serverId ?? 0)")
             weakSelf?.didDelete = true
             weakSelf?.view.hideToastActivity()
+            if let block = weakSelf?.completion {
+              block()
+            }
           }
         }
       }
@@ -179,7 +218,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
     if isOwer == true {
       return proposedDestinationIndexPath
     } else {
-      if let model = viewmodel.datas[proposedDestinationIndexPath.row] as? IdGroupModel {
+      if let model = viewmodel.datas[proposedDestinationIndexPath.row] as? QChatIdGroupModel {
         if model.hasPermission == true {
           return proposedDestinationIndexPath
         }
@@ -189,14 +228,14 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
   }
 
   public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-    if let model = viewmodel.datas[indexPath.row] as? IdGroupModel {
+    if let model = viewmodel.datas[indexPath.row] as? QChatIdGroupModel {
       return model.hasPermission
     }
     return true
   }
 
   public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-    if let model = viewmodel.datas[indexPath.row] as? IdGroupModel {
+    if let model = viewmodel.datas[indexPath.row] as? QChatIdGroupModel {
       return model.hasPermission
     }
     return true

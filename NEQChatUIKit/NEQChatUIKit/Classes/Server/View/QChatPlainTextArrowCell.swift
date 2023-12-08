@@ -23,5 +23,6 @@ class QChatPlainTextArrowCell: QChatTextArrowCell {
     titleLeftMargin?.constant = 20
     detailRightMargin?.constant = -42
     rightImageMargin?.constant = -20
+    dividerLineLeftMargin?.constant = 20
   }
 }

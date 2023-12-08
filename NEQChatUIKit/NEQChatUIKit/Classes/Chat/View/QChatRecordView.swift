@@ -34,6 +34,7 @@ public class QChatRecordView: UIView, UIGestureRecognizerDelegate {
     topTipLabel.font = UIFont.systemFont(ofSize: 12)
     topTipLabel.textColor = .ne_lightText
     topTipLabel.textAlignment = .center
+    topTipLabel.isHidden = true
     addSubview(topTipLabel)
     NSLayoutConstraint.activate([
       topTipLabel.topAnchor.constraint(equalTo: topAnchor, constant: 0),

@@ -5,10 +5,9 @@
 
 import UIKit
 
-class QChatTextCell: QChatStateCell {
+open class QChatTextCell: QChatStateCell {
   public var titleLabel: UILabel = .init()
   public var detailLabel: UILabel = .init()
-  public var line = UIView()
 
   var titleLeftMargin: NSLayoutConstraint?
 
@@ -50,19 +49,9 @@ class QChatTextCell: QChatStateCell {
       detailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
     ])
     detailLabel.textAlignment = .right
-
-    line.backgroundColor = .ne_greyLine
-    line.translatesAutoresizingMaskIntoConstraints = false
-    contentView.addSubview(line)
-    NSLayoutConstraint.activate([
-      line.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-      line.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-      line.heightAnchor.constraint(equalToConstant: 1.0),
-      line.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-    ])
   }
 
-  required init?(coder: NSCoder) {
+  public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }

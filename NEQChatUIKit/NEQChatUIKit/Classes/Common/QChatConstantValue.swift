@@ -7,7 +7,7 @@ import Foundation
 
 // 距离cell边缘的距离
 public let qChat_cell_margin = 16.0
-// 控件之间的间距
+/// 控件之间的间距, 默认：8.0
 public let qChat_margin = 8.0
 // 头像宽高
 public let qChat_headWH = 32.0

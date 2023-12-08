@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 typealias UpdateSettingBlock = (_ memberRole: MemberRole?) -> Void
 public class QChatMemberPermissionSettingVC: QChatTableViewController,
@@ -12,9 +13,9 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
   public var channel: ChatChannel?
   public var memberRole: MemberRole?
 //    public var didUpdateBlock: UpdateSettingBlock?
-  private var commonAuths = [RoleStatusInfoExt]()
-  private var messageAuths = [RoleStatusInfoExt]()
-  private var memberAuths = [RoleStatusInfoExt]()
+  private var commonAuths = [QChatRoleStatusInfoExt]()
+  private var messageAuths = [QChatRoleStatusInfoExt]()
+  private var memberAuths = [QChatRoleStatusInfoExt]()
 
   private var auths = [[Any]]()
 
@@ -31,6 +32,9 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
   override public func viewDidLoad() {
     super.viewDidLoad()
     title = localizable("member_permission_setting")
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+    view.backgroundColor = .ne_lightBackgroundColor
+
     tableView.register(
       QChatPermissionSettingCell.self,
       forCellReuseIdentifier: "\(QChatPermissionSettingCell.self)"
@@ -54,24 +58,26 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
 
     if let auths = memberRole?.auths {
       for auth in auths {
-        var authExt = RoleStatusInfoExt(status: auth)
-        let key = "auth" + String(auth.type.rawValue)
-        authExt.title = localizable(key)
-        switch auth.type {
-        case .ManageChannel:
-          commonAuths.insert(authExt, at: 0)
-        case .ManageRole:
-          commonAuths.append(authExt)
-        case .SendMsg:
-          messageAuths.append(authExt)
-//                case .DeleteOtherMsg:
-//                    messageAuths.append(authExt)
-//                case .RevokeMsg:
-//                    messageAuths.append(authExt)
-        case .BlackWhiteList:
-          memberAuths.append(authExt)
-        default:
-          break
+        var authExt = QChatRoleStatusInfoExt(status: auth)
+        if let type = auth.type {
+          let key = "auth_" + String(type.rawValue)
+          authExt.title = localizable(key)
+          switch auth.type {
+          case .manageChannel:
+            commonAuths.insert(authExt, at: 0)
+          case .manageRole:
+            commonAuths.append(authExt)
+          case .sendMsg:
+            messageAuths.append(authExt)
+          //                case .DeleteOtherMsg:
+          //                    messageAuths.append(authExt)
+          //                case .RevokeMsg:
+          //                    messageAuths.append(authExt)
+          case .manageBlackWhiteList:
+            memberAuths.append(authExt)
+          default:
+            break
+          }
         }
       }
 
@@ -108,11 +114,9 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
       let members = auths[indexPath.section]
       let m = members[indexPath.row] as? MemberRole
       cell.setup(accid: m?.accid, nickName: m?.nick, avatar: m?.avatar)
-      if indexPath.row == 0 {
-        cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
-      } else if indexPath.row == auths.count - 1 {
-        cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
-      }
+      cell.cornerType = CornerType.topLeft.union(CornerType.topRight).union(CornerType.bottomLeft.union(CornerType.bottomRight))
+      cell.line.isHidden = true
+
       return cell
     } else {
       let cell = tableView.dequeueReusableCell(
@@ -120,13 +124,15 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
         for: indexPath
       ) as! QChatPermissionSettingCell
       let auths = auths[indexPath.section]
-      let authExt = auths[indexPath.row] as? RoleStatusInfoExt
+      let authExt = auths[indexPath.row] as? QChatRoleStatusInfoExt
       cell.updateModel(model: authExt)
       cell.delegate = self
       if indexPath.row == 0 {
         cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
-      } else if indexPath.row == auths.count - 1 {
-        cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+      }
+      if indexPath.row == auths.count - 1 {
+        cell.cornerType = cell.cornerType.union(CornerType.bottomLeft.union(CornerType.bottomRight))
+        cell.dividerLine.isHidden = true
       }
       return cell
     }
@@ -174,11 +180,14 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
       )
       QChatRoleProvider.shared
         .updateMemberRole(param: param) { [weak self] error, memberRole in
-          if let err = error {
-            if err.code == 408 {
-              self?.view.makeToast(localizable("network_error"))
-            } else {
-              self?.view.makeToast(err.localizedDescription)
+          if let err = error as NSError? {
+            switch err.code {
+            case errorCode_NetWorkError:
+              self?.showToast(localizable("network_error"))
+            case errorCode_NoPermission:
+              self?.showToast(localizable("no_permession"))
+            default:
+              self?.showToast(err.localizedDescription)
             }
             cell?.selectedSuccess(success: false)
           } else {

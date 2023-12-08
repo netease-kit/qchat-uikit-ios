@@ -3,10 +3,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
+import NEChatUIKit
 import NECoreKit
 import NETeamUIKit
-import NEChatUIKit
+import UIKit
 
 class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
@@ -23,6 +23,7 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
 
   func initialConfig() {
     title = NSLocalizedString("message_remind", comment: "")
+    navigationView.backgroundColor = .ne_lightBackgroundColor
   }
 
   func setupSubviews() {
@@ -30,11 +31,11 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
-    cellClassDic.forEach { (key: Int, value: BaseTeamSettingCell.Type) in
+    cellClassDic.forEach { (key: Int, value: NEBaseTeamSettingCell.Type) in
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
   }
@@ -42,7 +43,7 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
   lazy var tableView: UITableView = {
     let table = UITableView()
     table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    table.backgroundColor = .ne_lightBackgroundColor
     table.dataSource = self
     table.delegate = self
     table.separatorColor = .clear
@@ -73,7 +74,7 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
     if let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(model.type)",
       for: indexPath
-    ) as? BaseTeamSettingCell {
+    ) as? NEBaseTeamSettingCell {
       cell.configure(model)
       return cell
     }
@@ -104,7 +105,7 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let header = UIView()
-    header.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    header.backgroundColor = .ne_lightBackgroundColor
     return header
   }
 }

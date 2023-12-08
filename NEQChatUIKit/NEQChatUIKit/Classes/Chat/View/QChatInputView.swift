@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECommonKit
 import UIKit
-import RSKPlaceholderTextView
 
 @objc public enum QChatMenuType: Int {
   case text = 0
@@ -37,9 +37,12 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
   public var contentSubView: UIView?
   private var recordView = QChatRecordView(frame: .zero)
   var contentView = UIView()
+  public var currentButton: UIButton?
   public var contentHeight = 204.0
   public var menuHeight = 100.0
   private var greyView = UIView()
+
+  public var buttons = [UIButton]()
 
   public lazy var emojiView: InputEmoticonContainerView = {
     let view =
@@ -50,9 +53,21 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
     return view
   }()
 
+  public lazy var coverLabel: UILabel = {
+    let label = UILabel()
+    label.backgroundColor = UIColor(hexString: "#E4E4E5")
+    label.textColor = UIColor(hexString: "#B3B7BC")
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.isHidden = true
+    label.text = "  \(localizable("qchat_visitor_chat_join_tip"))"
+    label.font = UIFont.systemFont(ofSize: 16)
+    label.clipsToBounds = true
+    return label
+  }()
+
 //  var textField = UITextField()
 
-  var textField = RSKPlaceholderTextView()
+  var textField = NETextView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -80,18 +95,28 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
       textField.rightAnchor.constraint(equalTo: rightAnchor, constant: -7),
       textField.heightAnchor.constraint(equalToConstant: 40),
     ])
-    let imageNames = ["mic", "emoji", "photo", "file", "add"]
+
+    addSubview(coverLabel)
+    NSLayoutConstraint.activate([
+      coverLabel.leftAnchor.constraint(equalTo: textField.leftAnchor),
+      coverLabel.topAnchor.constraint(equalTo: textField.topAnchor),
+      coverLabel.rightAnchor.constraint(equalTo: textField.rightAnchor),
+      coverLabel.bottomAnchor.constraint(equalTo: textField.bottomAnchor),
+    ])
+    coverLabel.layer.cornerRadius = textField.layer.cornerRadius
+
+    let imageNames = ["mic", "emoji", "photo", "add"]
+    let imageNamesSelected = ["mic_selected", "emoji_selected", "photo", "add_selected"]
     var items = [UIButton]()
-    for i in 0 ... 4 {
+    for i in 0 ..< imageNames.count {
       let button = UIButton(type: .custom)
       button.setImage(UIImage.ne_imageNamed(name: imageNames[i]), for: .normal)
+      button.setImage(UIImage.ne_imageNamed(name: imageNamesSelected[i]), for: .selected)
       button.translatesAutoresizingMaskIntoConstraints = false
       button.addTarget(self, action: #selector(buttonEvent), for: .touchUpInside)
       button.tag = i + 5
       items.append(button)
-      if i != 2, i != 0, i != 1 {
-        button.alpha = 0.5
-      }
+      buttons.append(button)
     }
     let stackView = UIStackView(arrangedSubviews: items)
     stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -150,11 +175,19 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
 //  }
 
   func buttonEvent(button: UIButton) {
+    button.isSelected = !button.isSelected
+    if button.tag - 5 != 2, button != currentButton {
+      currentButton?.isSelected = false
+      currentButton = button
+    }
+
     switch button.tag - 5 {
     case 0:
       addRecordView()
     case 1:
       addEmojiView()
+    case 3:
+      addMoreActionView()
     default:
       print("default")
     }
@@ -162,23 +195,25 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
   }
 
   func addRecordView() {
-    if currentType != .audio {
-      currentType = .audio
-      textField.resignFirstResponder()
-      contentSubView?.isHidden = true
-      contentSubView = recordView
-      contentSubView?.isHidden = false
-    }
+    currentType = .audio
+    textField.resignFirstResponder()
+    contentSubView?.isHidden = true
+    contentSubView = recordView
+    contentSubView?.isHidden = false
   }
 
   func addEmojiView() {
-    if currentType != .emoji {
-      currentType = .emoji
-      textField.resignFirstResponder()
-      contentSubView?.isHidden = true
-      contentSubView = emojiView
-      contentSubView?.isHidden = false
-    }
+    currentType = .emoji
+    textField.resignFirstResponder()
+    contentSubView?.isHidden = true
+    contentSubView = emojiView
+    contentSubView?.isHidden = false
+  }
+
+  func addMoreActionView() {
+    currentType = .addMore
+    contentSubView?.isHidden = true
+    textField.resignFirstResponder()
   }
 
   public func startRecord() {
@@ -315,6 +350,13 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
     }
 
     return true
+  }
+
+  public func setVisitorModel(isVisitorMode: Bool) {
+    buttons.forEach { button in
+      button.alpha = isVisitorMode ? 0.5 : 1.0
+    }
+    coverLabel.isHidden = !isVisitorMode
   }
 
 //    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -5,11 +5,11 @@
 
 import UIKit
 
-class QChatSelectedCell: QChatBaseCell {
-  var user: UserInfo? {
+class QChatSelectedCell: QNEChatBaseCell {
+  var user: QChatUserInfo? {
     didSet {
       if let name = user?.nickName, !name.isEmpty {
-        headerView.configHeadData(headUrl: user?.avatar, name: name)
+        headerView.configHeadData(headUrl: user?.avatar, name: name, uid: user?.accid ?? "")
       }
       titleLabel.text = user?.nickName
       headerView.backgroundColor = user?.color

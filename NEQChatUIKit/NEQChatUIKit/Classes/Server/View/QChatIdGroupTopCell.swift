@@ -11,10 +11,12 @@ class QChatIdGroupTopCell: QChatIdGroupCell {
     // Initialization code
   }
 
-  override func setSelected(_ selected: Bool, animated: Bool) {
-    super.setSelected(selected, animated: animated)
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: style, reuseIdentifier: reuseIdentifier)
+  }
 
-    // Configure the view for the selected state
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
   }
 
   override func setupUI() {

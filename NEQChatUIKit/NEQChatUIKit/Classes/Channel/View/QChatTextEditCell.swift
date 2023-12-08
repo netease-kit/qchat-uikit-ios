@@ -46,11 +46,6 @@ class QChatTextEditCell: QChatCornerCell, UITextFieldDelegate {
   @objc
   func textFieldChange() {
     guard let _ = textFied.markedTextRange else {
-      if let text = textFied.text,
-         let lmt = limit,
-         text.count > lmt {
-        textFied.text = String(text.prefix(lmt))
-      }
       if let d = delegate {
         d.textDidChange?(textFied)
       }
@@ -65,5 +60,15 @@ class QChatTextEditCell: QChatCornerCell, UITextFieldDelegate {
       UIApplication.shared.keyWindow?.makeToast(editTotast)
     }
     return canEdit
+  }
+
+  public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    if let lim = limit, let text = textField.text {
+      let newText = (text as NSString).replacingCharacters(in: range, with: string)
+      if newText.utf16.count > lim {
+        return false
+      }
+    }
+    return true
   }
 }

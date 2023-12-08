@@ -3,11 +3,12 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreKit
+import NECoreQChatKit
 import NETeamUIKit
-import YXLogin
 import NIMSDK
+import UIKit
+import YXLogin
 
 class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UITableViewDelegate {
   private var viewModel = MineSettingViewModel()
@@ -19,7 +20,6 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    navigationController?.setNavigationBarHidden(false, animated: false)
   }
 
   override func viewDidLoad() {
@@ -31,6 +31,7 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
 
   func initialConfig() {
     title = NSLocalizedString("setting", comment: "")
+    navigationView.backgroundColor = .ne_lightBackgroundColor
     viewModel.delegate = self
   }
 
@@ -39,11 +40,11 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
-    cellClassDic.forEach { (key: Int, value: BaseTeamSettingCell.Type) in
+    cellClassDic.forEach { (key: Int, value: NEBaseTeamSettingCell.Type) in
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
   }
@@ -51,7 +52,7 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
   lazy var tableView: UITableView = {
     let table = UITableView()
     table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    table.backgroundColor = .ne_lightBackgroundColor
     table.dataSource = self
     table.delegate = self
     table.separatorColor = .clear
@@ -65,12 +66,8 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
   }()
 
   func getFooterView() -> UIView? {
-//        guard let title = getBottomText() else {
-//            return nil
-//        }
     let footer = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 64.0))
     let button = UIButton()
-    button.translatesAutoresizingMaskIntoConstraints = false
     footer.addSubview(button)
     button.backgroundColor = .white
     button.clipsToBounds = true
@@ -78,19 +75,14 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
     button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
     button.setTitle(title, for: .normal)
     button.addTarget(self, action: #selector(loginOutAction), for: .touchUpInside)
-    button.layer.cornerRadius = 8.0
     button.setTitle(NSLocalizedString("logout", comment: ""), for: .normal)
-    NSLayoutConstraint.activate([
-      button.leftAnchor.constraint(equalTo: footer.leftAnchor, constant: 20),
-      button.rightAnchor.constraint(equalTo: footer.rightAnchor, constant: -20),
-      button.topAnchor.constraint(equalTo: footer.topAnchor, constant: 12),
-      button.heightAnchor.constraint(equalToConstant: 40),
-    ])
+    button.accessibilityIdentifier = "id.logout"
+    button.layer.cornerRadius = 8.0
+    button.frame = CGRect(x: 20, y: 12, width: view.frame.size.width - 40, height: 40)
     return footer
   }
 
   @objc func loginOutAction() {
-    view.makeToast("demo not support login")
     AuthorManager.shareInstance()?
       .logout(
         withConfirm: NSLocalizedString("want_to_logout", comment: ""),
@@ -103,15 +95,9 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
               name: Notification.Name("logout"),
               object: nil
             )
-            IMKitEngine.instance.logout { error in
+            QChatKitClient.instance.logoutQChat { error in
               if error == nil {
-                NIMSDK.shared().qchatManager.logout { chatError in
-                  if chatError != nil {
-                    self?.view.makeToast(chatError?.localizedDescription)
-                  } else {
-                    print("logout success")
-                  }
-                }
+                print("logout success")
               } else {
                 NELog.errorLog(
                   weakSelf?.tag ?? "",
@@ -143,7 +129,7 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
     if let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(model.type)",
       for: indexPath
-    ) as? BaseTeamSettingCell {
+    ) as? NEBaseTeamSettingCell {
       cell.configure(model)
       return cell
     }
@@ -174,7 +160,7 @@ class MineSettingViewController: NEBaseViewController, UITableViewDataSource, UI
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
     let header = UIView()
-    header.backgroundColor = UIColor(hexString: "0xF1F1F6")
+    header.backgroundColor = .ne_lightBackgroundColor
     return header
   }
 
@@ -193,4 +179,9 @@ extension MineSettingViewController: MineSettingViewModelDelegate {
   }
 
   func didClickCleanCache() {}
+
+  func didClickConfigTest() {
+    let configTestVC = ConfigTestViewController()
+    navigationController?.pushViewController(configTestVC, animated: true)
+  }
 }

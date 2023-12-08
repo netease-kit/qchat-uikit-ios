@@ -3,29 +3,50 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import MJRefresh
 import NECoreIMKit
+import NEQChatKit
+import UIKit
 
 public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, ViewModelDelegate {
-  let viewModel = IdGroupViewModel()
+  let viewModel = QChatIdGroupViewModel()
   var isOwner = false
   var serverid: UInt64?
 
+  override public func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    loadMoreData()
+  }
+
   override public func viewDidLoad() {
     super.viewDidLoad()
-
-    // Do any additional setup after loading the view.
     viewModel.delegate = self
-    loadMoreData()
+    viewModel.serverId = serverid
+
+    initializeConfig()
+    loadData()
     setupUI()
+    weak var weakSelf = self
+    viewModel.checkPermission(serverid) { error, permission in
+      weakSelf?.setupOperationPermissionUI()
+    }
+    viewModel.changeBlock = {
+      weakSelf?.setupOperationPermissionUI()
+    }
+  }
+
+  func initializeConfig() {
+    title = localizable("qchat_id_group")
+    addRightAction(UIImage.ne_imageNamed(name: "sign_add"), #selector(addClick), self)
+    navigationView.setMoreButtonImage(UIImage.ne_imageNamed(name: "sign_add"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(addClick))
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
+    navigationView.moreButton.isHidden = true
   }
 
   func setupUI() {
-    NELog.infoLog(ModuleName + " " + className(), desc: "serverid : \(serverid ?? 0)")
-    title = localizable("qchat_id_group")
-    addRightAction(UIImage.ne_imageNamed(name: "sign_add"), #selector(addClick), self)
     setupTable()
     tableView.delegate = self
     tableView.dataSource = self
@@ -49,9 +70,13 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
     tableView.mj_footer = mjFooter
   }
 
-  @objc func loadMoreData() {
+  func loadData() {
+    loadMoreData(false)
+  }
+
+  @objc func loadMoreData(_ refresh: Bool = true) {
     if let sid = serverid {
-      viewModel.getRoles(sid, false, nil)
+      viewModel.getRoles(sid, refresh, nil)
     } else {
       fatalError("serverid must not be nil")
     }
@@ -81,9 +106,17 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
   // MARK: UITableViewDelegate, UITableViewDataSource,ViewModelDelegate
 
   public func dataDidError(_ error: Error) {
-//    print("get roles error : ", error)
     NELog.errorLog(ModuleName + " " + className(), desc: "error : \(error)")
-    view.makeToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   public func dataDidChange() {
@@ -104,10 +137,14 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
     if section == 0 {
       return viewModel.topDatas.count
     } else if section == 1 {
-      if viewModel.datas.count > 0 {
-        return viewModel.sortBtnCellDatas.count
-      }
+//      if viewModel.hasManagerRolePermission == false {
+//        return 0
+//      }
+      return viewModel.datas.count > 0 ? viewModel.sortBtnCellDatas.count : 0
     } else if section == 2 {
+//      if viewModel.hasManagerRolePermission == false {
+//        return 0
+//      }
       return viewModel.datas.count
     }
     return 0
@@ -121,6 +158,7 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
         withIdentifier: "\(QChatIdGroupTopCell.self)",
         for: indexPath
       ) as! QChatIdGroupTopCell
+      cell.dividerLine.isHidden = true
       cell.configure(model)
       return cell
     } else if indexPath.section == 1 {
@@ -131,6 +169,10 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
       ) as! QChatIdGroupSortButtonCell
       cell.titleLabel.text = model.idName
       cell.sortBtn.addTarget(self, action: #selector(toSort), for: .touchUpInside)
+      print("hasManagerRolePermission:\(viewModel.hasManagerRolePermission)")
+      cell.sortBtn.isHidden = !viewModel.hasManagerRolePermission
+      cell.sortImage.isHidden = cell.sortBtn.isHidden
+      cell.sortLabel.isHidden = cell.sortBtn.isHidden
       return cell
     } else if indexPath.section == 2 {
       let model = viewModel.datas[indexPath.row]
@@ -217,31 +259,28 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
     weak var weakSelf = self
     sort.completion = {
       weakSelf?.refreshData()
-      //            weakSelf?.viewModel.datas.removeAll()
-      //            for index in 0..<array.count {
-      //                if let data = array[index] as? IdGroupModel {
-      //                    weakSelf?.viewModel.datas.append(data)
-      //                }
-      //            }
-      //            weakSelf?.tableView.reloadData()
     }
-    //        sort.dataArray.addObjects(from: viewModel.datas)
     navigationController?.pushViewController(sort, animated: true)
   }
 
-  func toPermission(_ model: IdGroupModel) {
+  func toPermission(_ model: QChatIdGroupModel) {
     weak var weakSelf = self
     let permission = QChatPermissionViewController()
     permission.idGroup = model
     permission.completion = { role in
       print("update role : ", role.name as Any)
 
-      let temModel = IdGroupModel(role)
+      let temModel = QChatIdGroupModel(role)
       model.idName = temModel.idName
       model.subTitle = temModel.subTitle
       model.role = role
       weakSelf?.tableView.reloadData()
     }
     navigationController?.pushViewController(permission, animated: true)
+  }
+
+  func setupOperationPermissionUI() {
+    navigationView.moreButton.isHidden = !viewModel.hasManagerRolePermission
+    tableView.reloadData()
   }
 }

@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreIMKit
+import UIKit
 
 struct ChannelSelection {
   var sectionName = ""
@@ -28,6 +28,9 @@ public class QChatChannelTypeVC: QChatTableViewController {
 
   func commonUI() {
     title = localizable("channel_type")
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+    view.backgroundColor = .ne_lightBackgroundColor
+
     tableView.register(
       QChatTextSelectionCell.self,
       forCellReuseIdentifier: "\(QChatTextSelectionCell.self)"
@@ -59,6 +62,7 @@ public class QChatChannelTypeVC: QChatTableViewController {
     cell.titleLabel.text = item.sectionName
     if indexPath.row == 0 {
       cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
+      cell.dividerLine.isHidden = false
     } else {
       cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
       cell.setSelected(true, animated: true)

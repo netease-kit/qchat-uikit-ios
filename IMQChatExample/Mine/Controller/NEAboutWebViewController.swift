@@ -3,10 +3,10 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
-import NECoreKit
-import WebKit
 import NECommonUIKit
+import NECoreKit
+import UIKit
+import WebKit
 
 class NEAboutWebViewController: NEBaseViewController {
   private var loadUrl: String = ""
@@ -27,6 +27,7 @@ class NEAboutWebViewController: NEBaseViewController {
 
   func setUpSubViews() {
     title = NSLocalizedString("product_intro", comment: "")
+    navigationView.backgroundColor = .white
     guard let requestUrl = URL(string: loadUrl) else {
       return
     }
@@ -40,7 +41,7 @@ class NEAboutWebViewController: NEBaseViewController {
     NSLayoutConstraint.activate([
       webview.leftAnchor.constraint(equalTo: view.leftAnchor),
       webview.rightAnchor.constraint(equalTo: view.rightAnchor),
-      webview.topAnchor.constraint(equalTo: view.topAnchor),
+      webview.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       webview.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
   }

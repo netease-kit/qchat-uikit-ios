@@ -3,8 +3,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreQChatKit
+import NEQChatKit
 import UIKit
-import NECoreIMKit
 
 public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   var channel: ChatChannel?
@@ -38,12 +39,17 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
 
   func commonUI() {
     title = localizable("authority_setting")
+    view.backgroundColor = .ne_lightBackgroundColor
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       title: localizable("qchat_edit"),
       style: .plain,
       target: self,
       action: #selector(edit)
     )
+    navigationView.setMoreButtonTitle(localizable("qchat_edit"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(edit))
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+
     tableView.rowHeight = 50
     tableView.register(
       QChatTextArrowCell.self,
@@ -69,14 +75,21 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   }
 
   func loadRoles() {
-    // 获取频道下的身份组
+    // 获取话题下的身份组
     viewModel?.firstGetChannelRoles { [weak self] error, roles in
       NELog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
         desc: "CALLBACK firstGetChannelRoles " + (error?.localizedDescription ?? "no error")
       )
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         self?.tableView.reloadData()
       }
@@ -84,14 +97,21 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   }
 
   func loadMembers() {
-    // 获取频道下的成员
+    // 获取话题下的成员
     viewModel?.firstGetMembers { [weak self] error, members in
       NELog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
         desc: "CALLBACK firstGetMembers " + (error?.localizedDescription ?? "no error")
       )
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         self?.tableView.reloadData()
       }
@@ -109,6 +129,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
       target: self,
       action: #selector(edit)
     )
+    navigationView.setMoreButtonTitle(title)
     tableView.reloadData()
   }
 
@@ -140,10 +161,13 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         withIdentifier: "\(QChatTextArrowCell.self)",
         for: indexPath
       ) as! QChatTextArrowCell
+
+      cell.dividerLine.isHidden = false
       if indexPath.row == 0 {
         cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
       } else {
         cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+        cell.dividerLine.isHidden = true
       }
       cell.titleLabel.text = staticData[indexPath.row]
       cell.rightStyle = .indicate
@@ -158,14 +182,18 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         cell.titleLabel.text = role?.title
         cell.titleLabel.textColor = .ne_greyText
         cell.titleLabel.font = .systemFont(ofSize: 14)
+
+        cell.line.isHidden = false
         switch role?.corner {
         case .top:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
         case .bottom:
           cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+          cell.line.isHidden = true
         case .all:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
             .union(CornerType.bottomLeft).union(CornerType.bottomRight)
+          cell.line.isHidden = true
         default:
           cell.cornerType = .none
         }
@@ -181,14 +209,18 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         } else {
           cell.rightStyle = isEdit ? .delete : .none
         }
+
+        cell.dividerLine.isHidden = false
         switch role?.corner {
         case .top:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
         case .bottom:
           cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+          cell.dividerLine.isHidden = true
         case .all:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
             .union(CornerType.bottomLeft).union(CornerType.bottomRight)
+          cell.dividerLine.isHidden = true
         default:
           cell.cornerType = .none
         }
@@ -205,14 +237,18 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         cell.titleLabel.textColor = .ne_greyText
         cell.titleLabel.font = .systemFont(ofSize: 14)
         cell.titleLabel.text = role?.title
+
+        cell.line.isHidden = false
         switch role?.corner {
         case .top:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
         case .bottom:
           cell.cornerType = CornerType.bottomLeft.union(CornerType.bottomRight)
+          cell.line.isHidden = true
         case .all:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
             .union(CornerType.bottomLeft).union(CornerType.bottomRight)
+          cell.line.isHidden = true
         default:
           cell.cornerType = .none
         }
@@ -225,6 +261,8 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         cell.rightStyle = isEdit ? .delete : .none
         let member = viewModel?.membersData.roles[indexPath.row].member
         cell.setup(accid: member?.accid, nickName: member?.nick, avatar: member?.avatar)
+
+        cell.line.isHidden = false
         switch role?.corner {
         case .top:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
@@ -234,6 +272,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         case .all:
           cell.cornerType = CornerType.topLeft.union(CornerType.topRight)
             .union(CornerType.bottomLeft).union(CornerType.bottomRight)
+          cell.line.isHidden = true
         default:
           cell.cornerType = .none
         }
@@ -245,6 +284,10 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   }
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    if section == 0 {
+      return nil
+    }
+
     let head = tableView
       .dequeueReusableHeaderFooterView(
         withIdentifier: "\(QChatSectionView.self)"
@@ -258,6 +301,10 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
       head.titleLabel.text = ""
     }
     return head
+  }
+
+  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    section == 0 ? 5 : 38
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -317,8 +364,15 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
             ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
             desc: "CALLBACK getMembers " + (error?.localizedDescription ?? "no error")
           )
-          if error != nil {
-            self?.view.makeToast(error?.localizedDescription)
+          if let err = error as NSError? {
+            switch err.code {
+            case errorCode_NetWorkError:
+              self?.showToast(localizable("network_error"))
+            case errorCode_NoPermission:
+              self?.showToast(localizable("no_permession"))
+            default:
+              self?.showToast(err.localizedDescription)
+            }
           } else {
             self?.tableView.reloadData()
           }
@@ -343,8 +397,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
 
   private func deleteRole(role: ChannelRole?, index: Int) {
     let name = role?.name ?? ""
-    let message = localizable("confirm_delete_channel") + name + localizable("qchat_id_group") +
-      "?"
+    let message = String(format: localizable("confirm_delete_text"), name) + localizable("qchat_id_group") + localizable("question_mark")
     let alertVC = UIAlertController.reconfimAlertView(
       title: localizable("removeRole"),
       message: message
@@ -354,8 +407,17 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
           ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
           desc: "CALLBACK removeChannelRole " + (error?.localizedDescription ?? "no error")
         )
-        if error != nil {
-          self?.view.makeToast(error?.localizedDescription)
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          case errorCode_NoExist:
+            self?.showToast(localizable("delete_role_failed"))
+          default:
+            self?.showToast(err.localizedDescription)
+          }
         } else {
           self?.loadRoles()
           self?.tableView.reloadData()
@@ -370,8 +432,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
     if let n = member?.nick, n.count > 0 {
       name = n
     }
-    let message = localizable("confirm_delete_channel") + name + localizable("qchat_member") +
-      "?"
+    let message = String(format: localizable("confirm_delete_text"), name) + localizable("qchat_member") + localizable("question_mark")
     let alertVC = UIAlertController.reconfimAlertView(
       title: localizable("removeMember"),
       message: message
@@ -381,8 +442,17 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
           ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
           desc: "CALLBACK removeMemberRole " + (error?.localizedDescription ?? "no error")
         )
-        if error != nil {
-          self?.view.makeToast(error?.localizedDescription)
+        if let err = error as NSError? {
+          switch err.code {
+          case errorCode_NetWorkError:
+            self?.showToast(localizable("network_error"))
+          case errorCode_NoPermission:
+            self?.showToast(localizable("no_permession"))
+          case errorCode_NoExist:
+            self?.showToast(localizable("delete_member_failed"))
+          default:
+            self?.showToast(err.localizedDescription)
+          }
         } else {
           self?.tableView.reloadData()
         }

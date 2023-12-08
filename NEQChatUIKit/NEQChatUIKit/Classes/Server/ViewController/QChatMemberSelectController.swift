@@ -3,12 +3,15 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import MJRefresh
-import NECoreIMKit
+import NECommonKit
 import NECommonUIKit
-typealias SelectMemeberCompletion = ([UserInfo]) -> Void
-typealias FilterMembersBlock = ([UserInfo]) -> [UserInfo]?
+import NECoreQChatKit
+import NEQChatKit
+import UIKit
+
+typealias SelectMemeberCompletion = ([QChatUserInfo]) -> Void
+typealias FilterMembersBlock = ([QChatUserInfo]) -> [QChatUserInfo]?
 
 public protocol QChatMemberSelectControllerDelegate: NSObjectProtocol {
   func filterMembers(accid: [String]?, _ filterMembers: @escaping ([String]?) -> Void)
@@ -23,7 +26,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
   UICollectionViewDelegate, UICollectionViewDataSource,
   UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource,
   ViewModelDelegate {
-  let viewmodel = MemberSelectViewModel()
+  let viewmodel = QChatMemberSelectViewModel()
   var filterBlock: FilterMembersBlock?
   var completion: SelectMemeberCompletion?
 
@@ -56,19 +59,28 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
 
   var collectionHeight: NSLayoutConstraint?
 
-  var selectArray = [UserInfo]()
+  var selectArray = [QChatUserInfo]()
 
   override public func viewDidLoad() {
     super.viewDidLoad()
     viewmodel.delegate = self
     loadData()
+    initializeConfig()
     setupUI()
   }
 
-  func setupUI() {
+  func initializeConfig() {
     edgesForExtendedLayout = []
-    addRightAction(localizable("qchat_sure"), #selector(sureClick), self)
     title = localizable("qchat_select")
+    addRightAction(localizable("qchat_sure"), #selector(sureClick), self)
+
+    navigationView.setMoreButtonTitle(localizable("qchat_sure"))
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(sureClick))
+    navigationView.backgroundColor = .white
+    navigationView.titleBarBottomLine.isHidden = false
+  }
+
+  func setupUI() {
     view.addSubview(collection)
     collection.delegate = self
     collection.dataSource = self
@@ -78,7 +90,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
     collectionHeight?.isActive = true
     collection.backgroundColor = UIColor(hexString: "F2F4F5")
     NSLayoutConstraint.activate([
-      collection.topAnchor.constraint(equalTo: view.topAnchor),
+      collection.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
       collection.leftAnchor.constraint(equalTo: view.leftAnchor),
       collection.rightAnchor.constraint(equalTo: view.rightAnchor),
     ])
@@ -129,10 +141,16 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
   }
 
   @objc func sureClick() {
+    if NEChatDetectNetworkTool.shareInstance.manager?.isReachable == false {
+      view.makeToast(localizable("network_error"), duration: 2, position: .center)
+      return
+    }
+
     if selectArray.count <= 0 {
       view.makeToast(localizable("qchat_not_empty_select_memeber"))
       return
     }
+
     if let block = completion {
       block(selectArray)
     }
@@ -145,8 +163,15 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
         ModuleName + " " + (self?.tag ?? "QChatMemberSelectController"),
         desc: "CALLBACK loadFirst " + (error?.localizedDescription ?? "no error")
       )
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         if (users?.count ?? 0) <= 0 {
           self?.emptyView.isHidden = false
@@ -165,8 +190,15 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
         ModuleName + " " + (self?.tag ?? "QChatMemberSelectController"),
         desc: "CALLBACK loadMore " + (error?.localizedDescription ?? "no error")
       )
-      if error != nil {
-        self?.view.makeToast(error?.localizedDescription)
+      if let err = error as NSError? {
+        switch err.code {
+        case errorCode_NetWorkError:
+          self?.showToast(localizable("network_error"))
+        case errorCode_NoPermission:
+          self?.showToast(localizable("no_permession"))
+        default:
+          self?.showToast(err.localizedDescription)
+        }
       } else {
         if users?.count ?? 0 > 0 {
           self?.tableView.reloadData()
@@ -181,7 +213,16 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
   // MARK:
 
   public func dataDidError(_ error: Error) {
-    view.makeToast(error.localizedDescription)
+    if let err = error as NSError? {
+      switch err.code {
+      case errorCode_NetWorkError:
+        showToast(localizable("network_error"))
+      case errorCode_NoPermission:
+        showToast(localizable("no_permession"))
+      default:
+        showToast(err.localizedDescription)
+      }
+    }
   }
 
   public func dataDidChange() {
@@ -246,9 +287,8 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
     } else {
       if selectArray.count >= limit {
         // view.makeToast("超出\(limit)人限制")
-        showToast(
-          "\(localizable("exceed"))\(limit)\(localizable("person"))\(localizable("limit"))"
-        )
+        let toastContent = String(format: localizable("qchat_select_limit"), limit)
+        showToast(toastContent)
         return
       }
       cell?.setSelect()
@@ -257,7 +297,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
     //        tableView.reloadRows(at: [indexPath], with: .none)
   }
 
-  func didSelectContact(_ user: UserInfo) {
+  func didSelectContact(_ user: QChatUserInfo) {
     user.select = true
     if selectArray.contains(where: { c in
       user === c
@@ -272,7 +312,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
     refreshSelectCount()
   }
 
-  func didUnselectContact(_ user: UserInfo) {
+  func didUnselectContact(_ user: QChatUserInfo) {
     user.select = false
     selectArray.removeAll { c in
       user === c
@@ -288,9 +328,12 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
 
   func refreshSelectCount() {
     if selectArray.count > 0 {
-      rightNavBtn.setTitle("\(localizable("qchat_sure"))(\(selectArray.count))", for: .normal)
+      let str = "\(localizable("qchat_sure"))(\(selectArray.count))"
+      rightNavBtn.setTitle(str, for: .normal)
+      navigationView.setMoreButtonTitle(str)
     } else {
       rightNavBtn.setTitle(localizable("qchat_sure"), for: .normal)
+      navigationView.setMoreButtonTitle(localizable("qchat_sure"))
     }
   }
 

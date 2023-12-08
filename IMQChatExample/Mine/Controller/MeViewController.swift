@@ -3,17 +3,17 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECoreKit
+import NECoreQChatKit
+import NEQChatUIKit
+import NIMSDK
 import UIKit
 import YXLogin
-import NECoreKit
-import NIMSDK
-import NECoreIMKit
-import NEQChatUIKit
 
 class MeViewController: UIViewController {
   private let mineData = [
-    [NSLocalizedString("about_yunxin", comment: ""): "about_yunxin"],
     [NSLocalizedString("setting", comment: ""): "mine_setting"],
+    [NSLocalizedString("about_yunxin", comment: ""): "about_yunxin"],
   ]
 
   private let userProvider = UserInfoProvider.shared
@@ -53,6 +53,7 @@ class MeViewController: UIViewController {
   }
 
   func setupSubviews() {
+    view.backgroundColor = UIColor.white
     view.addSubview(header)
     if #available(iOS 11.0, *) {
       NSLayoutConstraint.activate([
@@ -79,7 +80,7 @@ class MeViewController: UIViewController {
     view.addSubview(nameLabel)
     NSLayoutConstraint.activate([
       nameLabel.leftAnchor.constraint(equalTo: header.rightAnchor, constant: 15),
-      nameLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+      nameLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
       nameLabel.topAnchor.constraint(equalTo: header.topAnchor),
     ])
 
@@ -94,7 +95,7 @@ class MeViewController: UIViewController {
     updateUserInfo()
 
     let divider = UIView()
-    divider.backgroundColor = UIColor(hexString: "0xEFF1F4")
+    divider.backgroundColor = .ne_lightBackgroundColor
     view.addSubview(divider)
     divider.translatesAutoresizingMaskIntoConstraints = false
     divider.backgroundColor = UIColor(hexString: "EFF1F4")
@@ -130,10 +131,10 @@ class MeViewController: UIViewController {
   }
 
   func updateUserInfo() {
-    let user = userProvider.getUserInfo(userId: IMKitEngine.instance.imAccid)
+    let user = userProvider.getUserInfo(userId: QChatKitClient.instance.imAccid())
     idLabel.text = "\(NSLocalizedString("account", comment: "")):\(user?.userId ?? "")"
     nameLabel.text = user?.userInfo?.nickName
-    header.configHeadData(headUrl: user?.userInfo?.avatarUrl, name: user?.showName() ?? "")
+    header.configHeadData(headUrl: user?.userInfo?.avatarUrl, name: user?.showName() ?? "", uid: user?.userId ?? "")
   }
 
   // MAKR: lazy method
@@ -188,21 +189,11 @@ extension MeViewController: UITableViewDelegate, UITableViewDataSource {
   }
 
   public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if indexPath.row == 0 {
-//
-//        }else if indexPath.row == 1{
-//            let ctrl = IntroduceBrandViewController()
-//            navigationController?.pushViewController(ctrl, animated: true)
-//        }else if indexPath.row == 2{
-//            let ctrl = MineSettingViewController()
-//            navigationController?.pushViewController(ctrl, animated: true)
-//        }
-
     if indexPath.row == 0 {
-      let ctrl = IntroduceBrandViewController()
+      let ctrl = MineSettingViewController()
       navigationController?.pushViewController(ctrl, animated: true)
     } else if indexPath.row == 1 {
-      let ctrl = MineSettingViewController()
+      let ctrl = IntroduceBrandViewController()
       navigationController?.pushViewController(ctrl, animated: true)
     } else if indexPath.row == 2 {}
   }

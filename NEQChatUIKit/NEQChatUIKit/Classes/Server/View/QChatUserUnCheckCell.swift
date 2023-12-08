@@ -45,7 +45,7 @@ class QChatUserUnCheckCell: QChatBaseCollectionViewCell {
     contentView.backgroundColor = .clear
   }
 
-  func configure(_ model: UserInfo) {
+  func configure(_ model: QChatUserInfo) {
     if let avatar = model.avatar, !avatar.isEmpty {
       avatarImage.sd_setImage(with: URL(string: avatar))
       nameTailLabel.text = ""

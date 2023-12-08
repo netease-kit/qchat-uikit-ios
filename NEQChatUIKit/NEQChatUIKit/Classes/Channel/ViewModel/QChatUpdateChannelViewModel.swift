@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreIMKit
+import NECoreQChatKit
 import NEQChatKit
 
 @objcMembers
@@ -25,7 +25,7 @@ public class QChatUpdateChannelViewModel: NSObject {
     param.name = channelTmp?.name
     param.topic = channelTmp?.topic
     param.custom = channelTmp?.custom
-    QChatRepo().updateChannelInfo(param) { [weak self] error, channel in
+    QChatRepo.shared.updateChannelInfo(param) { [weak self] error, channel in
       if error == nil {
         self?.channel = channel
       }

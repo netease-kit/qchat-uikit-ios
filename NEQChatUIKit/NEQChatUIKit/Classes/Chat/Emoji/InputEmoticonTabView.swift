@@ -3,8 +3,8 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import UIKit
 import NECoreIMKit
+import UIKit
 @objc public protocol InputEmoticonTabViewDelegate: NSObjectProtocol {
   @objc optional func tabView(_ tabView: InputEmoticonTabView?, didSelectTabIndex index: Int)
 }
@@ -13,7 +13,7 @@ public class InputEmoticonTabView: UIControl {
   public weak var delegate: InputEmoticonTabViewDelegate?
   private var tabs = [UIButton]()
   private var seps = [UIView]()
-  private var className = "InputEmoticonTabView"
+  private var className = "NIMInputEmoticonTabView"
 
   override public init(frame: CGRect) {
     super.init(frame: frame)
