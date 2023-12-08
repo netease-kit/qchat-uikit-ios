@@ -1,0 +1,6 @@
+framework module SPPageMenu {
+  umbrella header "SPPageMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}

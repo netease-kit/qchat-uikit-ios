@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'NEQChatUIKit'
-  s.version          = '9.2.10'
+  s.version          = '9.5.3'
   s.summary          = 'Netease XKit'
 
 # This description is used to generate tags and improve search results.
@@ -29,7 +29,7 @@ TODO: Add long description of the pod here.
       'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
     }
   
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
   s.swift_version = '5.0'
 
   s.source_files = 'NEQChatUIKit/Classes/**/*'
@@ -40,10 +40,10 @@ TODO: Add long description of the pod here.
   s.resource = 'NEQChatUIKit/Assets/**/*'
   s.dependency 'NECommonUIKit'
   s.dependency 'NEQChatKit'
+  s.dependency 'NECoreQChatKit'
   s.dependency 'SDWebImageWebPCoder'
   s.dependency 'SDWebImageSVGKitPlugin'
   s.dependency 'MJRefresh'
-  s.dependency 'RSKPlaceholderTextView'
   s.dependency 'NIMSDK_LITE'
   s.dependency 'YXAlog'
 

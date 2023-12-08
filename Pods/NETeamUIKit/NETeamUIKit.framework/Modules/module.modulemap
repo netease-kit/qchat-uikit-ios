@@ -1,0 +1,11 @@
+framework module NETeamUIKit {
+  umbrella header "NETeamUIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module NETeamUIKit.Swift {
+  header "NETeamUIKit-Swift.h"
+  requires objc
+}

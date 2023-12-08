@@ -1,0 +1,11 @@
+framework module NEQChatKit {
+  umbrella header "NEQChatKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module NEQChatKit.Swift {
+  header "NEQChatKit-Swift.h"
+  requires objc
+}

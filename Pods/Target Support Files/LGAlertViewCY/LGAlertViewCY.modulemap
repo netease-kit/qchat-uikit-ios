@@ -1,0 +1,6 @@
+framework module LGAlertViewCY {
+  umbrella header "LGAlertViewCY-umbrella.h"
+
+  export *
+  module * { export * }
+}

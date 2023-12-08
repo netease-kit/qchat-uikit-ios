@@ -1,0 +1,11 @@
+framework module NEConversationUIKit {
+  umbrella header "NEConversationUIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module NEConversationUIKit.Swift {
+  header "NEConversationUIKit-Swift.h"
+  requires objc
+}
