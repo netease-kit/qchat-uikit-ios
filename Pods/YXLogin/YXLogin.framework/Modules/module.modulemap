@@ -1,6 +1,0 @@
-framework module YXLogin {
-  umbrella header "YXLogin-umbrella.h"
-
-  export *
-  module * { export * }
-}

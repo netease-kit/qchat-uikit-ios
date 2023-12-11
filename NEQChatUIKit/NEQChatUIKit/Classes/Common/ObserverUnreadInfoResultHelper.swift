@@ -28,7 +28,7 @@ public class ObserverUnreadInfoResultHelper: NSObject, NIMLoginManagerDelegate {
   public func getTotalUnreadCountForServer() -> UInt {
     var count: UInt = 0
     unreadInfoResultDic.forEach { (key: UInt64, value: UInt) in
-      count = count + value
+      count += value
     }
     return count
   }

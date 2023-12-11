@@ -112,7 +112,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     if let channelDic = channelDataDic[serverId] {
       for key in channelDic.keys {
         if let unreadCount = channelDic[key], unreadCount > 0 {
-          count = count + unreadCount
+          count += unreadCount
         }
       }
     }
