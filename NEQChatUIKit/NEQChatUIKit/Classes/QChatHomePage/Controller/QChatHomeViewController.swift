@@ -660,7 +660,7 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
           findServer = server
           break
         }
-        currentIndex = currentIndex - 1
+        currentIndex -= 1
       }
     } else if serverListArray.count > index + 1 {
       var currentIndex = index + 1
@@ -670,7 +670,7 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
           findServer = server
           break
         }
-        currentIndex = currentIndex + 1
+        currentIndex += 1
       }
     }
     return findServer

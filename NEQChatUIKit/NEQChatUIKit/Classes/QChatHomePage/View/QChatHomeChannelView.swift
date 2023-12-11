@@ -276,7 +276,7 @@ extension QChatHomeChannelView {
         if nextTimeTag != 0,
            channelArray.count > 0 {
           tableView.scrollToRow(at: IndexPath(row: channelArray.count - 1, section: 0), at: .bottom, animated: true)
-        } else {
+        } else if channelArray.count > 0 {
           tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
         }
         hasMore = result?.hasMore ?? false
