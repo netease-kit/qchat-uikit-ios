@@ -7,12 +7,13 @@ import NECommonKit
 import NECoreKit
 import NECoreQChatKit
 import UIKit
+
 // import NEKeyboardManagerSwift
 
 public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource, UITextFieldDelegate {
   private let tag = "JoinOtherServiceController"
-  public var serversArray = [QChatServer]()
+  public var serversArray = [NEQChatServer]()
   public var viewmodel = QChatJoinServerViewModel()
   public var channelViewModel = QChatChannelViewModel()
   public var isAnnouncement = false // 是否是公告频道, 默认false，非公共频道
@@ -138,7 +139,7 @@ public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewD
       tableView.addSubview(emptyView)
       return
     }
-    let param = QChatGetServersParam(serverIds: [NSNumber(value: serverId)])
+    let param = NEQChatGetServersParam(serverIds: [NSNumber(value: serverId)])
     viewmodel.getServers(parameter: param) { error, serversArray in
       NELog.infoLog(
         ModuleName + " " + self.tag,
@@ -196,7 +197,7 @@ public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewD
       return
     }
 
-    let param = QChatGetChannelsByPageParam(timeTag: 0, serverId: serverId)
+    let param = NEQChatGetChannelsByPageParam(timeTag: 0, serverId: serverId)
     channelViewModel.getChannelsByPage(parameter: param) { error, result in
       NELog.infoLog(
         ModuleName + " " + self.tag,

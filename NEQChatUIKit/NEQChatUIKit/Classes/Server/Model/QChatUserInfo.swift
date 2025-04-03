@@ -17,13 +17,13 @@ class QChatUserInfo: NSObject {
   var serverId: UInt64?
   var createTime: Double?
 
-  var serverMember: ServerMemeber?
+  var serverMember: NEQChatServerMemeber?
 
-  var roleMember: RoleMember?
+  var roleMember: NEQChatRoleMember?
 
   override init() {}
 
-  init(_ member: ServerMemeber) {
+  init(_ member: NEQChatServerMemeber) {
     serverMember = member
     if let n = member.nick, n.count > 0 {
       nickName = n
@@ -37,7 +37,7 @@ class QChatUserInfo: NSObject {
     color = UIColor.colorWithString(string: accid)
   }
 
-  init(_ member: RoleMember) {
+  init(_ member: NEQChatRoleMember) {
     roleMember = member
     if let n = member.nick, n.count > 0 {
       nickName = n

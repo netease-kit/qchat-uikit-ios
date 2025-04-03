@@ -63,7 +63,7 @@ open class QChatSquareHomeViewController: UIViewController, NEPagingContentViewC
       }
       weakSelf?.tabLoadingImageView.isHidden = true
       weakSelf?.contentLoadingImageView.isHidden = true
-      infos.forEach { info in
+      for info in infos {
         let vc = QChatSquareViewController()
         vc.type = info.type
         vc.delegate = weakSelf?.delegate

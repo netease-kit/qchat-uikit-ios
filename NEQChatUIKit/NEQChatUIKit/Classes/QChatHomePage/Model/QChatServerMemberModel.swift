@@ -9,7 +9,7 @@ import NECoreQChatKit
 // 社区下成员列表数据模型
 @objcMembers
 public class QChatServerMemberModel: NSObject {
-  public var serverMemberModel: ServerMemeber?
+  public var serverMemberModel: NEQChatServerMemeber?
   public var imName: String?
   public var idGroupData: [String]?
 }

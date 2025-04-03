@@ -10,9 +10,9 @@ import UIKit
 
 public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectControllerDelegate {
   var viewmodel = QChatWhiteBlackViewModel()
-  public var type: RoleType = .white
-  public var channel: ChatChannel?
-  private var memberArray: [ServerMemeber]?
+  public var type: NEQChatChannelMemberRoleType = .white
+  public var channel: NEQChatChatChannel?
+  private var memberArray: [NEQChatServerMemeber]?
   private var isEdited: Bool = false
   var owner: String?
   override public func viewDidLoad() {
@@ -43,8 +43,8 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
   }
 
   func loadData() {
-    let type: ChannelMemberRoleType = type == .white ? .white : .black
-    let param = GetChannelBlackWhiteMembers(
+    let type: NEQChatChannelMemberRoleType = type == .white ? .white : .black
+    let param = NEQChatGetChannelBlackWhiteMembers(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       timeTag: 0,
@@ -116,7 +116,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
       memberSelect.completion = { [weak self] datas in
         // 选中成员
         if datas.count > 0 {
-          var seletedMembers = [ServerMemeber]()
+          var seletedMembers = [NEQChatServerMemeber]()
           for data in datas {
             if let m = data.serverMember {
               seletedMembers.append(m)
@@ -199,7 +199,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
   }
 
   // 添加黑白名单
-  private func addMemberList(members: [ServerMemeber]?, type: RoleType,
+  private func addMemberList(members: [NEQChatServerMemeber]?, type: NEQChatChannelMemberRoleType,
                              _ completion: @escaping (NSError?) -> Void) {
     guard let ms = members else {
       return
@@ -208,7 +208,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
     for m in ms {
       accids.append(m.accid ?? "")
     }
-    let param = UpdateChannelBlackWhiteMembersParam(
+    let param = NEQChatUpdateChannelBlackWhiteMembersParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       type: type == .white ? .white : .black,
@@ -219,7 +219,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
   }
 
   // 移除黑白名单
-  private func removeMemberList(members: [ServerMemeber]?, type: RoleType,
+  private func removeMemberList(members: [NEQChatServerMemeber]?, type: NEQChatChannelMemberRoleType,
                                 _ completion: @escaping (NSError?) -> Void) {
     guard let ms = members else {
       return
@@ -230,7 +230,7 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
         accids.append(id)
       }
     }
-    let param = UpdateChannelBlackWhiteMembersParam(
+    let param = NEQChatUpdateChannelBlackWhiteMembersParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       type: type == .white ? .white : .black,
@@ -257,8 +257,8 @@ public class QChatWhiteBlackListVC: QChatTableViewController, QChatMemberSelectC
   }
 
   public func filterMembers(accid: [String]?, _ filterMembers: @escaping ([String]?) -> Void) {
-    let type: ChannelMemberRoleType = type == .white ? .white : .black
-    let param = GetExistingChannelBlackWhiteMembersParam(
+    let type: NEQChatChannelMemberRoleType = type == .white ? .white : .black
+    let param = NEQChatGetExistingChannelBlackWhiteMembersParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       type: type,

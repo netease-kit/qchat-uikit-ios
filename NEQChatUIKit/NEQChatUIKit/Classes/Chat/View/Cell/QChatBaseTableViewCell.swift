@@ -6,6 +6,7 @@
 import NECoreKit
 import NECoreQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objc class QChatBubbleButton: UIButton {
@@ -70,17 +71,17 @@ class QChatBaseTableViewCell: UITableViewCell {
 
   public var messageFrame: QChatMessageFrame? {
     didSet {
-      self.timeLabel.frame = messageFrame?.timeFrame ?? CGRect.zero
-      self.btnHeadImage.frame = messageFrame?.headFrame ?? CGRect.zero
-      self.contentBtn.frame = messageFrame?.contentFrame ?? CGRect.zero
-      self.quickCommentCollection.frame = messageFrame?.quickCommentsFrame ?? CGRect.zero
+      timeLabel.frame = messageFrame?.timeFrame ?? CGRect.zero
+      btnHeadImage.frame = messageFrame?.headFrame ?? CGRect.zero
+      contentBtn.frame = messageFrame?.contentFrame ?? CGRect.zero
+      quickCommentCollection.frame = messageFrame?.quickCommentsFrame ?? CGRect.zero
 
       if #available(iOS 13, *) {
         DispatchQueue.main.async {
           self.quickCommentCollection.reloadData()
         }
       } else {
-        self.quickCommentCollection.reloadData()
+        quickCommentCollection.reloadData()
       }
 
       timeLabel.text = messageFrame?.time
@@ -104,28 +105,28 @@ class QChatBaseTableViewCell: UITableViewCell {
       }
 
       if msg.isOutgoingMsg {
-        self.contentBtn
+        contentBtn
           .setBubbleImage(image: UIImage.ne_imageNamed(name: "chat_message_send")!)
         // 设置消息状态 判断消息发送是否成功
 
-        self.activityView.frame = CGRect(
+        activityView.frame = CGRect(
           x: contentBtn.left - (5 + 20),
           y: contentBtn.top + (contentBtn.height - 20) / 2,
           width: 20,
           height: 20
         )
 
-        if msg.deliveryState == NIMMessageDeliveryState.deliveried || messageFrame?.isFromLocalCache == true {
-          self.activityView.messageStatus = .successed
-        } else if msg.deliveryState == NIMMessageDeliveryState.delivering {
-          self.activityView.messageStatus = .sending
+        if msg.deliveryState == NIMMessageDeliveryState.deliveried.rawValue || messageFrame?.isFromLocalCache == true {
+          activityView.messageStatus = .successed
+        } else if msg.deliveryState == NIMMessageDeliveryState.delivering.rawValue {
+          activityView.messageStatus = .sending
         } else {
-          self.activityView.messageStatus = .failed
+          activityView.messageStatus = .failed
         }
 
       } else {
-        self.activityView.isHidden = true
-        self.contentBtn
+        activityView.isHidden = true
+        contentBtn
           .setBubbleImage(image: UIImage.ne_imageNamed(name: "chat_message_receive")!)
       }
     }

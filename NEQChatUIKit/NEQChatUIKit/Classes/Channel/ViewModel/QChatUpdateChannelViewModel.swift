@@ -8,20 +8,20 @@ import NEQChatKit
 
 @objcMembers
 public class QChatUpdateChannelViewModel: NSObject {
-  public var channel: ChatChannel?
+  public var channel: NEQChatChatChannel?
   // 临时记录修改的值
-  public var channelTmp: ChatChannel?
+  public var channelTmp: NEQChatChatChannel?
   private let className = "QChatUpdateChannelViewModel"
 
-  init(channel: ChatChannel?) {
+  init(channel: NEQChatChatChannel?) {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
     self.channel = channel
     channelTmp = channel
   }
 
-  func updateChannelInfo(completion: @escaping (NSError?, ChatChannel?) -> Void) {
+  func updateChannelInfo(completion: @escaping (NSError?, NEQChatChatChannel?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
-    var param = UpdateChannelParam(channelId: channel?.channelId)
+    var param = NEQChatUpdateChannelParam(channelId: channel?.channelId)
     param.name = channelTmp?.name
     param.topic = channelTmp?.topic
     param.custom = channelTmp?.custom

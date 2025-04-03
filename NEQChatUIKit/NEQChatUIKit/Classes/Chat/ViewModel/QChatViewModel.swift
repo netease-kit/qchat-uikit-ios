@@ -7,6 +7,7 @@ import NECommonKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 
 @objc
 public protocol QChatViewModelDelegate: NSObjectProtocol {
@@ -22,15 +23,15 @@ public protocol QChatViewModelDelegate: NSObjectProtocol {
 
 @objcMembers
 public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
-  public var channel: ChatChannel?
-  public var server: QChatServer?
+  public var channel: NEQChatChatChannel?
+  public var server: NEQChatServer?
   public var messages: [QChatMessageFrame] = .init()
   public weak var delegate: QChatViewModelDelegate?
   private var lastMsg: NIMQChatMessage?
   public var repo = QChatRepo.shared
   public var operationModel: QChatMessageFrame?
 
-  init(channel: ChatChannel?, server: QChatServer?) {
+  init(channel: NEQChatChatChannel?, server: NEQChatServer?) {
     NELog.infoLog(ModuleName + " " + QChatViewModel.className(), desc: #function)
     super.init()
     self.channel = channel
@@ -132,7 +133,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public func getMoreMessageHistory(_ completion: @escaping (Error?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
-      var param = GetMessageHistoryParam(serverId: sid, channelId: cid)
+      var param = NEQChatGetMessageHistoryParam(serverId: sid, channelId: cid)
       param.lastMsg = lastMsg
       QChatSystemMessageProvider.shared
         .getMessageHistory(param: param) { [weak self] error, messages in
@@ -158,7 +159,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
               let chunkMessages = messageArray.chunk(20)
 
-              chunkMessages.forEach { chunkMessage in
+              for chunkMessage in chunkMessages {
                 self?.fetchQuickComments(messages: chunkMessage, completion: { error, result in
                   if let msgsComments = result?.msgIdQuickCommentDic {
                     self?.messages.forEach { msgFrame in
@@ -184,8 +185,8 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func downloadAudioAttachment(_ messages: [NIMQChatMessage]) {
-    messages.forEach { message in
-      if message.messageType == .audio {
+    for message in messages {
+      if message.messageType == NIMMessageType.audio.rawValue {
         try? NIMSDK.shared().qchatMessageManager.fetchMessageAttachment(message)
       }
     }
@@ -210,7 +211,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public func markMessageRead(time: TimeInterval) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
-      var param = MarkMessageReadParam(serverId: sid, channelId: cid)
+      var param = NEQChatMarkMessageReadParam(serverId: sid, channelId: cid)
       param.ackTimestamp = time
       weak var weakSelf = self
       QChatSystemMessageProvider.shared.markMessageRead(param: param) { error in
@@ -227,8 +228,8 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   // 获取消息列表中的所有图片路径列表
   public func getUrls() -> [String] {
     var urls = [String]()
-    messages.forEach { messageFrame in
-      if messageFrame.message?.messageType == .image, let object = messageFrame.message?.messageObject as? NIMImageObject {
+    for messageFrame in messages {
+      if messageFrame.message?.messageType == NIMMessageType.image.rawValue, let object = messageFrame.message?.messageObject as? NIMImageObject {
         if let path = object.path, FileManager.default.fileExists(atPath: path) {
           urls.append(path)
         } else if let url = object.url {
@@ -255,7 +256,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
       // 撤回消息扩展内容
       var revokeExt = [String: Any]()
       revokeExt[revokeMessageFlag] = true
-      if message.messageType == .text {
+      if message.messageType == NIMMessageType.text.rawValue {
         // 消息撤回之后，text 会被清空
         UserDefaults.standard.setValue(message.text, forKey: message.serverID)
         UserDefaults.standard.synchronize()
@@ -280,7 +281,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   public func deleteMessage(_ completion: NIMQChatUpdateMessageHandler?) {
     if let message = operationModel?.message {
-      if message.deliveryState == .failed {
+      if message.deliveryState == NIMMessageDeliveryState.failed.rawValue {
         // 发送失败的消息UI上直接移除
         deleteMessageUpdateUI(message)
         return
@@ -425,7 +426,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
       return
     }
 
-    let param = QChatGetExistingAccidsInServerRoleParam(serverId: serverId, accids: [accid])
+    let param = NEQChatGetExistingAccidsInServerRoleParam(serverId: serverId, accids: [accid])
     repo.getExistingServerRolesByAccids(param) { [weak self] error, serverRoles in
       if let err = error {
         NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + "getServerRolesByAccId CALLBACK ERROR:\(err.localizedDescription)")
@@ -551,7 +552,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
     delegate?.send(message, didCompleteWithError: error)
   }
 
-  public func applyServerJoin(parameter: QChatApplyServerJoinParam,
+  public func applyServerJoin(parameter: NEQChatApplyServerJoinParam,
                               _ completion: @escaping (NSError?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
     repo.applyServerJoin(param: parameter) { error in

@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 
 import NEQChatKit
+import NIMSDK
 import UIKit
 
 class QChatTextTableViewCell: QChatBaseTableViewCell {
@@ -46,7 +47,7 @@ class QChatTextTableViewCell: QChatBaseTableViewCell {
         // 本地无撤回原文本则不可编辑
         // 超出重新编辑期限则不可编辑
         guard msg.isOutgoingMsg,
-              msg.messageType == .text,
+              msg.messageType == NIMMessageType.text.rawValue,
               Date().timeIntervalSince1970 - msg.timestamp < 2 * 60,
               UserDefaults.standard.value(forKey: msg.serverID) != nil
         else {

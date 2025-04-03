@@ -7,6 +7,7 @@ import NECommonKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 
 public protocol SettingModelDelegate: NSObjectProtocol {
   func didClickChannelName()
@@ -18,7 +19,7 @@ public protocol SettingModelDelegate: NSObjectProtocol {
   func didClickLeave(_ isOwner: Bool)
   func didRefresh()
   func didReloadData(_ isAdmin: Bool)
-  func didUpdateServerInfo(_ server: QChatServer?)
+  func didUpdateServerInfo(_ server: NEQChatServer?)
   func showToastInView(_ string: String)
 }
 
@@ -28,7 +29,7 @@ typealias FinishControllerBlock = () -> Void
 @objcMembers
 public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public let repo = QChatRepo.shared
-  var server: QChatServer?
+  var server: NEQChatServer?
   weak var delegate: SettingModelDelegate?
   var didGoBack: FinishControllerBlock?
 
@@ -53,7 +54,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
   // 允许表情回复
   let emotionReplyEnable = QChatSettingModel()
 
-  init(server: QChatServer? = nil) {
+  init(server: NEQChatServer? = nil) {
     super.init()
     self.server = server
     NIMSDK.shared().qchatMessageManager.add(self)
@@ -207,7 +208,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   /// 获取管理员人数
   func getManagerNumber(_ completion: @escaping (Int) -> Void) {
-    var param = GetServerRoleMembersParam()
+    var param = NEQChatGetServerRoleMembersParam()
     param.serverId = server?.serverId
     param.roleId = server?.announce?.roleId?.uint64Value
     param.limit = 200
@@ -226,7 +227,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
       completion(1)
       return
     }
-    repo.getServers(QChatGetServersParam(serverIds: [NSNumber(value: serverId)])) { error, results in
+    repo.getServers(NEQChatGetServersParam(serverIds: [NSNumber(value: serverId)])) { error, results in
       if error != nil {
         completion(1)
       } else if let number = results?.servers.first?.memberNumber {
@@ -236,7 +237,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   /// 查询是否具有某个权限
-  func checkPermission(command: StatusInfo, _ completion: @escaping (NSError?, Bool) -> Void) {
+  func checkPermission(command: NEQChatPermissionStatusInfo, _ completion: @escaping (NSError?, Bool) -> Void) {
     guard let serverId = server?.serverId,
           let channelId = server?.announce?.channelId?.uint64Value else {
       return
@@ -256,7 +257,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   /// 查询是否具有编辑公告频道信息的权限
   func checkManageChannelPermission(_ completion: @escaping (Bool) -> Void) {
-    var command = StatusInfo()
+    var command = NEQChatPermissionStatusInfo()
     command.permissionType = .manageChannel
     checkPermission(command: command) { [weak self] error, hasPermission in
       if let err = error as NSError? {
@@ -276,7 +277,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   /// 更新允许表情回复设置
   func updateEmotionEnable(enable: Bool, _ completion: @escaping (Bool) -> Void) {
-    var command = StatusInfo()
+    var command = NEQChatPermissionStatusInfo()
     command.customType = emojiAuthType
 
     // 查询是否有更改表情回复设置的权限
@@ -293,7 +294,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
         completion(false)
       } else {
         if hasPermission {
-          let announce = NEAnnounceModel()
+          let announce = NEQChatAnnounceModel()
           announce.channelId = self?.server?.announce?.channelId
           announce.roleId = self?.server?.announce?.roleId
           announce.emojiReplay = enable ? 1 : 0
@@ -394,7 +395,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
         } else if systemNoti.type == .serverUpdate,
                   let updateAttach = systemNoti.attach as? NIMQChatUpdateServerAttachment {
           let oldEmoAuth = server?.announce?.emojiReplay
-          server = QChatServer(server: updateAttach.server)
+          server = NEQChatServer(server: updateAttach.server)
           if server?.announce?.emojiReplay != oldEmoAuth {
             // 允许表情评论回复状态改变
             emotionReplyEnable.switchOpen = server?.announce?.emojiReplay == 1

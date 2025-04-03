@@ -9,15 +9,15 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias AddMemberRoleBlock = (_ memberRole: MemberRole?) -> Void
+typealias AddMemberRoleBlock = (_ memberRole: NEQChatMemberRole?) -> Void
 public class QChatAddMemberVC: QChatSearchVC {
-  public var channel: ChatChannel?
-  private var serverMembers: [ServerMemeber]?
-  private var channelMembers: [ServerMemeber]?
+  public var channel: NEQChatChatChannel?
+  private var serverMembers: [NEQChatServerMemeber]?
+  private var channelMembers: [NEQChatServerMemeber]?
   private var lastTimeTag: Double?
 //    public var didAddMemberRole: AddMemberRoleBlock?
 
-  public init(channel: ChatChannel?) {
+  public init(channel: NEQChatChatChannel?) {
     super.init(nibName: nil, bundle: nil)
     self.channel = channel
   }
@@ -49,11 +49,8 @@ public class QChatAddMemberVC: QChatSearchVC {
   }
 
   @objc func loadData() {
-    lastTimeTag = 0
-    var param = GetServerMembersByPageParam()
-    param.serverId = channel?.serverId
+    var param = NEQChatGetServerMembersByPageParam(timeTag: 0, serverId: channel?.serverId)
     param.limit = 50
-    param.timeTag = lastTimeTag
     QChatServerProvider.shared.getServerMembers(param) { [weak self] error, sMembers in
       if let err = error as NSError? {
         switch err.code {
@@ -77,14 +74,14 @@ public class QChatAddMemberVC: QChatSearchVC {
                 ids.append(id)
               }
             }
-            let param = GetExistingAccidsOfMemberRolesParam(
+            let param = NEQChatGetExistingAccidsOfMemberRolesParam(
               serverId: sid,
               channelId: cid,
               accids: ids
             )
             QChatRoleProvider.shared
               .getExistingMemberRoles(param: param) { error, existMemberArray in
-                var filterMembers = [ServerMemeber]()
+                var filterMembers = [NEQChatServerMemeber]()
                 if let existMembers = existMemberArray, !existMembers.isEmpty {
                   for m in sMembers {
                     if existMembers.contains(where: { existMember in
@@ -98,7 +95,7 @@ public class QChatAddMemberVC: QChatSearchVC {
                   self?.emptyView.isHidden = !filterMembers.isEmpty
 
                 } else {
-                  var serMembers = [ServerMemeber]()
+                  var serMembers = [NEQChatServerMemeber]()
                   for sMem in sMembers {
                     if sMem.accid != IMKitLoginManager.instance.currentAccount() {
                       serMembers.append(sMem)
@@ -127,10 +124,8 @@ public class QChatAddMemberVC: QChatSearchVC {
   }
 
   @objc func loadMore() {
-    var param = GetServerMembersByPageParam()
-    param.serverId = channel?.serverId
+    var param = NEQChatGetServerMembersByPageParam(timeTag: lastTimeTag ?? 0, serverId: channel?.serverId)
     param.limit = 50
-    param.timeTag = lastTimeTag
     QChatServerProvider.shared.getServerMembers(param) { [weak self] error, sMembers in
       if let err = error as NSError? {
         switch err.code {
@@ -152,7 +147,7 @@ public class QChatAddMemberVC: QChatSearchVC {
                 ids.append(id)
               }
             }
-            let param = GetExistingAccidsOfMemberRolesParam(
+            let param = NEQChatGetExistingAccidsOfMemberRolesParam(
               serverId: sid,
               channelId: cid,
               accids: ids
@@ -215,8 +210,8 @@ public class QChatAddMemberVC: QChatSearchVC {
     addMemberInChannel(member: member, index: indexPath.row)
   }
 
-  private func addMemberInChannel(member: ServerMemeber?, index: Int) {
-    let param = AddMemberRoleParam(
+  private func addMemberInChannel(member: NEQChatServerMemeber?, index: Int) {
+    let param = NEQChatAddMemberRoleParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       accid: member?.accid

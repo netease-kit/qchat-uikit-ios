@@ -14,8 +14,8 @@ public enum RoundedType {
 }
 
 public struct RoleModel {
-  public var role: ChannelRole?
-  public var member: MemberRole?
+  public var role: NEQChatChannelRole?
+  public var member: NEQChatMemberRole?
   public var title: String?
   public var corner: RoundedType?
   public var isPlacehold: Bool = false

@@ -11,8 +11,8 @@ public class QChatEditMemberViewModel: NSObject {
   var limitIdGroups = [QChatIdGroupModel]()
   var allIdGroups = [QChatIdGroupModel]()
 
-  var serverRoles = [ServerRole]()
-  var userRoles = [ServerRole]()
+  var serverRoles = [NEQChatServerRole]()
+  var userRoles = [NEQChatServerRole]()
 
   var userDic = [UInt64: QChatIdGroupModel]()
   var serverDic = [UInt64: QChatIdGroupModel]()
@@ -41,10 +41,10 @@ public class QChatEditMemberViewModel: NSObject {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
     limitIdGroups.removeAll()
     allIdGroups.removeAll()
-    serverRoles.forEach { role in
+    for role in serverRoles {
       if let roleId = role.roleId {
-        if let model = self.serverDic[roleId] {
-          self.allIdGroups.append(model)
+        if let model = serverDic[roleId] {
+          allIdGroups.append(model)
         }
       }
     }
@@ -63,9 +63,9 @@ public class QChatEditMemberViewModel: NSObject {
   func filterAllRoles() {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
     let serverModels = getRoleModel(serverRoles, nil)
-    serverModels.forEach { idModel in
+    for idModel in serverModels {
       if let roleId = idModel.role?.roleId {
-        self.serverDic[roleId] = idModel
+        serverDic[roleId] = idModel
       }
     }
   }
@@ -82,9 +82,9 @@ public class QChatEditMemberViewModel: NSObject {
         last.cornerType = last.cornerType.union(.bottomLeft).union(.bottomRight)
       }
     }
-    allIdGroups.forEach { idModel in
+    for idModel in allIdGroups {
       if let roleId = idModel.role?.roleId {
-        self.userDic[roleId] = idModel
+        userDic[roleId] = idModel
       }
     }
     delegate?.dataDidChange()
@@ -94,7 +94,7 @@ public class QChatEditMemberViewModel: NSObject {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
     weak var weakSelf = self
 
-    var accidParam = GetServerRolesByAccIdParam(serverId: serverId, accid: accid)
+    var accidParam = NEQChatGetServerRolesByAccIdParam(serverId: serverId, accid: accid)
     accidParam.limit = 200
     accidParam.timeTag = 0
     repo.getServerRolesByAccId(param: accidParam) { error, roles in
@@ -110,7 +110,7 @@ public class QChatEditMemberViewModel: NSObject {
       }
     }
 
-    var param = GetServerRoleParam()
+    var param = NEQChatGetServerRoleParam()
     param.limit = 200
     param.serverId = serverId
 
@@ -127,7 +127,7 @@ public class QChatEditMemberViewModel: NSObject {
     }
   }
 
-  func getRoleModel(_ roles: [ServerRole]?, _ select: Bool?) -> [QChatIdGroupModel] {
+  func getRoleModel(_ roles: [NEQChatServerRole]?, _ select: Bool?) -> [QChatIdGroupModel] {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", roles.count:\(roles?.count ?? 0)")
     var models = [QChatIdGroupModel]()
     roles?.forEach { role in
@@ -141,18 +141,18 @@ public class QChatEditMemberViewModel: NSObject {
   }
 
   func updateMyMember(_ serverId: UInt64?, _ nick: String?,
-                      _ completion: @escaping (Error?, ServerMemeber) -> Void) {
+                      _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = UpdateMyMemberInfoParam()
+    var param = NEQChatUpdateMyMemberInfoParam()
     param.serverId = serverId
     param.nick = nick
     repo.updateMyServerMember(param, completion)
   }
 
   func updateMember(_ serverId: UInt64?, _ nick: String?, _ accid: String?,
-                    _ completion: @escaping (Error?, ServerMemeber) -> Void) {
+                    _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = UpdateServerMemberInfoParam()
+    var param = NEQChatUpdateServerMemberInfoParam()
     param.serverId = serverId
     param.nick = nick
     param.accid = accid
@@ -162,7 +162,7 @@ public class QChatEditMemberViewModel: NSObject {
   func kickoutMember(_ serverId: UInt64?, _ accid: String?,
                      _ completion: @escaping (Error?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = KickServerMembersParam()
+    var param = NEQChatKickServerMembersParam()
     param.serverId = serverId
     var accids = [String]()
     if let acc = accid {
@@ -177,7 +177,7 @@ public class QChatEditMemberViewModel: NSObject {
   func addMembers(_ accid: String?, _ serverId: UInt64?, _ roleId: UInt64?,
                   _ completion: @escaping () -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", accid:\(accid ?? "nil")")
-    var param = AddServerRoleMemberParam()
+    var param = NEQChatAddServerRoleMemberParam()
     param.serverId = serverId
     param.roleId = roleId
     var accids = [String]()
@@ -206,7 +206,7 @@ public class QChatEditMemberViewModel: NSObject {
   func remove(_ accid: String?, _ serverId: UInt64?, _ rid: UInt64?,
               _ completion: @escaping () -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", accid:\(accid ?? "nil")")
-    var param = RemoveServerRoleMemberParam()
+    var param = NEQChatRemoveServerRoleMemberParam()
     param.serverId = serverId
     param.roleId = rid
     weak var weakSelf = self

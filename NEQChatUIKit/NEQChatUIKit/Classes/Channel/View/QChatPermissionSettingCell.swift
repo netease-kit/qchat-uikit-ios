@@ -7,7 +7,7 @@ import NECoreQChatKit
 import UIKit
 
 protocol QChatPermissionSettingCellDelegate: AnyObject {
-  func didSelected(cell: QChatPermissionSettingCell?, model: RoleStatusInfo?)
+  func didSelected(cell: QChatPermissionSettingCell?, model: NEQChatPermissionStatusInfo?)
 }
 
 class QChatPermissionSettingCell: QChatCornerCell {
@@ -121,10 +121,10 @@ class QChatPermissionSettingCell: QChatCornerCell {
       return
     }
     selectedIndex = sender.tag - 10
-    if let type = model?.status?.type {
-      let update = RoleStatusInfo(
+    if let type = model?.status?.permissionType {
+      let update = NEQChatPermissionStatusInfo(
         type: type,
-        status: status(rawValue: selectedIndex - 1) ?? .Extend
+        status: NEQChatPermissionStatus(rawValue: selectedIndex - 1) ?? .Extend
       )
       delegate?.didSelected(cell: self, model: update)
     }
@@ -140,7 +140,7 @@ class QChatPermissionSettingCell: QChatCornerCell {
         new.isSelected = !new.isSelected
         button = new
       }
-      model?.status?.status = status(rawValue: selectedIndex - 1) ?? .Extend
+      model?.status?.status = NEQChatPermissionStatus(rawValue: selectedIndex - 1) ?? .Extend
     }
   }
 

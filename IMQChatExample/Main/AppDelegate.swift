@@ -34,9 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
         
     func setupInit(){
-        
-        let account = "<#accid#>"
-        let token = "<#token#>"
         // init
         let option = NIMSDKOption()
         option.appKey = AppKey.appKey
@@ -46,8 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         NEKeyboardManager.shared.enable = true
         NEKeyboardManager.shared.shouldResignOnTouchOutside = true
         weak var weakSelf = self
-        let param = QChatLoginParam(account, token)
-        
+        let param = NEQChatLoginParam(account, token)
+
         QChatKitClient.instance.loginQChat(param) { error, result in
             if let err = error {
                 print("qchatLogin failed, error : ", err)
@@ -108,7 +105,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         ConversationRouter.register()
         
         // 关闭群聊
-        ConfigCenter.shared.teamEnable = false
+        IMKitConfigCenter.shared.teamEnable = false
         
         //地图map初始化
         NEMapClient.shared().setupMapClient(withAppkey: AppKey.gaodeMapAppkey)

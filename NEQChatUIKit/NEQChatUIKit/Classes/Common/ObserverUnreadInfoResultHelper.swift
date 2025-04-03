@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public class ObserverUnreadInfoResultHelper: NSObject, NIMLoginManagerDelegate {
@@ -27,7 +28,7 @@ public class ObserverUnreadInfoResultHelper: NSObject, NIMLoginManagerDelegate {
   // 总未读数
   public func getTotalUnreadCountForServer() -> UInt {
     var count: UInt = 0
-    unreadInfoResultDic.forEach { (key: UInt64, value: UInt) in
+    for (key, value) in unreadInfoResultDic {
       count += value
     }
     return count

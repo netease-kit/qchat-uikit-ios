@@ -129,13 +129,11 @@ public class QChatMemberSelectViewModel: NSObject {
   func getServerMebers(_ serverId: UInt64?,
                        completion: @escaping (NSError?, [QChatUserInfo]?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = GetServerMembersByPageParam()
-    param.serverId = serverId
-    param.timeTag = lastTimeTag
+    var param = NEQChatGetServerMembersByPageParam(timeTag: lastTimeTag, serverId: serverId)
     param.limit = pageSize
     repo.getServerMembers(param) { error, members in
       var memberArray = [QChatUserInfo]()
-      members.forEach { member in
+      for member in members {
         memberArray.append(QChatUserInfo(member))
       }
       completion(error as NSError?, memberArray)

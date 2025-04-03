@@ -27,7 +27,7 @@ public class QChatPermissionViewModel: NSObject {
 
   override init() {}
 
-  func getData(_ serverRole: ServerRole) {
+  func getData(_ serverRole: NEQChatServerRole) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverRole.serverId ?? 0)")
     weak var weakSelf = self
 //        print("get data authors : ", serverRole.auths as Any)

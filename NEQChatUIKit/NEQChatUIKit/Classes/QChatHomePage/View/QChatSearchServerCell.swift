@@ -15,7 +15,7 @@ class QChatSearchServerCell: UITableViewCell {
 
   let repo = QChatRepo.shared
 
-  public var serverModel: QChatServer? {
+  public var serverModel: NEQChatServer? {
     didSet {
       if let imageUrl = serverModel?.icon {
         headImageView.sd_setImage(with: URL(string: imageUrl), completed: nil)
@@ -28,18 +28,18 @@ class QChatSearchServerCell: UITableViewCell {
         headImageView.backgroundColor = .colorWithNumber(number: serverModel?.serverId)
       }
 
-      self.content.text = serverModel?.name
+      content.text = serverModel?.name
 
       guard let serverId = serverModel?.serverId else {
         return
       }
-      self.subContent.text = "\(serverId)"
+      subContent.text = "\(serverId)"
 
       let item = QChatGetServerMemberItem(
         serverId: serverId,
         accid: QChatKitClient.instance.imAccid()
       )
-      let param = QChatGetServerMembersParam(serverAccIds: [item])
+      let param = NEQChatGetServerMembersParam(serverAccIds: [item])
 
       if serverModel?.announce != nil {
         repo.getServerMemberList(parameter: param) { error, membersResult in
@@ -223,7 +223,7 @@ extension QChatSearchServerCell {
     guard let serverId = serverModel?.serverId else {
       return
     }
-    let param = QChatApplyServerJoinParam(serverId: serverId)
+    let param = NEQChatApplyServerJoinParam(serverId: serverId)
     if NEChatDetectNetworkTool.shareInstance.manager?.isReachable == false {
       UIApplication.shared.keyWindow?.makeToast(localizable("network_error"), duration: 2, position: .center)
       return

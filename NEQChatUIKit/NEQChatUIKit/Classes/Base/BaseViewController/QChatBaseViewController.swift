@@ -3,23 +3,66 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreKit
+import NECommonKit
 import UIKit
 
-class QChatBaseViewController: NEBaseViewController {
-  override func viewDidLoad() {
-    super.viewDidLoad()
+@objcMembers
+open class QChatBaseViewController: UIViewController, UIGestureRecognizerDelegate {
+  public var topConstant: CGFloat = 0
+  public let navigationView = NENavigationView()
 
-    // Do any additional setup after loading the view.
+  override open var title: String? {
+    get {
+      super.title
+    }
+
+    set {
+      super.title = newValue
+      navigationView.navTitle.text = newValue
+    }
   }
 
-  /*
-   // MARK: - Navigation
+  override open func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .white
+    navigationController?.interactivePopGestureRecognizer?.delegate = self
 
-   // In a storyboard-based application, you will often want to do a little preparation before navigation
-   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       // Get the new view controller using segue.destination.
-       // Pass the selected object to the new view controller.
-   }
-   */
+    if let useSystemNav = NEConfigManager.instance.getParameter(key: useSystemNav) as? Bool, useSystemNav {
+      navigationController?.isNavigationBarHidden = false
+      topConstant = 0
+      setupBackUI()
+    } else {
+      navigationController?.isNavigationBarHidden = true
+      topConstant = NEConstant.navigationAndStatusHeight
+      navigationView.translatesAutoresizingMaskIntoConstraints = false
+      navigationView.addBackButtonTarget(target: self, selector: #selector(backEvent))
+      navigationView.moreButton.isHidden = true
+      view.addSubview(navigationView)
+      NSLayoutConstraint.activate([
+        navigationView.leftAnchor.constraint(equalTo: view.leftAnchor),
+        navigationView.rightAnchor.constraint(equalTo: view.rightAnchor),
+        navigationView.topAnchor.constraint(equalTo: view.topAnchor),
+        navigationView.heightAnchor.constraint(equalToConstant: topConstant),
+      ])
+    }
+  }
+
+  private func setupBackUI() {
+    let image = coreLoader.loadImage("backArrow")?.withRenderingMode(.alwaysOriginal)
+    let backItem = UIBarButtonItem(
+      image: image,
+      style: .plain,
+      target: self,
+      action: #selector(backEvent)
+    )
+    backItem.accessibilityIdentifier = "id.backArrow"
+
+    navigationItem.leftBarButtonItem = backItem
+    navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem()
+    navigationController?.navigationBar.topItem?.backBarButtonItem?.tintColor = .ne_darkText
+  }
+
+  open func backEvent() {
+    navigationController?.popViewController(animated: true)
+  }
 }

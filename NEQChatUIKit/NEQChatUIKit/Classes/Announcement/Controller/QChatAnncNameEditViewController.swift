@@ -7,6 +7,7 @@ import NECommonKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objc public enum QChatChannelChangeType: Int {
@@ -20,7 +21,7 @@ public protocol QChatAnncNameEditViewControllerDelegate: NSObjectProtocol {
 
 @objcMembers
 open class QChatAnncNameEditViewController: NEBaseViewController, UITextViewDelegate, NIMQChatMessageManagerDelegate {
-  var server: QChatServer?
+  var server: NEQChatServer?
   public var type = QChatChannelChangeType.ChannelName
   public var repo = QChatRepo.shared
   public var textLimit = 50
@@ -56,7 +57,7 @@ open class QChatAnncNameEditViewController: NEBaseViewController, UITextViewDele
     return text
   }()
 
-  init(server: QChatServer?, type: QChatChannelChangeType) {
+  init(server: NEQChatServer?, type: QChatChannelChangeType) {
     super.init(nibName: nil, bundle: nil)
     self.server = server
     self.type = type

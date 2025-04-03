@@ -56,7 +56,7 @@
 "qchat_select"="Select";
 "qchat_please_input_topic"="Please enter the theme";
 "qchat_not_empty_servername"="Please Name the community";
-"qchat_not_empty_header_url"="Please upload Avator";
+"qchat_not_empty_header_url"="Please upload Avatar";
 "qchat_not_empty_select_memeber"="Please Select member";
 "qchat_please_input_role_name"="Please set the role name";
 "qchat_delete_success"="Delete successfully";
@@ -175,7 +175,7 @@
 "search_public_serverId"="Search Channel ID";
 "no_serverId"="Not Found";
 "know"="ok";
-"upload_headImage"="Upload Avator";
+"upload_headImage"="Upload Avatar";
 "enter_serverName"="Please enter community name";
 "request_sended"="invit sent";
 "message_channel"="Message Topic";

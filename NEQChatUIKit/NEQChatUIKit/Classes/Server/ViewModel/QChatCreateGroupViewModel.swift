@@ -41,7 +41,7 @@ public class QChatCreateGroupViewModel: NSObject {
 
   func filterData() {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
-    allUsers.forEach { user in
+    for user in allUsers {
       user.cornerType = .none
     }
     if allUsers.count == 1, let first = allUsers.first {
@@ -81,7 +81,7 @@ public class QChatCreateGroupViewModel: NSObject {
 
   func addMembers(_ members: [QChatUserInfo]) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", members.count:\(members.count)")
-    members.forEach { user in
+    for user in members {
       if allUsers.contains(where: { lUser in
         if let cid = lUser.serverMember?.accid, let mid = user.serverMember?.accid {
           if cid == mid {

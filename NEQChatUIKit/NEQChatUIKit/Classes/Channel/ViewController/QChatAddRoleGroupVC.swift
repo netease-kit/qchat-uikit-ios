@@ -8,11 +8,11 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias AddChannelRoleBlock = (_ role: ChannelRole?) -> Void
+typealias AddChannelRoleBlock = (_ role: NEQChatChannelRole?) -> Void
 public class QChatAddRoleGroupVC: QChatSearchVC {
-  public var channel: ChatChannel?
-  private var serverRoles: [ServerRole]?
-  private var channelRoles: [ChannelRole]?
+  public var channel: NEQChatChatChannel?
+  private var serverRoles: [NEQChatServerRole]?
+  private var channelRoles: [NEQChatChannelRole]?
 //    public var didAddChannelRole: AddChannelRoleBlock?
   private var priority: Int?
   private lazy var placeholderView: NEEmptyDataView = .init(
@@ -48,7 +48,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
     loadData()
   }
 
-  init(channel: ChatChannel?) {
+  init(channel: NEQChatChatChannel?) {
     super.init(nibName: nil, bundle: nil)
     self.channel = channel
   }
@@ -60,7 +60,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
   @objc func loadData() {
     priority = 0
     // 加载server的身份组
-    var param = GetServerRoleParam()
+    var param = NEQChatGetServerRoleParam()
     param.serverId = channel?.serverId
     param.limit = 50
     param.priority = priority
@@ -88,7 +88,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
                 ids.append(id)
               }
             }
-            let param = GetExistingChannelRolesByServerRoleIdsParam(
+            let param = NEQChatGetExistingChannelRolesByServerRoleIdsParam(
               serverId: sid,
               channelId: cid,
               roleIds: ids
@@ -96,7 +96,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
             QChatRoleProvider.shared
               .getExistingChannelRoles(param: param) { error, channelRoles in
                 if let existRoles = channelRoles, !existRoles.isEmpty {
-                  var tmp = [ServerRole]()
+                  var tmp = [NEQChatServerRole]()
                   print("roleArray: \(roleArray)")
                   for role in roleArray {
                     if existRoles.contains(where: { existRole in
@@ -133,7 +133,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
 
   @objc func loadMore() {
     // 加载server的身份组
-    var param = GetServerRoleParam()
+    var param = NEQChatGetServerRoleParam()
     param.serverId = channel?.serverId
     param.limit = 50
     param.priority = priority
@@ -158,7 +158,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
                 ids.append(id)
               }
             }
-            let param = GetExistingChannelRolesByServerRoleIdsParam(
+            let param = NEQChatGetExistingChannelRolesByServerRoleIdsParam(
               serverId: sid,
               channelId: cid,
               roleIds: ids
@@ -223,7 +223,7 @@ public class QChatAddRoleGroupVC: QChatSearchVC {
       return
     }
     // 1.添加到话题下
-    let param = AddChannelRoleParam(serverId: sId, channelId: cId, parentRoleId: roleId)
+    let param = NEQChatAddChannelRoleParam(serverId: sId, channelId: cId, parentRoleId: roleId)
     QChatRoleProvider.shared.addChannelRole(param: param) { [weak self] error, cRole in
       if let err = error as NSError? {
         switch err.code {

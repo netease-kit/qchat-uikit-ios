@@ -27,6 +27,7 @@
 		181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */; };
 		181EE6652B23512F0043817F /* NodeSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6522B23512F0043817F /* NodeSelectCell.swift */; };
 		181EE6662B23512F0043817F /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6532B23512F0043817F /* VersionCell.swift */; };
+		183776DF2D9E77BE005F4255 /* DemoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183776DD2D9E77BE005F4255 /* DemoService.swift */; };
 		39572AAB28C6F74D007A9526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39572AAD28C6F74D007A9526 /* InfoPlist.strings */; };
 		39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A36F8028002CFF009B07A9 /* NETabBarController.swift */; };
 		39A39BA928C5A2B70001B638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39A39BAB28C5A2B80001B638 /* Localizable.strings */; };
@@ -78,6 +79,7 @@
 		181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdayDatePickerView.swift; sourceTree = "<group>"; };
 		181EE6522B23512F0043817F /* NodeSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSelectCell.swift; sourceTree = "<group>"; };
 		181EE6532B23512F0043817F /* VersionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
+		183776DD2D9E77BE005F4255 /* DemoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoService.swift; sourceTree = "<group>"; };
 		18D0A2A428D564CB00788205 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A628D564DF00788205 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A828D5674400788205 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +163,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		183776DE2D9E77BE005F4255 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				183776DD2D9E77BE005F4255 /* DemoService.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		39A2F24128D9DF9100DDCAF2 /* Main */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,6 +204,7 @@
 		4B3B9BDD277AFEE50091A74E /* IMQChatExample */ = {
 			isa = PBXGroup;
 			children = (
+				183776DE2D9E77BE005F4255 /* Manager */,
 				181EE63D2B23512F0043817F /* Mine */,
 				39A2F24128D9DF9100DDCAF2 /* Main */,
 				01B0A28E2816CF41009065C5 /* IMUIKitExample.entitlements */,
@@ -387,6 +398,7 @@
 				181EE65F2B23512F0043817F /* NENodeViewController.swift in Sources */,
 				181EE6602B23512F0043817F /* PersonInfoViewController.swift in Sources */,
 				4B3B9BDF277AFEE50091A74E /* AppDelegate.swift in Sources */,
+				183776DF2D9E77BE005F4255 /* DemoService.swift in Sources */,
 				181EE65E2B23512F0043817F /* MessageRemindViewController.swift in Sources */,
 				181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */,
 				181EE6572B23512F0043817F /* MessageRemindViewModel.swift in Sources */,
@@ -595,7 +607,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.5.3;
+				MARKETING_VERSION = 9.5.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -645,7 +657,7 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.5.3;
+				MARKETING_VERSION = 9.5.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

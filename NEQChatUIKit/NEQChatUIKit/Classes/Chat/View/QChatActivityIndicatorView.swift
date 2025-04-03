@@ -20,15 +20,14 @@ class QChatActivityIndicatorView: UIButton {
 
       switch messageStatus {
       case .sending:
-        self.isHidden = false
+        isHidden = false
         activity.isHidden = false
         activity.startAnimating()
       case .failed:
-        self.isHidden = false
+        isHidden = false
         failBtn.isHidden = false
       case .successed:
-        self.isHidden = true
-
+        isHidden = true
       default:
         print("")
       }

@@ -31,7 +31,7 @@ class QChatHomeServerCell: UITableViewCell {
     // Configure the view for the selected state
   }
 
-  public var serverModel: QChatServer? {
+  public var serverModel: NEQChatServer? {
     didSet {
       if let imageUrl = serverModel?.icon {
         headView.sd_setImage(with: URL(string: imageUrl), completed: nil)

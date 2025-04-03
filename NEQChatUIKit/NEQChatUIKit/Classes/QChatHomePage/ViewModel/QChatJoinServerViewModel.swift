@@ -12,15 +12,15 @@ public class QChatJoinServerViewModel: NSObject {
 
   public var isAnnouncement = false
 
-  public func getServers(parameter: QChatGetServersParam,
-                         _ completion: @escaping (NSError?, [QChatServer]) -> Void) {
+  public func getServers(parameter: NEQChatGetServersParam,
+                         _ completion: @escaping (NSError?, [NEQChatServer]) -> Void) {
     NELog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverIds.count:\(parameter.serverIds?.count ?? 0)"
     )
     repo.getServers(parameter) { error, serverResult in
 
-      var retServers = [QChatServer]()
+      var retServers = [NEQChatServer]()
       serverResult?.servers.forEach { [weak self] server in
         if self?.isAnnouncement == true {
           if server.announce != nil, server.announce?.isInValid() == false {

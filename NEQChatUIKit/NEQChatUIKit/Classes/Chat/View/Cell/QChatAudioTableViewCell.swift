@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 
 import NIMSDK
+import NIMQChat
 import UIKit
 
 protocol QChatAudioCell {

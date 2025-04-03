@@ -5,6 +5,7 @@
 
 import NECoreQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objc
@@ -26,7 +27,7 @@ open class QChatHomeChannelCell: UITableViewCell {
     redAngleView.backgroundColor = HexRGB(0xF24957)
   }
 
-  public var channelModel: ChatChannel? {
+  public var channelModel: NEQChatChatChannel? {
     didSet {
       guard let name = channelModel?.name else { return }
       channelNameLabel.text = name

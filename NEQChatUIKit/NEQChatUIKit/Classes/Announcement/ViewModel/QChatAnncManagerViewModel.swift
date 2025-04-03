@@ -5,6 +5,7 @@
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public protocol QChatAnncManagerViewModelDelegate: NSObjectProtocol {
@@ -15,14 +16,14 @@ public protocol QChatAnncManagerViewModelDelegate: NSObjectProtocol {
 @objcMembers
 public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate {
   let repo = QChatRepo.shared
-  var managerMembers = [ServerMemeber]()
-  var normalMembers = [ServerMemeber]()
+  var managerMembers = [NEQChatServerMemeber]()
+  var normalMembers = [NEQChatServerMemeber]()
   var limit = 100
   var isControllerShow = true // 判断当前controller是否显示
 
   var lastTimeTag: Double = 0
 
-  var qchatServer: QChatServer?
+  var qchatServer: NEQChatServer?
 
   var hasPermission = false // 是否有权限移除订阅者，订阅者列表使用
 
@@ -38,7 +39,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   public func inviteMembersToServer(serverId: UInt64, accids: [String],
                                     _ completion: @escaping (NSError?, [String]?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
-    let param = QChatInviteServerMembersParam(serverId: serverId, accids: accids)
+    let param = NEQChatInviteServerMembersParam(serverId: serverId, accids: accids)
 
     repo.inviteMembersToServerWithResult(param: param) { error, failedIds, bandedFialedIds in
       completion(error, failedIds)
@@ -46,7 +47,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   }
 
   func getManagerMembers(_ roleId: UInt64?, _ serverId: UInt64?, _ owner: String?, _ isLoadMore: Bool = false, _ timeTag: Double = 0, _ completion: @escaping (NSError?, Bool) -> Void) {
-    var param = GetServerRoleMembersParam()
+    var param = NEQChatGetServerRoleMembersParam()
     param.serverId = serverId
     param.roleId = roleId
     param.limit = limit
@@ -77,7 +78,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
     }
   }
 
-  func getServerMember(roleMembers: [RoleMember]?, _ owner: String?, _ serverId: UInt64?, _ isLoadMore: Bool = false, _ completion: @escaping (NSError?, [ServerMemeber]) -> Void) {
+  func getServerMember(roleMembers: [NEQChatRoleMember]?, _ owner: String?, _ serverId: UInt64?, _ isLoadMore: Bool = false, _ completion: @escaping (NSError?, [NEQChatServerMemeber]) -> Void) {
     var memberItems = [QChatGetServerMemberItem]()
 
     // 把创建者放在管理员第一个
@@ -86,7 +87,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
       memberItems.append(item)
     }
 
-    var retMembers = [ServerMemeber]()
+    var retMembers = [NEQChatServerMemeber]()
 
     roleMembers?.forEach { member in
       retMembers.append(member.convertToServerMember())
@@ -95,7 +96,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
       completion(nil, retMembers)
       return
     }
-    let param = QChatGetServerMembersParam(serverAccIds: memberItems)
+    let param = NEQChatGetServerMembersParam(serverAccIds: memberItems)
     repo.getServerMembers(param: param) { error, members in
       if let err = error {
         completion(err as NSError, retMembers)
@@ -109,11 +110,9 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   }
 
   func getMemberWithRoles(_ serverId: UInt64?, _ timeTag: Double?,
-                          _ completion: @escaping (NSError?, [ServerMemeber]?, Bool) -> Void) {
-    var param = GetServerMembersByPageParam()
+                          _ completion: @escaping (NSError?, [NEQChatServerMemeber]?, Bool) -> Void) {
+    var param = NEQChatGetServerMembersByPageParam(timeTag: timeTag ?? 0, serverId: serverId)
     param.limit = limit
-    param.serverId = serverId
-    param.timeTag = timeTag
 
     var isNoMoreData = false
     repo.getServerMembers(param) { [weak self] error, members in
@@ -124,7 +123,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
         }
         let memberArr = members
         var accidList = [String]()
-        var dic = [String: ServerMemeber]()
+        var dic = [String: NEQChatServerMemeber]()
 
         for memberModel in memberArr {
           accidList.append(memberModel.accid ?? "")
@@ -134,7 +133,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
           }
         }
 
-        let roleParam = QChatGetExistingAccidsInServerRoleParam(
+        let roleParam = NEQChatGetExistingAccidsInServerRoleParam(
           serverId: param.serverId!,
           accids: accidList
         )
@@ -142,7 +141,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
           serverRolesDict?.forEach { key, roleArray in
             dic[key]?.roles = roleArray
           }
-          var tempServerArray = [ServerMemeber]()
+          var tempServerArray = [NEQChatServerMemeber]()
           for var memberModel in memberArr {
             if let accid = memberModel.accid, let dicMember = dic[accid] {
               memberModel.roles = dicMember.roles
@@ -230,14 +229,14 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
     }
   }
 
-  public func getExistingServerRoleMembersByAccids(_ param: GetExistingServerRoleMembersByAccidsParam,
+  public func getExistingServerRoleMembersByAccids(_ param: NEQChatGetExistingServerRoleMembersByAccidsParam,
                                                    _ completion: @escaping (Error?, [String])
                                                      -> Void) {
     repo.getExistingServerRoleMembersByAccids(param, completion)
   }
 
   public func addManagerMember(_ serverId: UInt64?, _ roleId: UInt64?, _ accids: [String]?, _ completion: @escaping (NSError?) -> Void) {
-    var param = AddServerRoleMemberParam()
+    var param = NEQChatAddServerRoleMemberParam()
     param.serverId = serverId
     param.roleId = roleId
     param.accountArray = accids
@@ -247,11 +246,11 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
       } else {
         if let sid = serverId {
           var items = [QChatGetServerMemberItem]()
-          successIds.forEach { accid in
+          for accid in successIds {
             let item = QChatGetServerMemberItem(serverId: sid, accid: accid)
             items.append(item)
           }
-          let param = QChatGetServerMembersParam(serverAccIds: items)
+          let param = NEQChatGetServerMembersParam(serverAccIds: items)
           self?.repo.getServerMembers(param: param) { [weak self] error, members in
             members?.forEach { member in
               if self?.managerMembers.count ?? 0 > 0 {
@@ -268,7 +267,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   }
 
   public func removeNormalMeber(_ serverId: UInt64?, _ accid: [String]?, _ completion: @escaping (NSError?) -> Void) {
-    var param = KickServerMembersParam()
+    var param = NEQChatKickServerMembersParam()
     param.serverId = serverId
     param.accounts = accid
     repo.kickoutServerMembers(param) { error in
@@ -293,7 +292,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
     }
   }
 
-  public func checkPermission(_ server: QChatServer?, _ completion: @escaping (NSError?, Bool) -> Void) {
+  public func checkPermission(_ server: NEQChatServer?, _ completion: @escaping (NSError?, Bool) -> Void) {
     guard let sid = server?.serverId, let cid = server?.announce?.channelId?.uint64Value else {
       return
     }
@@ -303,14 +302,14 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   }
 
   public func addMemberRole(_ serverId: UInt64?, _ channelId: UInt64?, _ accid: String?) {
-    let param = AddMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
+    let param = NEQChatAddMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
     repo.addMemberRole(param: param) { [weak self] error, memberRole in
       NELog.infoLog(self?.className() ?? "", desc: "add member role error : \(error?.localizedDescription ?? "")")
     }
   }
 
   public func removeMemberRole(_ serverId: UInt64?, _ channelId: UInt64?, _ accid: String?) {
-    let param = RemoveMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
+    let param = NEQChatRemoveMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
     repo.removeMemberRole(param: param) { [weak self] error in
       NELog.infoLog(self?.className() ?? "", desc: "remove member role error : \(error?.localizedDescription ?? "")")
     }
@@ -323,7 +322,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
     }
 
     var accidSet = Set<String>()
-    accids.forEach { accid in
+    for accid in accids {
       accidSet.insert(accid)
     }
     if accidSet.contains(QChatKitClient.instance.imAccid()) {
@@ -362,7 +361,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
       return
     }
     var accidSet = Set<String>()
-    accids.forEach { accid in
+    for accid in accids {
       accidSet.insert(accid)
       allMemberMark.remove(accid)
     }

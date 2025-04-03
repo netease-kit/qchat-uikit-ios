@@ -5,7 +5,9 @@
 
 import Foundation
 import NIMSDK
+import NIMQChat
 import UIKit
+
 class QChatImageTableViewCell: QChatBaseTableViewCell {
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -13,7 +13,7 @@ class QChatWhiteBlackViewModel: NSObject {
     guard let sid = serverId else {
       return
     }
-    let param = QChatGetServersParam(serverIds: [NSNumber(value: sid)])
+    let param = NEQChatGetServersParam(serverIds: [NSNumber(value: sid)])
     repo.getServers(param) { error, result in
       if let server = result?.servers.first, sid == server.serverId {
         completion(server.owner)

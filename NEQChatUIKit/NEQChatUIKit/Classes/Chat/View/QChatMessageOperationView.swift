@@ -194,7 +194,7 @@ open class QChatMessageOperationView: UIView, UICollectionViewDataSource, UIColl
 
   open func setQuickEmojis(emotionIds: [String]) {
     quickEmojiItems = [NIMInputEmoticon]()
-    emotionIds.forEach { name in
+    for name in emotionIds {
       if let emoticons = emoticonCatalog?.id2Emoticons?[name] {
         quickEmojiItems.append(emoticons)
       }

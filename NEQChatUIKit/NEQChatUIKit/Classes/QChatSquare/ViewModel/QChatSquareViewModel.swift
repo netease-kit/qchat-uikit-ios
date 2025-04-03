@@ -6,6 +6,7 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public protocol QChatSquareViewModelDelegate: NSObjectProtocol {
@@ -34,14 +35,14 @@ public class QChatSquareViewModel: NSObject, NIMQChatMessageManagerDelegate {
     var items = [QChatGetServerMemberItem]()
     let currentAccid = QChatKitClient.instance.imAccid()
     weak var weakSelf = self
-    servers.forEach { server in
+    for server in servers {
       if let sid = server.server?.serverId {
         let item = QChatGetServerMemberItem(serverId: sid, accid: currentAccid)
         items.append(item)
         weakSelf?.serverDic[sid] = server
       }
     }
-    let param = QChatGetServerMembersParam(serverAccIds: items)
+    let param = NEQChatGetServerMembersParam(serverAccIds: items)
     repo.getServerMembers(param: param) { error, members in
       members?.forEach { member in
         if let sid = member.serverId {

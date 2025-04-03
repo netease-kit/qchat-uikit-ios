@@ -7,7 +7,7 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias UpdateChannelSuccess = (_ channel: ChatChannel?) -> Void
+typealias UpdateChannelSuccess = (_ channel: NEQChatChatChannel?) -> Void
 
 public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellDelegate {
   var viewModel: QChatUpdateChannelViewModel?
