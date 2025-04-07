@@ -11,9 +11,9 @@ public class QChatPermissionModel: NSObject {
   var changeMap = [String: Bool]()
 
   // 通用权限
-  var managerServer = ChatPermissionType.manageServer.rawValue
-  var allChannelProperty = ChatPermissionType.manageChannel.rawValue
-  var role = ChatPermissionType.manageRole.rawValue
+  var managerServer = NEQChatPermissionType.manageServer.rawValue
+  var allChannelProperty = NEQChatPermissionType.manageChannel.rawValue
+  var role = NEQChatPermissionType.manageRole.rawValue
 
   let commonPermission = [
     #keyPath(managerServer),
@@ -28,9 +28,9 @@ public class QChatPermissionModel: NSObject {
   ]
 
   // 消息权限
-  var sendMessage = ChatPermissionType.sendMsg.rawValue
-  var revokeOtherMessage = ChatPermissionType.revokeMsg.rawValue
-  var deleteOtherMessage = ChatPermissionType.deleteOtherMsg.rawValue
+  var sendMessage = NEQChatPermissionType.sendMsg.rawValue
+  var revokeOtherMessage = NEQChatPermissionType.revokeMsg.rawValue
+  var deleteOtherMessage = NEQChatPermissionType.deleteOtherMsg.rawValue
 
   let messagePermission = [#keyPath(sendMessage),
                            #keyPath(revokeOtherMessage),
@@ -42,11 +42,11 @@ public class QChatPermissionModel: NSObject {
      #keyPath(deleteOtherMessage): localizable("qchat_delete_message")]
 
   // 成员权限
-  var modifyOwnServer = ChatPermissionType.modifySelfInfo.rawValue
-  var modifyOthersServer = ChatPermissionType.modifyOthersInfoInServer.rawValue
-  var inviteMember = ChatPermissionType.inviteToServer.rawValue
-  var kickout = ChatPermissionType.kickOthersInServer.rawValue
-  var managerBlackAndWhite = ChatPermissionType.manageBlackWhiteList.rawValue
+  var modifyOwnServer = NEQChatPermissionType.modifySelfInfo.rawValue
+  var modifyOthersServer = NEQChatPermissionType.modifyOthersInfoInServer.rawValue
+  var inviteMember = NEQChatPermissionType.inviteToServer.rawValue
+  var kickout = NEQChatPermissionType.kickOthersInServer.rawValue
+  var managerBlackAndWhite = NEQChatPermissionType.manageBlackWhiteList.rawValue
 
   let memberPermission = [#keyPath(modifyOwnServer),
                           #keyPath(modifyOthersServer),
@@ -66,11 +66,11 @@ public class QChatPermissionModel: NSObject {
     super.init()
   }
 
-  func getChangePermission() -> [ChatPermissionType: Bool] {
-    var permissions = [ChatPermissionType: Bool]()
-    changeMap.forEach { (key: String, v: Bool) in
+  func getChangePermission() -> [NEQChatPermissionType: Bool] {
+    var permissions = [NEQChatPermissionType: Bool]()
+    for (key, v) in changeMap {
       if let permissionKey = value(forKey: key) as? String,
-         let type = ChatPermissionType(rawValue: permissionKey) {
+         let type = NEQChatPermissionType(rawValue: permissionKey) {
         permissions[type] = v
       }
     }

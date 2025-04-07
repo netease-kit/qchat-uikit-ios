@@ -8,6 +8,6 @@ import UIKit
 @objc
 @objcMembers
 open class QChatSquareServer: NSObject {
-  public var server: QChatServer?
+  public var server: NEQChatServer?
   public var isJoinedServer = false // 是否已经加入server
 }

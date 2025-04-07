@@ -172,7 +172,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
       viewmodel.datas.removeObject(at: sourceIndexPath.row)
     }
 
-    viewmodel.datas.forEach { user in
+    for user in viewmodel.datas {
       if let u = user as? QChatIdGroupModel {
         print("change name : ", u.idName as Any)
         print("change p: ", u.role?.priority as Any)

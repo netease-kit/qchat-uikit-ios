@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objc
@@ -10,17 +11,17 @@ public class QChatUtil: NSObject {
   class func getLastMsgContent(_ msg: NIMQChatMessage) -> String {
     var content = ""
     switch msg.messageType {
-    case .text:
+    case NIMMessageType.text.rawValue:
       content = msg.text ?? ""
-    case .image:
+    case NIMMessageType.image.rawValue:
       content = localizable("picture")
-    case .audio:
+    case NIMMessageType.audio.rawValue:
       content = localizable("voice")
-    case .video:
+    case NIMMessageType.video.rawValue:
       content = localizable("video")
-    case .file:
+    case NIMMessageType.file.rawValue:
       content = localizable("file")
-    case .location:
+    case NIMMessageType.location.rawValue:
       content = localizable("location")
     default:
       content = localizable("unknown")

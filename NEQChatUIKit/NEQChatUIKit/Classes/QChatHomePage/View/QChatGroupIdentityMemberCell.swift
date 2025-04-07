@@ -16,7 +16,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
   var isFirstRow = true
   var titleTopConstraint: NSLayoutConstraint?
 
-  public var memberModel: ServerMemeber? {
+  public var memberModel: NEQChatServerMemeber? {
     didSet {
       guard let model = memberModel else { return }
 
@@ -31,7 +31,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
       memberModel?.roles?.forEach { roleModel in
         labelContentArray.append(roleModel.name ?? "")
       }
-      self.dataArray = labelContentArray
+      dataArray = labelContentArray
       setupSubviews()
 
       if let nick = model.nick,!nick.isEmpty, nick != model.accid {
@@ -124,7 +124,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
     ])
 
     // 移除contentview上复用的label
-    labelContainerView.subviews.forEach { label in
+    for label in labelContainerView.subviews {
       label.removeFromSuperview()
     }
     var labelsWidth: CGFloat = 0

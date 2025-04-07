@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 
 import NECommonKit
+import NIMSDK
 import UIKit
 
 @objc public enum QChatMenuType: Int {
@@ -79,7 +80,7 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
   }
 
   func commonUI() {
-    backgroundColor = UIColor(hexString: "#EFF1F3")
+    backgroundColor = .ne_backgroundColor
     textField.layer.cornerRadius = 8
     textField.font = UIFont.systemFont(ofSize: 16)
     textField.clipsToBounds = true
@@ -130,7 +131,7 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
     ])
 
     greyView.translatesAutoresizingMaskIntoConstraints = false
-    greyView.backgroundColor = UIColor(hexString: "#EFF1F3")
+    greyView.backgroundColor = .ne_backgroundColor
     greyView.isHidden = true
     addSubview(greyView)
     NSLayoutConstraint.activate([
@@ -353,7 +354,7 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
   }
 
   public func setVisitorModel(isVisitorMode: Bool) {
-    buttons.forEach { button in
+    for button in buttons {
       button.alpha = isVisitorMode ? 0.5 : 1.0
     }
     coverLabel.isHidden = !isVisitorMode

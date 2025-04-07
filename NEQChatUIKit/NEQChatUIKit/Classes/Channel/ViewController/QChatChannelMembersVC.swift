@@ -9,10 +9,10 @@ import NEQChatKit
 import UIKit
 
 public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoViewDelegate {
-  public var channel: ChatChannel?
-  private var channelMembers: [ServerMemeber]?
+  public var channel: NEQChatChatChannel?
+  private var channelMembers: [NEQChatServerMemeber]?
   var memberInfoView: QChatMemberInfoView?
-  var lastMember: ServerMemeber?
+  var lastMember: NEQChatServerMemeber?
   var isVisitorMode = false
 
   override public func viewDidLoad() {
@@ -49,7 +49,7 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
   }
 
   @objc func loadData() {
-    var param = ChannelMembersParam(
+    var param = NEQChatChannelMembersParam(
       serverId: channel?.serverId ?? 0,
       channelId: channel?.channelId ?? 0
     )
@@ -68,7 +68,7 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
   }
 
   @objc func loadMoreData() {
-    var param = ChannelMembersParam(
+    var param = NEQChatChannelMembersParam(
       serverId: channel?.serverId ?? 0,
       channelId: channel?.channelId ?? 0
     )
@@ -112,7 +112,7 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
       withIdentifier: "\(QChatGroupIdentityMemberCell.self)",
       for: indexPath
     ) as! QChatGroupIdentityMemberCell
-    let member = channelMembers![indexPath.row] as ServerMemeber
+    let member = channelMembers![indexPath.row] as NEQChatServerMemeber
     cell.memberModel = member
     cell.arrowImageView.isHidden = true
     return cell
@@ -127,8 +127,8 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
     loadRolesOfMember(member: m)
   }
 
-  func loadRolesOfMember(member: ServerMemeber) {
-    let param = GetServerRolesByAccIdParam(serverId: channel?.serverId, accid: member.accid)
+  func loadRolesOfMember(member: NEQChatServerMemeber) {
+    let param = NEQChatGetServerRolesByAccIdParam(serverId: channel?.serverId, accid: member.accid)
     QChatRoleProvider.shared.getServerRolesByAccId(param: param) { [weak self] error, roles in
       print("roles:\(roles?.count) error: \(error)")
       guard let roleList = roles else {

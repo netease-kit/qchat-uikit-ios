@@ -8,7 +8,7 @@ import NEQChatKit
 
 @objcMembers
 public class QChatAuthoritySettingViewModel: NSObject {
-  public var channel: ChatChannel?
+  public var channel: NEQChatChatChannel?
   private let limit = 5
   public var rolesData = QChatRoles()
   public var rolesLimitData = QChatRoles()
@@ -17,7 +17,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   private var repo = QChatRepo.shared
   private let className = "QChatAuthoritySettingViewModel"
 
-  init(channel: ChatChannel?) {
+  init(channel: NEQChatChatChannel?) {
     self.channel = channel
   }
 
@@ -35,7 +35,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
       completion(NSError.paramError(), nil)
       return
     }
-    var param = ChannelRoleParam(serverId: sid, channelId: cid)
+    var param = NEQChatChannelRoleParam(serverId: sid, channelId: cid)
     param.limit = rolesData.pageSize
     param.timeTag = rolesData.timeTag
     repo.getChannelRoles(param) { [weak self] error, roleList in
@@ -100,7 +100,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
       completion(NSError.paramError(), nil)
       return
     }
-    var param = GetMemberRolesParam()
+    var param = NEQChatGetMemberRolesParam()
     param.serverId = sid
     param.channelId = cid
     param.limit = membersData.pageSize
@@ -144,10 +144,10 @@ public class QChatAuthoritySettingViewModel: NSObject {
     }
   }
 
-  public func removeChannelRole(role: ChannelRole?, index: Int,
+  public func removeChannelRole(role: NEQChatChannelRole?, index: Int,
                                 _ completion: @escaping (NSError?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role?.serverId ?? 0)")
-    var param = RemoveChannelRoleParam()
+    var param = NEQChatRemoveChannelRoleParam()
     param.serverId = role?.serverId
     param.roleId = UInt64(role?.roleId ?? 0)
     param.channelId = role?.channelId
@@ -156,10 +156,10 @@ public class QChatAuthoritySettingViewModel: NSObject {
     }
   }
 
-  public func removeMemberRole(member: MemberRole?, index: Int,
+  public func removeMemberRole(member: NEQChatMemberRole?, index: Int,
                                _ completion: @escaping (NSError?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member?.serverId ?? 0)")
-    let param = RemoveMemberRoleParam(
+    let param = NEQChatRemoveMemberRoleParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
       accid: member?.accid
@@ -173,7 +173,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
 //    本地插入成员
-  public func insertLocalMemberAtHead(member: MemberRole) {
+  public func insertLocalMemberAtHead(member: NEQChatMemberRole) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member.serverId ?? 0)")
     let model = RoleModel(member: member, isPlacehold: false)
     membersData.roles.insert(model, at: 0)
@@ -181,7 +181,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
 //    本地插入身份组
-  public func insertLocalRoleAtHead(role: ChannelRole) {
+  public func insertLocalRoleAtHead(role: NEQChatChannelRole) {
     NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role.serverId ?? 0)")
     let model = RoleModel(role: role, isPlacehold: false)
     rolesData.roles.insert(model, at: 0)

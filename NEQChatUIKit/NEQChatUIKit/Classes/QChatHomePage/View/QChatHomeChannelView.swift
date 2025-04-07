@@ -6,13 +6,14 @@
 import MJRefresh
 import NECoreQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
-  typealias CallBack = (_ server: QChatServer?) -> Void
-  typealias SelectedChannelBlock = (_ channel: ChatChannel?, _ isVisitor: Bool?) -> Void
+  typealias CallBack = (_ server: NEQChatServer?) -> Void
+  typealias SelectedChannelBlock = (_ channel: NEQChatChatChannel?, _ isVisitor: Bool?) -> Void
   public var channelViewModel = QChatChannelViewModel()
-  public var channelArray = [ChatChannel]()
+  public var channelArray = [NEQChatChatChannel]()
 
   public var setUpBlock: CallBack?
   public var addChannelBlock: CallBack?
@@ -22,14 +23,14 @@ class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
 
   public var viewmodel: QChatHomeViewModel?
 
-  public var qchatServerModel: QChatServer? {
+  public var qchatServerModel: NEQChatServer? {
     didSet {
       hasMore = true
       nextTimeTag = 0
-      self.titleLabel.text = qchatServerModel?.name
-      self.titleLabel.isHidden = false
-      self.divideLineView.isHidden = false
-      self.subTitleLabel.isHidden = false
+      titleLabel.text = qchatServerModel?.name
+      titleLabel.isHidden = false
+      divideLineView.isHidden = false
+      subTitleLabel.isHidden = false
       requestData(timeTag: 0)
       print("set up btn : ", setUpBtn)
       refreshVisitorUI()
@@ -118,6 +119,7 @@ class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
       if noticeInfo.serverId == qchatServerModel?.serverId {
         requestData(timeTag: 0)
       }
+
     case .updateChannelCategoryBlackWhiteRole:
       if noticeInfo.serverId == qchatServerModel?.serverId,
          (noticeInfo.toAccids?.contains(QChatKitClient.instance.imAccid())) != nil {
@@ -253,7 +255,7 @@ extension QChatHomeChannelView {
     channelViewModel.getChannelsByPage(serverId, timeTag) { [self] error, result in
       if error == nil {
         NELog.infoLog(className(), desc: "✅CALLBACK getChannelsByPage SUCCESS")
-        var dataArray = [ChatChannel]()
+        var dataArray = [NEQChatChatChannel]()
         if let retArray = result?.channels {
           dataArray.append(contentsOf: retArray)
         }

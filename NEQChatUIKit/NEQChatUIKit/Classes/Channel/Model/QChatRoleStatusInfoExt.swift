@@ -7,10 +7,10 @@ import Foundation
 import NECoreQChatKit
 
 public struct QChatRoleStatusInfoExt {
-  public var status: RoleStatusInfo?
+  public var status: NEQChatPermissionStatusInfo?
   public var title: String?
 
-  public init(status: RoleStatusInfo?) {
+  public init(status: NEQChatPermissionStatusInfo?) {
     self.status = status
   }
 }

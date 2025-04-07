@@ -6,6 +6,7 @@ import Foundation
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 
 public protocol QChatAnncEditMemberViewModelDelegate: NSObjectProtocol {
   func didClickRemoveAdmin()
@@ -17,8 +18,8 @@ public protocol QChatAnncEditMemberViewModelDelegate: NSObjectProtocol {
 @objcMembers
 public class QChatAnncEditMemberViewModel: NSObject {
   public let repo = QChatRepo.shared
-  var member: ServerMemeber?
-  var server: QChatServer?
+  var member: NEQChatServerMemeber?
+  var server: NEQChatServer?
   weak var delegate: QChatAnncEditMemberViewModelDelegate?
 
   /// 发消息
@@ -37,7 +38,7 @@ public class QChatAnncEditMemberViewModel: NSObject {
   let manageEmotionComment = QChatSettingModel()
   var manageEmotionCommentSwitchOpen = true
 
-  init(server: QChatServer?, member: ServerMemeber?) {
+  init(server: NEQChatServer?, member: NEQChatServerMemeber?) {
     super.init()
     self.server = server
     self.member = member
@@ -131,7 +132,7 @@ public class QChatAnncEditMemberViewModel: NSObject {
         completion(false)
       } else if result?.successfulAccidArray.contains(uid) == true {
         // 移除定制权限
-        self?.repo.removeMemberRole(param: RemoveMemberRoleParam(serverId: serverId, channelId: channelId, accid: uid)) { error in
+        self?.repo.removeMemberRole(param: NEQChatRemoveMemberRoleParam(serverId: serverId, channelId: channelId, accid: uid)) { error in
           if let err = error {
             if err.code == errorCode_NetWorkError {
               completion(false)
@@ -163,8 +164,8 @@ public class QChatAnncEditMemberViewModel: NSObject {
   }
 
   /// 添加定制权限
-  func addMemberRole(_ completion: @escaping (MemberRole) -> Void) {
-    var param = GetMemberRolesParam()
+  func addMemberRole(_ completion: @escaping (NEQChatMemberRole) -> Void) {
+    var param = NEQChatGetMemberRolesParam()
     param.serverId = server?.serverId
     param.channelId = server?.announce?.channelId?.uint64Value
     param.limit = 200
@@ -183,7 +184,7 @@ public class QChatAnncEditMemberViewModel: NSObject {
         }
 
         // 添加定制权限
-        let addParam = AddMemberRoleParam(serverId: self?.server?.serverId, channelId: self?.server?.announce?.channelId?.uint64Value, accid: self?.member?.accid)
+        let addParam = NEQChatAddMemberRoleParam(serverId: self?.server?.serverId, channelId: self?.server?.announce?.channelId?.uint64Value, accid: self?.member?.accid)
         self?.repo.addMemberRole(param: addParam) { error, memberRole in
           if let err = error {
             print(err.localizedDescription)
@@ -196,14 +197,14 @@ public class QChatAnncEditMemberViewModel: NSObject {
   }
 
   /// 设置开关状态
-  func setSwitchOpen(memberRoles: MemberRole?) {
+  func setSwitchOpen(memberRoles: NEQChatMemberRole?) {
     if let memberRole = memberRoles {
       for cmd in memberRole.auths ?? [] {
         if cmd.customType == emojiAuthType {
           manageEmotionComment.switchOpen = cmd.status != .Deny
           manageEmotionCommentSwitchOpen = manageEmotionComment.switchOpen
         } else {
-          switch cmd.type {
+          switch cmd.permissionType {
           case .sendMsg:
             sendMsg.switchOpen = cmd.status != .Deny
             sendMsgSwitchOpen = sendMsg.switchOpen
@@ -226,30 +227,30 @@ public class QChatAnncEditMemberViewModel: NSObject {
   }
 
   func saveAdminAuthStatus(_ completion: @escaping (NSError?) -> Void) {
-    var commands = [RoleStatusInfo]()
+    var commands = [NEQChatPermissionStatusInfo]()
 
     if sendMsg.switchOpen != sendMsgSwitchOpen {
-      let sendMsgCmd = RoleStatusInfo(type: .sendMsg,
-                                      status: sendMsg.switchOpen ? .Extend : .Deny)
+      let sendMsgCmd = NEQChatPermissionStatusInfo(type: .sendMsg,
+                                                   status: sendMsg.switchOpen ? .Extend : .Deny)
       commands.append(sendMsgCmd)
     }
     if editChannelInfo.switchOpen != editChannelInfoSwitchOpen {
-      let editChannelInfoCmd = RoleStatusInfo(type: .manageChannel,
-                                              status: editChannelInfo.switchOpen ? .Extend : .Deny)
+      let editChannelInfoCmd = NEQChatPermissionStatusInfo(type: .manageChannel,
+                                                           status: editChannelInfo.switchOpen ? .Extend : .Deny)
       commands.append(editChannelInfoCmd)
     }
     if deleteMsg.switchOpen != deleteMsgSwitchOpen {
-      let deleteMsgCmd = RoleStatusInfo(type: .deleteOtherMsg,
-                                        status: deleteMsg.switchOpen ? .Extend : .Deny)
+      let deleteMsgCmd = NEQChatPermissionStatusInfo(type: .deleteOtherMsg,
+                                                     status: deleteMsg.switchOpen ? .Extend : .Deny)
       commands.append(deleteMsgCmd)
     }
     if manageSubscriber.switchOpen != manageSubscriberSwitchOpen {
-      let manageSubscriberCmd = RoleStatusInfo(type: .manageRole,
-                                               status: manageSubscriber.switchOpen ? .Extend : .Deny)
+      let manageSubscriberCmd = NEQChatPermissionStatusInfo(type: .manageRole,
+                                                            status: manageSubscriber.switchOpen ? .Extend : .Deny)
       commands.append(manageSubscriberCmd)
     }
     if manageEmotionComment.switchOpen != manageEmotionCommentSwitchOpen {
-      let manageEmoCommentCmd = RoleStatusInfo(customtype: emojiAuthType, status: manageEmotionComment.switchOpen ? .Extend : .Deny)
+      let manageEmoCommentCmd = NEQChatPermissionStatusInfo(customtype: emojiAuthType, status: manageEmotionComment.switchOpen ? .Extend : .Deny)
       commands.append(manageEmoCommentCmd)
     }
 
@@ -291,8 +292,8 @@ public class QChatAnncEditMemberViewModel: NSObject {
   }
 
   /// 更新管理员的所有定制权限状态
-  func updateAdminAuthStatus(_ commands: [RoleStatusInfo], _ completion: @escaping (NSError?) -> Void) {
-    let param = UpdateMemberRoleParam(
+  func updateAdminAuthStatus(_ commands: [NEQChatPermissionStatusInfo], _ completion: @escaping (NSError?) -> Void) {
+    let param = NEQChatUpdateMemberRoleParam(
       serverId: server?.serverId,
       channelId: server?.announce?.channelId?.uint64Value,
       accid: member?.accid,
@@ -305,7 +306,7 @@ public class QChatAnncEditMemberViewModel: NSObject {
 
   /// 查询是否已退出公告频道
   func hasLeave(_ completion: @escaping (NSError?, Bool) -> Void) {
-    var param = GetExistingServerRoleMembersByAccidsParam()
+    var param = NEQChatGetExistingServerRoleMembersByAccidsParam()
     param.serverId = server?.serverId
     param.roleId = server?.announce?.roleId?.uint64Value
     param.accids = [member?.accid ?? ""]

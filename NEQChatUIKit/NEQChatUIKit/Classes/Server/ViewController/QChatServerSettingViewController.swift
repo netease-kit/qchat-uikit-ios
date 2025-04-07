@@ -7,14 +7,15 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
-typealias SaveSuccessBlock = (_ server: QChatServer?) -> Void
+typealias SaveSuccessBlock = (_ server: NEQChatServer?) -> Void
 
 public class QChatServerSettingViewController: NEBaseTableViewController, UITableViewDelegate,
-  UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate {
+                                               UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
   let viewModel = QChatSettingViewModel()
-  var server: QChatServer?
+  var server: NEQChatServer?
   var permissions = [QChatSettingModel]()
 
   var headerImageUrl: String?
@@ -44,7 +45,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
     return label
   }()
 
-  public init(server: QChatServer?) {
+  public init(server: NEQChatServer?) {
     super.init(nibName: nil, bundle: nil)
     self.server = server
   }
@@ -517,7 +518,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
   }
 
   // UINavigationControllerDelegate
-  func imagePickerController(_ picker: UIImagePickerController,
+  public func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info: [UIImagePickerController
                                .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage

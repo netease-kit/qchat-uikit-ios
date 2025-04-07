@@ -7,18 +7,18 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias ChannelUpdateSettingBlock = (_ channelRole: ChannelRole?) -> Void
+typealias ChannelUpdateSettingBlock = (_ channelRole: NEQChatChannelRole?) -> Void
 
 public class QChatGroupPermissionSettingVC: QChatTableViewController,
   QChatPermissionSettingCellDelegate {
 //    public var didUpdateBlock: ChannelUpdateSettingBlock?
-  public var cRole: ChannelRole?
+  public var cRole: NEQChatChannelRole?
   private var commonAuths = [QChatRoleStatusInfoExt]()
   private var messageAuths = [QChatRoleStatusInfoExt]()
   private var memberAuths = [QChatRoleStatusInfoExt]()
   private var auths = [[QChatRoleStatusInfoExt]]()
 
-  public init(cRole: ChannelRole?) {
+  public init(cRole: NEQChatChannelRole?) {
     super.init(nibName: nil, bundle: nil)
     self.cRole = cRole
   }
@@ -59,10 +59,10 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
     if let auths = cRole?.auths {
       for auth in auths {
         var authExt = QChatRoleStatusInfoExt(status: auth)
-        if let type = auth.type {
+        if let type = auth.permissionType {
           let key = "auth_" + String(type.rawValue)
           authExt.title = localizable(key)
-          switch auth.type {
+          switch auth.permissionType {
           case .manageChannel:
             commonAuths.insert(authExt, at: 0)
           case .manageRole:
@@ -143,9 +143,9 @@ public class QChatGroupPermissionSettingVC: QChatTableViewController,
 
   //    MARK: QChatPermissionSettingCellDelegate
 
-  func didSelected(cell: QChatPermissionSettingCell?, model: RoleStatusInfo?) {
+  func didSelected(cell: QChatPermissionSettingCell?, model: NEQChatPermissionStatusInfo?) {
     if let auth = model {
-      let param = UpdateChannelRoleParam(
+      let param = NEQChatUpdateChannelRoleParam(
         serverId: cRole?.serverId,
         channelId: cRole?.channelId,
         roleId: cRole?.roleId,

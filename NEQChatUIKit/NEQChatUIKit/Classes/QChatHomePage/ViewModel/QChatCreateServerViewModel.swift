@@ -22,7 +22,7 @@ public class QChatCreateServerViewModel: NSObject {
 
   public func inviteMembersToServer(serverId: UInt64, accids: [String],
                                     _ completion: @escaping (NSError?) -> Void) {
-    let param = QChatInviteServerMembersParam(serverId: serverId, accids: accids)
+    let param = NEQChatInviteServerMembersParam(serverId: serverId, accids: accids)
     repo.inviteMembersToServer(param) { error in
       completion(error)
     }

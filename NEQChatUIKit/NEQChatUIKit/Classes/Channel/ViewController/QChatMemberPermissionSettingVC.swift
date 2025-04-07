@@ -7,11 +7,11 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias UpdateSettingBlock = (_ memberRole: MemberRole?) -> Void
+typealias UpdateSettingBlock = (_ memberRole: NEQChatMemberRole?) -> Void
 public class QChatMemberPermissionSettingVC: QChatTableViewController,
   QChatPermissionSettingCellDelegate {
-  public var channel: ChatChannel?
-  public var memberRole: MemberRole?
+  public var channel: NEQChatChatChannel?
+  public var memberRole: NEQChatMemberRole?
 //    public var didUpdateBlock: UpdateSettingBlock?
   private var commonAuths = [QChatRoleStatusInfoExt]()
   private var messageAuths = [QChatRoleStatusInfoExt]()
@@ -19,7 +19,7 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
 
   private var auths = [[Any]]()
 
-  init(channel: ChatChannel?, memberRole: MemberRole?) {
+  init(channel: NEQChatChatChannel?, memberRole: NEQChatMemberRole?) {
     super.init(nibName: nil, bundle: nil)
     self.channel = channel
     self.memberRole = memberRole
@@ -59,10 +59,10 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
     if let auths = memberRole?.auths {
       for auth in auths {
         var authExt = QChatRoleStatusInfoExt(status: auth)
-        if let type = auth.type {
+        if let type = auth.permissionType {
           let key = "auth_" + String(type.rawValue)
           authExt.title = localizable(key)
-          switch auth.type {
+          switch auth.permissionType {
           case .manageChannel:
             commonAuths.insert(authExt, at: 0)
           case .manageRole:
@@ -112,7 +112,7 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
         for: indexPath
       ) as! QChatImageTextCell
       let members = auths[indexPath.section]
-      let m = members[indexPath.row] as? MemberRole
+      let m = members[indexPath.row] as? NEQChatMemberRole
       cell.setup(accid: m?.accid, nickName: m?.nick, avatar: m?.avatar)
       cell.cornerType = CornerType.topLeft.union(CornerType.topRight).union(CornerType.bottomLeft.union(CornerType.bottomRight))
       cell.line.isHidden = true
@@ -170,9 +170,9 @@ public class QChatMemberPermissionSettingVC: QChatTableViewController,
 
 //    MARK: QChatPermissionSettingCellDelegate
 
-  func didSelected(cell: QChatPermissionSettingCell?, model: RoleStatusInfo?) {
+  func didSelected(cell: QChatPermissionSettingCell?, model: NEQChatPermissionStatusInfo?) {
     if let auth = model {
-      let param = UpdateMemberRoleParam(
+      let param = NEQChatUpdateMemberRoleParam(
         serverId: channel?.serverId,
         channelId: channel?.channelId,
         accid: memberRole?.accid,

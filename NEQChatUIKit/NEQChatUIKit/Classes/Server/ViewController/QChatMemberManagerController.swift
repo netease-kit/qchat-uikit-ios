@@ -99,7 +99,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
   // MARK: UITableViewDelegate, UITableViewDataSource,ViewModelDelegate,QChatMemberSelectControllerDelegate
 
   public func filterMembers(accid: [String]?, _ filterMembers: @escaping ([String]?) -> Void) {
-    var param = GetExistingServerRoleMembersByAccidsParam()
+    var param = NEQChatGetExistingServerRoleMembersByAccidsParam()
     param.serverId = serverId
     param.accids = accid
     param.roleId = roleId
@@ -109,7 +109,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
 //      print("getExistingServerRoleMembersByAccids : ", accids)
       var dic = [String: String]()
       var retAccids = [String]()
-      accids.forEach { aid in
+      for aid in accids {
         dic[aid] = aid
       }
       accid?.forEach { aid in

@@ -7,7 +7,7 @@ import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
-typealias RoleUpdateCompletion = (_ role: ServerRole) -> Void
+typealias RoleUpdateCompletion = (_ role: NEQChatServerRole) -> Void
 public class QChatPermissionViewController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, QChatTextEditCellDelegate, ViewModelDelegate, QChatSwitchCellDelegate {
   var idGroup: QChatIdGroupModel?
@@ -76,7 +76,7 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
     if let model = cell.model as? QChatPermissionCellModel,
        let key = model.permissionKey,
        let value = model.permission?.value(forKey: key) as? String,
-       let type = ChatPermissionType(rawValue: value) {
+       let type = NEQChatPermissionType(rawValue: value) {
       updatePermission(type, cell.qSwitch.isOn) { success in
         if success == false {
           cell.qSwitch.isOn = !cell.qSwitch.isOn
@@ -254,7 +254,7 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
       showToast(localizable("roleName_cannot_be_empty"))
       return
     }
-    var param = UpdateServerRoleParam()
+    var param = NEQChatUpdateServerRoleParam()
     param.serverId = idGroup?.role?.serverId
     if let rid = idGroup?.role?.roleId {
       param.roleId = UInt64(rid)
@@ -304,16 +304,16 @@ public class QChatPermissionViewController: NEBaseTableViewController, UITableVi
 }
 
 extension QChatPermissionViewController {
-  func updatePermission(_ type: ChatPermissionType, _ open: Bool,
+  func updatePermission(_ type: NEQChatPermissionType, _ open: Bool,
                         _ completion: @escaping (Bool) -> Void) {
-    var param = UpdateServerRoleParam()
+    var param = NEQChatUpdateServerRoleParam()
     param.serverId = idGroup?.role?.serverId
     if let rid = idGroup?.role?.roleId {
       param.roleId = UInt64(rid)
     }
 
-    var commonds = [StatusInfo]()
-    var info = StatusInfo()
+    var commonds = [NEQChatPermissionStatusInfo]()
+    var info = NEQChatPermissionStatusInfo()
     info.permissionType = type
     info.status = open == true ? .Allow : .Deny
     commonds.append(info)

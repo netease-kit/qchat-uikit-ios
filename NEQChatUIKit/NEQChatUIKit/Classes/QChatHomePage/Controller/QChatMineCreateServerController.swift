@@ -7,10 +7,11 @@ import NECommonKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public class QChatMineCreateServerController: NEBaseViewController, UINavigationControllerDelegate,
-  UITextFieldDelegate {
+                                              UITextFieldDelegate, UIImagePickerControllerDelegate {
   private let tag = "QChatMineCreateServerController"
   public var serverViewModel = QChatMineCreateViewModel()
   var headImageUrl: String?
@@ -171,7 +172,7 @@ public class QChatMineCreateServerController: NEBaseViewController, UINavigation
       return
     }
 
-    var param = CreateServerParam(name: serverName, icon: headImageUrl ?? "")
+    var param = NEQChatCreateServerParam(name: serverName, icon: headImageUrl ?? "")
     param.applyMode = .autoEnter
     param.inviteMode = .autoEnter
     if isAnnouncement {
@@ -243,7 +244,7 @@ public class QChatMineCreateServerController: NEBaseViewController, UINavigation
 
   // MARK: UIImagePickerControllerDelegate
 
-  func imagePickerController(_ picker: UIImagePickerController,
+  public func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info: [UIImagePickerController
                                .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage

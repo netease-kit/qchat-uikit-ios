@@ -8,6 +8,7 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public protocol QChatAnncSettingViewControllerDelegate: NSObjectProtocol {
@@ -15,9 +16,9 @@ public protocol QChatAnncSettingViewControllerDelegate: NSObjectProtocol {
   func didChannelNameChanged(_ name: String?)
 }
 
-public class QChatAnncSettingViewController: NEBaseTableViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, SettingModelDelegate, QChatAnncNameEditViewControllerDelegate {
+public class QChatAnncSettingViewController: NEBaseTableViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, SettingModelDelegate, QChatAnncNameEditViewControllerDelegate, UIImagePickerControllerDelegate {
   var viewModel = QChatSettingViewModel()
-  var server: QChatServer?
+  var server: NEQChatServer?
   public weak var delegate: QChatAnncSettingViewControllerDelegate?
   public var isAdministrator: Bool = true
   var sectionTitle = [String]()
@@ -51,7 +52,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
     return linkView
   }()
 
-  public init(server: QChatServer?, isAdministrator: Bool = true) {
+  public init(server: NEQChatServer?, isAdministrator: Bool = true) {
     super.init(nibName: nil, bundle: nil)
     self.server = server
     self.isAdministrator = isAdministrator
@@ -122,7 +123,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
       tableView.sectionHeaderTopPadding = 0.0
     }
 
-    cellClassDic.forEach { (key: Int, value: QChatCornerCell.Type) in
+    for (key, value) in cellClassDic {
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
 
@@ -319,7 +320,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
     tableView.reloadData()
   }
 
-  public func didUpdateServerInfo(_ server: QChatServer?) {
+  public func didUpdateServerInfo(_ server: NEQChatServer?) {
     self.server = server
     headerView.configure(iconUrl: server?.icon, name: server?.name, uid: server?.serverId ?? 0)
   }
@@ -391,7 +392,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
   }
 
   // UINavigationControllerDelegate
-  func imagePickerController(_ picker: UIImagePickerController,
+  public func imagePickerController(_ picker: UIImagePickerController,
                              didFinishPickingMediaWithInfo info: [UIImagePickerController
                                .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage

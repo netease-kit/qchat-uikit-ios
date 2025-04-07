@@ -141,7 +141,7 @@ open class QChatSquareViewController: UIViewController, UICollectionViewDelegate
         weakSelf?.contentLoadingImageView.isHidden = true
         weakSelf?.viewmodel.datas.removeAll()
         if squareServers.count > 0 {
-          squareServers.forEach { server in
+          for server in squareServers {
             weakSelf?.viewmodel.datas.append(server)
           }
           weakSelf?.emptyView.isHidden = true

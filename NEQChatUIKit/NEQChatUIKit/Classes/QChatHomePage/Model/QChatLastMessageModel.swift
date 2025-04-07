@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public class QChatLastMessageModel: NSObject {

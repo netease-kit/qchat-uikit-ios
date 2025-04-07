@@ -6,6 +6,7 @@
 import Foundation
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 
 public class QChatMessageHelper {
   // 获取图片合适尺寸
@@ -51,12 +52,12 @@ public class QChatMessageHelper {
                                                   isAnnouncement: Bool = false) -> [QChatOperationItem]? {
     var items = [QChatOperationItem]()
 
-    if model?.message?.messageType == .text {
+    if model?.message?.messageType == NIMMessageType.text.rawValue {
       items.append(QChatOperationItem.copyItem())
     }
 
     if enableEdit {
-      if model?.message?.deliveryState == .deliveried, !isAnnouncement {
+      if model?.message?.deliveryState == NIMMessageDeliveryState.deliveried.rawValue, !isAnnouncement {
         items.append(QChatOperationItem.recallItem())
       }
       items.append(QChatOperationItem.deleteItem())

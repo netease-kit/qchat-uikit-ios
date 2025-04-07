@@ -13,12 +13,12 @@ public class QChatIdGroupModel: NSObject {
   var uid: Int?
   var isSelect = false
   var cornerType: CornerType = .none
-  var role: ServerRole?
+  var role: NEQChatServerRole?
   var hasPermission = false
 
   override public init() {}
 
-  public init(_ serverRole: ServerRole) {
+  public init(_ serverRole: NEQChatServerRole) {
     role = serverRole
     idName = serverRole.name
     if let type = serverRole.type, type == .everyone {

@@ -71,7 +71,7 @@ open class QChatAnncMemberCell: QChatMemberManagerCell {
     ])
   }
 
-  func configure(user: ServerMemeber) {
+  func configure(user: NEQChatServerMemeber) {
     headView.configHeadData(headUrl: user.avatar, name: user.nick ?? "", uid: user.accid ?? "")
     nameLabel.text = (user.nick?.count ?? 0) > 0 ? user.nick : user.accid
   }

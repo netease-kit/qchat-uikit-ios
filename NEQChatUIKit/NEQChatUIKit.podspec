@@ -1,50 +1,32 @@
 #
-# Be sure to run `pod lib lint NEQChatUIKit.podspec' to ensure this is a
-# valid spec before submitting.
+#  Be sure to run `pod spec lint NEQChatUIKit.podspec' to ensure this is a
+#  valid spec and to remove all comments including this before submitting the s.
 #
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
+#  To learn more about Podspec attributes see https://guides.cocoapods.org/syntax/pods.html
+#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
-Pod::Spec.new do |s|
-  s.name             = 'NEQChatUIKit'
-  s.version          = '9.5.3'
-  s.summary          = 'Netease XKit'
+# 配置内容详见：../PodConfigs/config_podspec.rb
+require_relative "../PodConfigs/config_podspec.rb"
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-  s.homepage         = 'http://netease.im'
-  s.license          = { :'type' => 'Copyright', :'text' => ' Copyright 2022 Netease '}
-  s.author           = 'yunxin engineering department'
-  s.source           = { :git => 'ssh://git@g.hz.netease.com:22222/yunxin-app/xkit-ios.git', :tag => s.version.to_s }
-  s.pod_target_xcconfig = {
-    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',
-      'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES'
-    }
+Pod::Spec.new do |spec|
+  spec.name         = 'NEQChatUIKit'
+  spec.version      = YXConfig.qchatkit_version
+  spec.summary      = 'Netease XKit'
+  spec.homepage         = YXConfig.homepage
+  spec.license          = YXConfig.license
+  spec.author           = YXConfig.author
+  spec.ios.deployment_target = YXConfig.deployment_target
+  spec.swift_version = YXConfig.swift_version
+  spec.source           = { :git => '', :tag => spec.version.to_s }
+  spec.source_files = 'NEQChatUIKit/Classes/**/*'
+  spec.resource = 'NEQChatUIKit/Assets/**/*'
+  YXConfig.pod_target_xcconfig(spec)
   
-  s.ios.deployment_target = '11.0'
-  s.swift_version = '5.0'
-
-  s.source_files = 'NEQChatUIKit/Classes/**/*'
-  
-#  s.resource_bundles = {
-#    'NEQChatUIKit' => ['NEQChatUIKit/Assets/*.png']
-#  }
-  s.resource = 'NEQChatUIKit/Assets/**/*'
-  s.dependency 'NECommonUIKit'
-  s.dependency 'NEQChatKit'
-  s.dependency 'NECoreQChatKit'
-  s.dependency 'SDWebImageWebPCoder'
-  s.dependency 'SDWebImageSVGKitPlugin'
-  s.dependency 'MJRefresh'
-  s.dependency 'NIMSDK_LITE'
-  s.dependency 'YXAlog'
+  spec.dependency 'NEQChatKit', YXConfig.qchatkit_version
+  spec.dependency 'NECommonUIKit'
+  spec.dependency 'MJRefresh'
+  spec.dependency 'SDWebImageWebPCoder'
+  spec.dependency 'SDWebImageSVGKitPlugin'
 
 end

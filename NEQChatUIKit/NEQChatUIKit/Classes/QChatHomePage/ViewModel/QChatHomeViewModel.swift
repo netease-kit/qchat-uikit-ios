@@ -7,6 +7,7 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import SDWebImageSVGKitPlugin
 import SDWebImageWebPCoder
 import UIKit
@@ -19,7 +20,7 @@ import UIKit
 public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllChannelDataDelegate {
   typealias ServerListRefresh = () -> Void
 
-  var dataDic = WeakDictionary<UInt64, QChatServer>()
+  var dataDic = WeakDictionary<UInt64, NEQChatServer>()
 
 //  var serverUnReadDic = [UInt64: UInt]()
 
@@ -70,7 +71,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
       }
     }
 
-    set.forEach { sid in
+    for sid in set {
       let model = dataDic[sid]
       print("server model : ", model?.name as Any)
       let unreadCount = getServerUnread(sid)
@@ -119,16 +120,16 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     return count
   }
 
-  public func createServer(parameter: CreateServerParam,
-                           _ completion: @escaping (NSError?, CreateServerResult?) -> Void) {
+  public func createServer(parameter: NEQChatCreateServerParam,
+                           _ completion: @escaping (NSError?, NEQChatCreateServerResult?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
     QChatServerProvider.shared.createServer(param: parameter) { error, serverResult in
       completion(error, serverResult)
     }
   }
 
-  public func getServers(parameter: QChatGetServersParam,
-                         _ completion: @escaping (NSError?, QChatGetServersResult?) -> Void) {
+  public func getServers(parameter: NEQChatGetServersParam,
+                         _ completion: @escaping (NSError?, NEQChatGetServersResult?) -> Void) {
     NELog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverIds.count:\(parameter.serverIds?.count ?? 0)"
@@ -138,12 +139,12 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  public func getServerList(parameter: GetServersByPageParam,
-                            _ completion: @escaping (NSError?, [QChatServer]?) -> Void) {
+  public func getServerList(parameter: NEQChatGetServersByPageParam,
+                            _ completion: @escaping (NSError?, [NEQChatServer]?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function)
     repo.getServerList(param: parameter) { [weak self] error, result in
-      var retServers = [QChatServer]()
-      var invalidServers = [QChatServer]()
+      var retServers = [NEQChatServer]()
+      var invalidServers = [NEQChatServer]()
 
       result?.servers.forEach { server in
         if let announce = server.announce, announce.isInValid() == true {
@@ -157,9 +158,9 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  public func getServerMemberList(parameter: QChatGetServerMembersParam,
+  public func getServerMemberList(parameter: NEQChatGetServerMembersParam,
                                   _ completion: @escaping (NSError?,
-                                                           QChatGetServerMembersResult?) -> Void) {
+                                                           NEQChatGetServerMembersResult?) -> Void) {
     NELog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverAccIds.count:\(parameter.serverAccIds?.count ?? 0)"
@@ -169,9 +170,9 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  public func getServerMembersByPage(parameter: QChatGetServerMembersByPageParam,
+  public func getServerMembersByPage(parameter: NEQChatGetServerMembersByPageParam,
                                      _ completion: @escaping (NSError?,
-                                                              QChatGetServerMembersResult?)
+                                                              NEQChatGetServerMembersResult?)
                                        -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId ?? 0)")
     QChatServerProvider.shared.getServerMembersByPage(param: parameter) { error, result in
@@ -180,7 +181,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 //        repo.getServerMembersByPage(parameter, completion)
   }
 
-  public func applyServerJoin(parameter: QChatApplyServerJoinParam,
+  public func applyServerJoin(parameter: NEQChatApplyServerJoinParam,
                               _ completion: @escaping (NSError?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
     QChatServerProvider.shared.applyServerJoin(param: parameter) { error in
@@ -191,32 +192,32 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   public func inviteMembersToServer(serverId: UInt64, accids: [String],
                                     _ completion: @escaping (NSError?) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
-    let param = QChatInviteServerMembersParam(serverId: serverId, accids: accids)
+    let param = NEQChatInviteServerMembersParam(serverId: serverId, accids: accids)
     repo.inviteMembersToServer(param) { error in
       completion(error)
     }
   }
 
-  public func updateMyServerMember(_ param: UpdateMyMemberInfoParam,
-                                   _ completion: @escaping (Error?, ServerMemeber) -> Void) {
+  public func updateMyServerMember(_ param: NEQChatUpdateMyMemberInfoParam,
+                                   _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
     repo.updateMyServerMember(param, completion)
   }
 
-  public func updateServerMember(_ param: UpdateServerMemberInfoParam,
-                                 _ completion: @escaping (Error?, ServerMemeber) -> Void) {
+  public func updateServerMember(_ param: NEQChatUpdateServerMemberInfoParam,
+                                 _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
     repo.updateServerMember(param, completion)
   }
 
-  public func getUnread(_ servers: [QChatServer]) {
+  public func getUnread(_ servers: [NEQChatServer]) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", servers.count:\(servers.count)")
 
 //    if currentServerId == nil {
 //      currentServerId = servers.first?.serverId
 //    }
 
-    servers.forEach { server in
+    for server in servers {
       if let sid = server.serverId {
         dataDic[sid] = server
       }
@@ -224,7 +225,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  func getAllChannel(_ server: QChatServer) {
+  func getAllChannel(_ server: NEQChatServer) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(server.serverId ?? 0)")
     if let sid = server.serverId, requestFlag[sid] == nil {
       let allChannelData = QChatAllChannelData(sid: sid)
@@ -233,14 +234,14 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  func getChannelUnread(_ serverId: UInt64, _ channels: [ChatChannel]) {
+  func getChannelUnread(_ serverId: UInt64, _ channels: [NEQChatChatChannel]) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId), channels.count:\(channels.count)")
 //    print("getChannelUnread channel count : ", channels.count)
-    var param = GetChannelUnreadInfosParam()
-    var targets = [ChannelIdInfo]()
+    var param = NEQChatGetChannelUnreadInfosParam()
+    var targets = [NEQChatChannelIdInfo]()
 
-    channels.forEach { channel in
-      var channelIdInfo = ChannelIdInfo()
+    for channel in channels {
+      var channelIdInfo = NEQChatChannelIdInfo()
       channelIdInfo.serverId = serverId
       channelIdInfo.channelId = channel.channelId
       targets.append(channelIdInfo)
@@ -275,7 +276,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  func dataGetSuccess(_ serverId: UInt64, _ channels: [ChatChannel]) {
+  func dataGetSuccess(_ serverId: UInt64, _ channels: [NEQChatChatChannel]) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     print("get unread channel success : ", channels.count)
     requestFlag.removeValue(forKey: serverId)
@@ -337,7 +338,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   public func visitorSubcribeAllChannel(_ serverId: UInt64) {
-    var param = QChatGetChannelsByPageParam(timeTag: 0, serverId: serverId)
+    var param = NEQChatGetChannelsByPageParam(timeTag: 0, serverId: serverId)
     param.limit = 100
 
     repo.getChannelsByPage(param: param) { [weak self] error, result in
@@ -362,7 +363,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   func clearVisitorCache() {
     loadVisitorCache()
     var serverIds = [NSNumber]()
-    visitorServerCache.forEach { sid in
+    for sid in visitorServerCache {
       serverIds.append(NSNumber(value: sid))
     }
 
@@ -407,8 +408,8 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   // 查找数组中第一个不是公告频道的server数据
-  public func findFirstNormalServer(_ servers: [QChatServer]?) -> QChatServer? {
-    var server: QChatServer?
+  public func findFirstNormalServer(_ servers: [NEQChatServer]?) -> NEQChatServer? {
+    var server: NEQChatServer?
     if let qchatServers = servers {
       for qchatServer in qchatServers {
         if qchatServer.announce == nil {
@@ -420,7 +421,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     return server
   }
 
-  public func deleteInvalidServers(_ servers: [QChatServer]) {
+  public func deleteInvalidServers(_ servers: [NEQChatServer]) {
     servers.forEach { [weak self] server in
       if let sid = server.serverId {
         self?.repo.deleteServer(sid) { error in
@@ -429,7 +430,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     }
   }
 
-  func checkJoinServer(server: QChatServer, _ completion: @escaping (Error?, Bool) -> Void) {
+  func checkJoinServer(server: NEQChatServer, _ completion: @escaping (Error?, Bool) -> Void) {
     guard let sid = server.serverId else {
       return
     }
@@ -437,7 +438,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     let currentAccid = QChatKitClient.instance.imAccid()
     let item = QChatGetServerMemberItem(serverId: sid, accid: currentAccid)
     items.append(item)
-    let param = QChatGetServerMembersParam(serverAccIds: items)
+    let param = NEQChatGetServerMembersParam(serverAccIds: items)
     repo.getServerMembers(param: param) { error, members in
       var isJoined = false
       if let member = members?.first, sid == member.serverId {

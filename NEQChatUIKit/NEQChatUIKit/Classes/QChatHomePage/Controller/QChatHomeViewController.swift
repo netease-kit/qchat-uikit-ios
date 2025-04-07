@@ -10,23 +10,24 @@ import NECommonUIKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objc
 @objcMembers
 open class QChatHomeViewController: UIViewController, ViewModelDelegate {
   public var serverViewModel = QChatHomeViewModel()
-  public var serverListArray = [QChatServer]()
+  public var serverListArray = [NEQChatServer]()
 //  fileprivate var selectIndex = 0
   private let className = "QChatHomeViewController"
 
   private var serverID: UInt64 = 0
 
-  public var visitorServer: QChatServer? {
+  public var visitorServer: NEQChatServer? {
     didSet {}
   }
 
-  public var recordServer: QChatServer? // 记录断网时候点击的cell
+  public var recordServer: NEQChatServer? // 记录断网时候点击的cell
 
   public var noticeServerSet = Set<UInt64>()
 
@@ -100,7 +101,7 @@ open class QChatHomeViewController: UIViewController, ViewModelDelegate {
     addObserve()
   }
 
-  public func setCurrentServer(server: QChatServer) {
+  public func setCurrentServer(server: NEQChatServer) {
     weak var weakSelf = self
 
     serverViewModel.checkJoinServer(server: server) { error, isJoined in
@@ -193,7 +194,7 @@ open class QChatHomeViewController: UIViewController, ViewModelDelegate {
   }
 
   func requestData(timeTag: TimeInterval, _ currentSid: UInt64? = nil) {
-    let param = GetServersByPageParam(timeTag: timeTag, limit: 50)
+    let param = NEQChatGetServersByPageParam(timeTag: timeTag, limit: 50)
     weak var weakSelf = self
     serverViewModel.getServerList(parameter: param) { error, servers in
       NELog.infoLog(
@@ -452,7 +453,7 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
   }
 
   @objc func onCreateAnnouncement(noti: NSNotification) {
-    guard let server = noti.object as? QChatServer else {
+    guard let server = noti.object as? NEQChatServer else {
       return
     }
     let chatVC = QChatViewController(channel: nil, server: server)
@@ -461,13 +462,13 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
 
   @objc func onCreateChannel(noti: Notification) {
     // enter ChatVC
-    guard let channel = noti.object as? ChatChannel else {
+    guard let channel = noti.object as? NEQChatChatChannel else {
       return
     }
     enterChatVC(channel: channel)
   }
 
-  private func enterChatVC(channel: ChatChannel?, _ isVisitorMode: Bool = false) {
+  private func enterChatVC(channel: NEQChatChatChannel?, _ isVisitorMode: Bool = false) {
     NELog.infoLog(ModuleName + " " + className(), desc: "[enterChatVC], navigationController:\(String(describing: navigationController))")
 
     let chatVC = QChatViewController(channel: channel)
@@ -499,7 +500,7 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
       return
     }
     sender.isEnabled = false
-    let param = QChatApplyServerJoinParam(serverId: sid)
+    let param = NEQChatApplyServerJoinParam(serverId: sid)
     serverViewModel.applyServerJoin(parameter: param) { [weak self] error in
       sender.isEnabled = true
       self?.visitorServer = nil
@@ -550,7 +551,7 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
                 return
               }
 
-              let server = QChatServer(server: imServer)
+              let server = NEQChatServer(server: imServer)
 
               if server.announce == nil {
                 requestData(timeTag: 0, systemNotification.serverId)
@@ -568,14 +569,13 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
             }
           }
         }
-
       case .serverUpdate:
 
         guard let attach = systemNotification.attach as? NIMQChatUpdateServerAttachment, let imServer = attach.server else {
           return
         }
 
-        let server = QChatServer(server: imServer)
+        let server = NEQChatServer(server: imServer)
 
         if systemNotification.fromAccount == QChatKitClient.instance.imAccid() {
           print("update server from self")
@@ -622,7 +622,7 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
   }
 
   private func reloadUpdateCell(targetServerId: UInt64) {
-    let param = QChatGetServersParam(serverIds: [NSNumber(value: targetServerId)])
+    let param = NEQChatGetServersParam(serverIds: [NSNumber(value: targetServerId)])
     weak var weakSelf = self
     serverViewModel.getServers(parameter: param) { error, result in
       NELog.infoLog(
@@ -649,8 +649,8 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
     return -1
   }
 
-  private func findNextFocusServer(_ sid: UInt64) -> QChatServer? {
-    var findServer: QChatServer?
+  private func findNextFocusServer(_ sid: UInt64) -> NEQChatServer? {
+    var findServer: NEQChatServer?
     let index = indexOfServer(sid)
     if index != 0, serverListArray.count > index - 1 {
       var currentIndex = index - 1

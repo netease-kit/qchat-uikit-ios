@@ -6,6 +6,7 @@ import Foundation
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 
 public protocol QChatChannelViewModelDelegate: NSObjectProtocol {
   func didNeedRefreshData()
@@ -18,7 +19,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public var serverId: UInt64
   public var name: String?
   public var topic: String?
-  public var type: ChannelType = .messageType
+  public var type: NEQChatChannelType = .messageType
   public var isPrivate: Bool = false
   private let className = "QChatChannelViewModel"
   public var lastMsgDic = [UInt64: QChatLastMessageModel]()
@@ -39,10 +40,10 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
     NotificationCenter.default.addObserver(self, selector: #selector(deleteMsgNoti(noti:)), name: NSNotification.Name(rawValue: deleteMessageFlag), object: nil)
   }
 
-  public func createChannel(_ completion: @escaping (NSError?, ChatChannel?) -> Void) {
+  public func createChannel(_ completion: @escaping (NSError?, NEQChatChatChannel?) -> Void) {
     NELog.infoLog(ModuleName + " " + className, desc: #function)
-    let visibleType: ChannelVisibleType = isPrivate ? .isPrivate : .isPublic
-    let param = CreateChannelParam(
+    let visibleType: NEQChatChannelVisibleType = isPrivate ? .isPrivate : .isPublic
+    let param = NEQChatCreateChannelParam(
       serverId: serverId,
       name: name ?? "",
       topic: topic,
@@ -53,7 +54,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
     }
   }
 
-  public func getChannelsByPage(_ serverid: UInt64?, _ timeTag: TimeInterval, _ completion: @escaping (NSError?, QChatGetChannelsByPageResult?) -> Void) {
+  public func getChannelsByPage(_ serverid: UInt64?, _ timeTag: TimeInterval, _ completion: @escaping (NSError?, NEQChatGetChannelsByPageResult?) -> Void) {
     NELog.infoLog(
       ModuleName + " " + className,
       desc: #function + ", serverId:\(serverid ?? 0)"
@@ -70,8 +71,8 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
     }
   }
 
-  public func getChannelsByPage(parameter: QChatGetChannelsByPageParam,
-                                _ completion: @escaping (NSError?, QChatGetChannelsByPageResult?)
+  public func getChannelsByPage(parameter: NEQChatGetChannelsByPageParam,
+                                _ completion: @escaping (NSError?, NEQChatGetChannelsByPageResult?)
                                   -> Void) {
     NELog.infoLog(
       ModuleName + " " + className,
@@ -88,7 +89,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   public func onRecvMessages(_ messages: [NIMQChatMessage]) {
     var isNeedRefresh = false
-    messages.forEach { chatMessage in
+    for chatMessage in messages {
       if chatMessage.qchatServerId == serverId {
         if checkLastMsgReplaceEnable(channelId: chatMessage.qchatChannelId, message: chatMessage) == true {
           lastMsgDic[chatMessage.qchatChannelId] = QChatLastMessageModel(message: chatMessage)

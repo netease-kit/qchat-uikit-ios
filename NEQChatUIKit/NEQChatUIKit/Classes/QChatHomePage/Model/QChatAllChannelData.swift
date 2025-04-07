@@ -8,7 +8,7 @@ import NECoreQChatKit
 import NEQChatKit
 
 protocol QChatAllChannelDataDelegate: NSObjectProtocol {
-  func dataGetSuccess(_ serverId: UInt64, _ channels: [ChatChannel])
+  func dataGetSuccess(_ serverId: UInt64, _ channels: [NEQChatChatChannel])
   func dataGetError(_ serverId: UInt64, _ error: Error)
 }
 
@@ -18,7 +18,7 @@ public class QChatAllChannelData: NSObject {
   let limit = 200
   weak var delegate: QChatAllChannelDataDelegate?
   var serverId: UInt64 = 0
-  var channelInfos = [ChatChannel]()
+  var channelInfos = [NEQChatChatChannel]()
   public var nextTimetag: TimeInterval = 0
 
   init(sid: UInt64) {
@@ -28,7 +28,7 @@ public class QChatAllChannelData: NSObject {
   }
 
   func getChannelData() {
-    var param = QChatGetChannelsByPageParam(timeTag: nextTimetag, serverId: serverId)
+    var param = NEQChatGetChannelsByPageParam(timeTag: nextTimetag, serverId: serverId)
     param.limit = 200
     weak var weakSelf = self
     repo.getChannelsByPage(param: param) { error, result in

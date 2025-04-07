@@ -129,7 +129,7 @@ public class NELoginViewController: UIViewController {
     if let token = user?.imToken, let account = user?.imAccid {
       weak var weakSelf = self
 
-      let param = QChatLoginParam(account, token)
+      let param = NEQChatLoginParam(account, token)
       QChatKitClient.instance.loginQChat(param) { error, response in
         if let err = error {
           print("qchatLogin failed, error : ", err)

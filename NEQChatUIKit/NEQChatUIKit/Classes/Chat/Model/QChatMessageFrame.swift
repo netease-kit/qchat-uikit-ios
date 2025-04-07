@@ -5,6 +5,7 @@
 
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 public class QChatMessageFrame: NSObject {
@@ -87,9 +88,9 @@ public class QChatMessageFrame: NSObject {
       getContentSize()
     } else {
       switch msg.messageType {
-      case .text: // 计算文本
+      case NIMMessageType.text.rawValue: // 计算文本
         getContentSize()
-      case .image: // 计算图片类型
+      case NIMMessageType.image.rawValue: // 计算图片类型
         if let imageObject = msg.messageObject,
            imageObject.isKind(of: NIMImageObject.self) {
           let obj = (imageObject as! NIMImageObject)
@@ -101,7 +102,7 @@ public class QChatMessageFrame: NSObject {
         } else {
           contentSize = qChat_pic_size
         }
-      case .audio:
+      case NIMMessageType.audio.rawValue:
         var audioW = 80.0
         // contentSize
         let audioTotalWidth = 265.0
@@ -149,7 +150,7 @@ public class QChatMessageFrame: NSObject {
       var tempWidth = quickCommentWidth! // 用于计算评论区行数
       var quickCommentMaxW = qChat_content_maxW // 评论区的最大宽度
 
-      if msg.messageType == .text, contentSize.height > qChat_min_h {
+      if msg.messageType == NIMMessageType.text.rawValue, contentSize.height > qChat_min_h {
         // 文本大于一行，则评论区的最大宽度取文本的最大宽度（文本的最大宽度不一定是 qChat_content_maxW）
         quickCommentMaxW = contentSize.width
       }
@@ -207,7 +208,7 @@ public class QChatMessageFrame: NSObject {
       (timeFrame.height > 0 ? timeFrame.height + qChat_margin : 0)
 
     // 单行文本
-    if msg.messageType == .text || msg.messageType == .audio, contentSize.height <= qChat_min_h {
+    if msg.messageType == NIMMessageType.text.rawValue || msg.messageType == NIMMessageType.audio.rawValue, contentSize.height <= qChat_min_h {
       if let height = contentFrame?.size.height {
         contentFrame?.size.height = height - qChat_margin * 2
       }

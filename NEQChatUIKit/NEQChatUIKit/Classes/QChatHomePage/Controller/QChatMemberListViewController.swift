@@ -8,14 +8,16 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
+
 public class QChatMemberListViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
   public var serverViewModel = QChatCreateServerViewModel()
   public var memberViewModel = QChatMemberListViewModel()
   private let className = "QChatMemberListViewController"
 
-  var dataArray: [ServerMemeber]?
+  var dataArray: [NEQChatServerMemeber]?
   var serverId: UInt64?
 
   override public func viewDidLoad() {
@@ -31,7 +33,7 @@ public class QChatMemberListViewController: NEBaseViewController, UITableViewDel
       print("serverId is nil")
       return
     }
-    let param = QChatGetServerMembersByPageParam(timeTag: 0, serverId: id)
+    let param = NEQChatGetServerMembersByPageParam(timeTag: 0, serverId: id)
     weak var weakSelf = self
     memberViewModel.requestServerMemebersByPage(param: param) { error, serverMemberArray in
       NELog.infoLog(

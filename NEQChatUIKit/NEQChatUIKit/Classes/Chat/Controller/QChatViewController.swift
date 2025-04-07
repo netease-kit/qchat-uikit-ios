@@ -10,15 +10,16 @@ import NECoreKit
 import NECoreQChatKit
 import NEQChatKit
 import NIMSDK
+import NIMQChat
 import UIKit
 
 @objcMembers
-public class QChatViewController: NEBaseViewController, UINavigationControllerDelegate,
-  QChatInputViewDelegate, QChatViewModelDelegate, UITableViewDataSource, UITableViewDelegate, NIMMediaManagerDelegate, QChatMessageOperationViewDelegate, QChatAnncSettingViewControllerDelegate {
+public class QChatViewController: QChatBaseViewController, UINavigationControllerDelegate,
+                                  QChatInputViewDelegate, QChatViewModelDelegate, UITableViewDataSource, UITableViewDelegate, NIMMediaManagerDelegate, QChatMessageOperationViewDelegate, QChatAnncSettingViewControllerDelegate, UIImagePickerControllerDelegate {
   private var viewmodel: QChatViewModel?
 
   // 公告频道对应的 server，非公告频道时为 nil
-  var server: QChatServer?
+  var server: NEQChatServer?
   public var isVisitorMode = false
 
   public var menuView: QChatInputView = .init()
@@ -32,12 +33,12 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
   // 是否是公告频道拥有者/管理员
   public var isAdministrator = true
 
-  public init(channel: ChatChannel?, server: QChatServer? = nil) {
+  public init(channel: NEQChatChatChannel?, server: NEQChatServer? = nil) {
     super.init(nibName: nil, bundle: nil)
     var channel = channel
     self.server = server
     if server != nil {
-      channel = ChatChannel()
+      channel = NEQChatChatChannel()
       channel?.serverId = server?.serverId
       channel?.channelId = server?.announce?.channelId?.uint64Value
     }
@@ -282,7 +283,7 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
     }
     sender.isEnabled = false
     weak var weakSelf = self
-    let param = QChatApplyServerJoinParam(serverId: sid)
+    let param = NEQChatApplyServerJoinParam(serverId: sid)
     viewmodel?.applyServerJoin(parameter: param) { error in
       sender.isEnabled = true
       if let err = error as NSError? {
@@ -394,7 +395,7 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
 
   func onUpdateChannel(noti: Notification) {
     // enter ChatVC
-    guard let channel = noti.object as? ChatChannel else {
+    guard let channel = noti.object as? NEQChatChatChannel else {
       return
     }
     viewmodel?.channel = channel
@@ -534,13 +535,13 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
         layoutInputView(offset: 204)
         scrollTableViewToBottom()
       } else if index == 2 {
-        showBottomAlert(self, false, false) { [weak self] in
+        showBottomAlert(self, false, false,  { [weak self] in
           if NIMSDK.shared().mediaManager.isPlaying() {
             NIMSDK.shared().mediaManager.stopPlay()
             self?.playAudioCell?.stopAnimation()
             self?.playAudioModel?.isPlaying = false
           }
-        }
+        })
       } else if index == 3 {
         layoutInputView(offset: 204)
         scrollTableViewToBottom()
@@ -644,7 +645,7 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
         } else if systemNoti.type == .serverUpdate,
                   let updateAttach = systemNoti.attach as? NIMQChatUpdateServerAttachment {
           // 更新社区
-          let newServer = QChatServer(server: updateAttach.server)
+          let newServer = NEQChatServer(server: updateAttach.server)
           if server?.announce?.emojiReplay != newServer.announce?.emojiReplay {
             tableView.reloadData()
           }
@@ -752,11 +753,11 @@ public class QChatViewController: NEBaseViewController, UINavigationControllerDe
     } else {
       // 根据cell类型区分identify
       switch msgFrame.message?.messageType {
-      case .text:
+      case NIMMessageType.text.rawValue:
         reuseIdentifier = "\(QChatTextTableViewCell.self)"
-      case .image:
+      case NIMMessageType.image.rawValue:
         reuseIdentifier = "\(QChatImageTableViewCell.self)"
-      case .audio:
+      case NIMMessageType.audio.rawValue:
         reuseIdentifier = "\(QChatAudioTableViewCell.self)"
       default:
         reuseIdentifier = "\(QChatBaseTableViewCell.self)"
@@ -1003,7 +1004,7 @@ extension QChatViewController: QChatBaseCellDelegate {
   /// 消息单击手势
   func didClickMessage(messgae: NIMQChatMessage) {
     operationView?.removeFromSuperview()
-    if messgae.messageType == .image {
+    if messgae.messageType == NIMMessageType.image.rawValue {
       var imageUrl = ""
       let imageObject = messgae.messageObject as! NIMImageObject
       if let path = imageObject.path, FileManager.default.fileExists(atPath: path) == true {
@@ -1015,7 +1016,7 @@ extension QChatViewController: QChatBaseCellDelegate {
       showController.modalPresentationStyle = .overFullScreen
       present(showController, animated: false, completion: nil)
 
-    } else if messgae.messageType == .audio {}
+    } else if messgae.messageType == NIMMessageType.audio.rawValue {}
   }
 
   /// 消息长按手势
@@ -1048,7 +1049,7 @@ extension QChatViewController: QChatBaseCellDelegate {
     }
 
     if messageFrame?.isRevoked == true,
-       messageFrame?.message?.messageType == .text,
+       messageFrame?.message?.messageType == NIMMessageType.text.rawValue,
        let text = messageFrame?.revokeText {
       menuView.textField.attributedText = NEEmotionTool.getAttWithStr(str: text, font: DefaultTextFont(16))
       menuView.textField.becomeFirstResponder()
@@ -1118,7 +1119,7 @@ extension QChatViewController: QChatBaseCellDelegate {
     if isVisitorMode {
       return
     }
-    if messageFrame?.isRevoked == true || messageFrame?.message?.deliveryState == .delivering {
+    if messageFrame?.isRevoked == true || messageFrame?.message?.deliveryState == NIMMessageDeliveryState.delivering.rawValue {
       return
     }
 
@@ -1138,7 +1139,7 @@ extension QChatViewController: QChatBaseCellDelegate {
       showEmoji = false
     }
 
-    if messageFrame?.message?.deliveryState == .failed {
+    if messageFrame?.message?.deliveryState == NIMMessageDeliveryState.failed.rawValue {
       // 发送失败的消息不展示表情评论入口
       showEmoji = false
     }

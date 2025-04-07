@@ -8,7 +8,7 @@ import NEQChatKit
 import UIKit
 
 public class QChatChannelAuthoritySettingVC: QChatTableViewController {
-  var channel: ChatChannel?
+  var channel: NEQChatChatChannel?
   var viewModel: QChatAuthoritySettingViewModel?
   var sectionTitle: [String] = ["", localizable("qchat_id_group"), localizable("qchat_member")]
   var staticData: [String] = [localizable("add_group"), localizable("add_member")]
@@ -17,7 +17,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   var showAll = false
   private let className = "QChatChannelAuthoritySettingVC"
 
-  init(channel: ChatChannel?) {
+  init(channel: NEQChatChatChannel?) {
     super.init(nibName: nil, bundle: nil)
     self.channel = channel
     viewModel = QChatAuthoritySettingViewModel(channel: self.channel)
@@ -226,7 +226,6 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         }
         return cell
       }
-
     case 2:
       let role = viewModel?.membersData.roles[indexPath.row]
       if role!.isPlacehold {
@@ -390,12 +389,13 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
           navigationController?.pushViewController(settingVC, animated: true)
         }
       }
+
     default:
       break
     }
   }
 
-  private func deleteRole(role: ChannelRole?, index: Int) {
+  private func deleteRole(role: NEQChatChannelRole?, index: Int) {
     let name = role?.name ?? ""
     let message = String(format: localizable("confirm_delete_text"), name) + localizable("qchat_id_group") + localizable("question_mark")
     let alertVC = UIAlertController.reconfimAlertView(
@@ -427,7 +427,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
     present(alertVC, animated: true, completion: nil)
   }
 
-  private func deleteMember(member: MemberRole?, index: Int) {
+  private func deleteMember(member: NEQChatMemberRole?, index: Int) {
     var name = member?.accid ?? ""
     if let n = member?.nick, n.count > 0 {
       name = n

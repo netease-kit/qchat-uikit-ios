@@ -82,7 +82,7 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
     }
 
     rightNavBtn.isEnabled = false
-    var param = ServerRoleParam()
+    var param = NEQChatServerRoleParam()
     param.serverId = serverId
     param.type = .custom
     param.name = serverName.trimmingCharacters(in: .whitespaces)
@@ -110,12 +110,12 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
   func addMember(_ roleId: UInt64) {
     if viewModel.allUsers.count > 0 {
       var accids = [String]()
-      viewModel.allUsers.forEach { user in
+      for user in viewModel.allUsers {
         if let accid = user.serverMember?.accid {
           accids.append(accid)
         }
       }
-      var param = AddServerRoleMemberParam()
+      var param = NEQChatAddServerRoleMemberParam()
       param.accountArray = accids
       param.serverId = serverId
       param.roleId = roleId
@@ -143,7 +143,7 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
 
   public func filterMembers(accid: [String]?, _ filterMembers: @escaping ([String]?) -> Void) {
     var dic = [String: String]()
-    viewModel.allUsers.forEach { user in
+    for user in viewModel.allUsers {
       if let aid = user.accid {
         dic[aid] = aid
       }

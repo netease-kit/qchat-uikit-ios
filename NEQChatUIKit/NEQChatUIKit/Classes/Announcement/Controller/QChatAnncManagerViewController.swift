@@ -12,7 +12,7 @@ import UIKit
 open class QChatAnncManagerViewController: NEBaseTableViewController, UITableViewDelegate,
   UITableViewDataSource, QChatMemberSelectControllerDelegate, QChatAnncCellDelegate, QChatAnncManagerViewModelDelegate, QChatMemberInfoViewDelegate {
   public var isManager = false // 是否是管理员列表，false 表示普通成员列表
-  public var qchatServer: QChatServer?
+  public var qchatServer: NEQChatServer?
   let viewmodel = QChatAnncManagerViewModel()
   var isRefresh = false
   var isOwner = false // 是否是创建者，管理员列表使用
@@ -154,7 +154,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
     }
   }
 
-  func getMemeber(index: NSInteger) -> ServerMemeber {
+  func getMemeber(index: NSInteger) -> NEQChatServerMemeber {
     if isManager {
       return viewmodel.managerMembers[index]
     }
@@ -324,7 +324,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
       }
 
       var acccIds = [String]()
-      users.forEach { user in
+      for user in users {
         if let accid = user.accid {
           acccIds.append(accid)
         }
@@ -469,7 +469,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
   }
 
   public func filterMembers(accid: [String]?, _ filterMembers: @escaping ([String]?) -> Void) {
-    var param = GetExistingServerRoleMembersByAccidsParam()
+    var param = NEQChatGetExistingServerRoleMembersByAccidsParam()
     param.serverId = qchatServer?.serverId
     param.accids = accid
     param.roleId = qchatServer?.announce?.roleId?.uint64Value
@@ -477,7 +477,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
     viewmodel.repo.getExistingServerRoleMembersByAccids(param) { [weak self] error, accids in
       var dic = [String: String]()
       var retAccids = [String]()
-      accids.forEach { aid in
+      for aid in accids {
         dic[aid] = aid
       }
       accid?.forEach { aid in

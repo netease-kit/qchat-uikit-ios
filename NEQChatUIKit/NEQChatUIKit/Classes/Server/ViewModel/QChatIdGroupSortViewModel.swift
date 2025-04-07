@@ -21,7 +21,7 @@ public class QChatIdGroupSortViewModel: NSObject {
 
   func getData(_ serverId: UInt64?) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = GetServerRoleParam()
+    var param = NEQChatGetServerRoleParam()
     param.limit = 200
     param.serverId = serverId
     weak var weakSelf = self
@@ -35,7 +35,7 @@ public class QChatIdGroupSortViewModel: NSObject {
     }
   }
 
-  func filterData(_ roles: [ServerRole]?, _ sets: Set<NSNumber>?) {
+  func filterData(_ roles: [NEQChatServerRole]?, _ sets: Set<NSNumber>?) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", roles.count:\(roles?.count ?? 0)")
     weak var weakSelf = self
     roles?.forEach { role in
@@ -60,7 +60,7 @@ public class QChatIdGroupSortViewModel: NSObject {
   func removeRole(_ serverId: UInt64?, _ roleId: UInt64?, _ model: QChatIdGroupModel,
                   _ completion: @escaping () -> Void) {
     NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
-    var param = DeleteServerRoleParam()
+    var param = NEQChatDeleteServerRoleParam()
     param.serverId = serverId
     param.roleId = roleId
     weak var weakSelf = self
@@ -81,12 +81,11 @@ public class QChatIdGroupSortViewModel: NSObject {
 
     var startSort = false
     var last: QChatIdGroupModel?
-    var items = [UpdateServerRolePriorityItem]()
+    var items = [NEQChatUpdateServerRolePriorityItem]()
 
     var min: Int?
 
-    datas.forEach { data in
-
+    for data in datas {
       if let model = data as? QChatIdGroupModel, model.hasPermission == true {
         print("model p : ", model.role?.priority as Any)
         if let m = min, let p = model.role?.priority {
@@ -111,7 +110,7 @@ public class QChatIdGroupSortViewModel: NSObject {
         }
         if startSort == false {
         } else {
-          let item = UpdateServerRolePriorityItem(r, startIndex)
+          let item = NEQChatUpdateServerRolePriorityItem(r, startIndex)
           items.append(item)
           startIndex += 1
           print("item priority : ", startIndex)
@@ -121,7 +120,7 @@ public class QChatIdGroupSortViewModel: NSObject {
       }
     }
 
-    var param = UpdateServerRolePrioritiesParam()
+    var param = NEQChatUpdateServerRolePrioritiesParam()
     param.updateItems = items
     param.serverId = serverId
     weak var weakSelf = self

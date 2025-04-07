@@ -11,8 +11,8 @@ import UIKit
 @objcMembers
 public class QChatAnncMemberEditViewController: NEBaseTableViewController, UITableViewDataSource,
   UITableViewDelegate, QChatAnncEditMemberViewModelDelegate {
-  var member: ServerMemeber?
-  var server: QChatServer?
+  var member: NEQChatServerMemeber?
+  var server: NEQChatServer?
   var viewModel = QChatAnncEditMemberViewModel(server: nil, member: nil)
   var sectionTitle = [localizable("authority_list"), ""]
   var sectionData = [QChatSettingSectionModel]()
@@ -28,7 +28,7 @@ public class QChatAnncMemberEditViewController: NEBaseTableViewController, UITab
     return header
   }()
 
-  init(server: QChatServer?, member: ServerMemeber?) {
+  init(server: NEQChatServer?, member: NEQChatServerMemeber?) {
     super.init(nibName: nil, bundle: nil)
     self.server = server
     self.member = member
@@ -69,7 +69,7 @@ public class QChatAnncMemberEditViewController: NEBaseTableViewController, UITab
     tableView.delegate = self
     tableView.backgroundColor = .clear
 
-    cellClassDic.forEach { (key: Int, value: QChatCornerCell.Type) in
+    for (key, value) in cellClassDic {
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
 
