@@ -7,7 +7,7 @@ module YXConfig
   end
 
   def self.qchatkit_version
-    "9.5.4"
+    "9.5.6"
 #    "10.0.0"
   end
 
