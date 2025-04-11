@@ -1,6 +1,6 @@
 # 配置内容详见：PodConfigs/config_podspec.rb
 # YXConfig.imuikit_version = 9.7.4
-# YXConfig.qchatkit_version = 9.5.4
+# YXConfig.qchatkit_version = 9.5.6
 require_relative "PodConfigs/config_podspec.rb"
 
 # Uncomment the next line to define a global platform for your project
