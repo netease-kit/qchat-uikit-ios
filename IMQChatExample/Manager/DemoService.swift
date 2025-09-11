@@ -3,17 +3,9 @@
 // found in the LICENSE file.
 
 import UIKit
-import YXLogin
 
 @objcMembers
-public class NECommonResult: NSObject {
-  /// 错误码
-  public var code = -1
-  /// 原始数据
-  public var originData: NSDictionary?
-}
-
-class DemoService: NSObject {
+public class DemoService: NSObject {
   public class func getSearchTypeData(completion: @escaping (Error?, NECommonResult?) -> Void) {
     let uri = "im/group/searchType/list"
     if var request = getRequest(uri: uri) {
@@ -94,15 +86,10 @@ class DemoService: NSObject {
     }
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
-
-    let uuid = UUID()
     request.setValue(AppKey.appKey, forHTTPHeaderField: "appkey")
     request.setValue("application/json;charset=utf-8", forHTTPHeaderField: "Content-Type")
-    let accountId = AuthorManager.shareInstance()?.getUserInfo()?.accountId ?? ""
-    let accessToken = AuthorManager.shareInstance()?.getUserInfo()?.accessToken ?? ""
-    print("accountId : \(accountId) access token : \(accessToken)")
-    request.setValue(accountId, forHTTPHeaderField: "accountId")
-    request.setValue(accessToken, forHTTPHeaderField: "accessToken")
+    request.setValue(account, forHTTPHeaderField: "accountId")
+    request.setValue(token, forHTTPHeaderField: "accessToken")
     return request
   }
 

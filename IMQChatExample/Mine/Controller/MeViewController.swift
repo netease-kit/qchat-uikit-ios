@@ -3,20 +3,65 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NEChatKit
+import NEChatUIKit
+import NECommonUIKit
+import NECoreIM2Kit
 import NECoreKit
-import NECoreQChatKit
-import NEQChatUIKit
 import NIMSDK
 import UIKit
-import YXLogin
 
-class MeViewController: UIViewController {
-  private let mineData = [
-    [NSLocalizedString("setting", comment: ""): "mine_setting"],
-    [NSLocalizedString("about_yunxin", comment: ""): "about_yunxin"],
-  ]
+class MeViewController: UIViewController, UIGestureRecognizerDelegate {
+  private let viewModel = MeViewModel()
 
-  private let userProvider = UserInfoProvider.shared
+  private lazy var tableView: UITableView = {
+    let tableView = UITableView(frame: .zero, style: .plain)
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.separatorStyle = .none
+    tableView.delegate = self
+    tableView.dataSource = self
+    tableView.register(
+      MineTableViewCell.self,
+      forCellReuseIdentifier: "\(NSStringFromClass(MineTableViewCell.self))"
+    )
+    tableView.rowHeight = 52
+    tableView.keyboardDismissMode = .onDrag
+
+    tableView.estimatedRowHeight = 0
+    tableView.estimatedSectionHeaderHeight = 0
+    tableView.estimatedSectionFooterHeight = 0
+
+    if #available(iOS 15.0, *) {
+      tableView.sectionHeaderTopPadding = 0.0
+    }
+    return tableView
+  }()
+
+  private lazy var arrowImageView: UIImageView = {
+    let imageView = UIImageView(image: coreLoader.loadImage("arrow_right"))
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    imageView.accessibilityIdentifier = "id.rightArrow"
+    return imageView
+  }()
+
+  private lazy var personInfoButton: UIButton = {
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
+    button.addTarget(self, action: #selector(personInfoButtonClick), for: .touchUpInside)
+    return button
+  }()
+
+  @objc func personInfoButtonClick(sender: UIButton) {
+    let personInfo = PersonInfoViewController()
+    navigationController?.pushViewController(personInfo, animated: true)
+  }
+
+  lazy var headerView: UIView = {
+    let view = UIView(frame: .zero)
+    view.translatesAutoresizingMaskIntoConstraints = false
+    view.backgroundColor = .white
+    return view
+  }()
 
   lazy var header: NEUserHeaderView = {
     let view = NEUserHeaderView(frame: .zero)
@@ -26,11 +71,12 @@ class MeViewController: UIViewController {
   }()
 
   lazy var nameLabel: UILabel = {
-    let name = UILabel()
-    name.textColor = .ne_darkText
-    name.font = UIFont.systemFont(ofSize: 22.0)
-    name.translatesAutoresizingMaskIntoConstraints = false
-    return name
+    let nameLabel = UILabel()
+    nameLabel.textColor = .ne_darkText
+    nameLabel.font = UIFont.systemFont(ofSize: 22.0)
+    nameLabel.translatesAutoresizingMaskIntoConstraints = false
+    nameLabel.accessibilityIdentifier = "id.name"
+    return nameLabel
   }()
 
   lazy var idLabel: UILabel = {
@@ -38,44 +84,65 @@ class MeViewController: UIViewController {
     label.textColor = .ne_darkText
     label.font = UIFont.systemFont(ofSize: 16.0)
     label.translatesAutoresizingMaskIntoConstraints = false
+    label.accessibilityIdentifier = "id.account"
     return label
   }()
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    setupSubviews()
-  }
 
   override func viewWillAppear(_ animated: Bool) {
     navigationController?.setNavigationBarHidden(true, animated: false)
     updateUserInfo()
     super.viewWillAppear(animated)
+    if navigationController?.viewControllers.count ?? 0 > 0 {
+      if let root = navigationController?.viewControllers[0] as? UIViewController {
+        if root.isKind(of: MeViewController.self) {
+          navigationController?.interactivePopGestureRecognizer?.delegate = self
+        }
+      }
+    }
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = NEStyleManager.instance.isNormalStyle() ? UIColor(hexString: "#EFF1F4") : UIColor(hexString: "#EDEDED")
+
+    NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NENotificationName.changeLanguage, object: nil)
+
+    setupSubviews()
+    viewModel.getData()
+  }
+
+  override func didMove(toParent parent: UIViewController?) {
+    super.didMove(toParent: parent)
+    if parent == nil {
+      NotificationCenter.default.removeObserver(self)
+    }
+  }
+
+  @objc func changeLanguage() {
+    updateUserInfo()
+    viewModel.getData()
+    tableView.reloadData()
   }
 
   func setupSubviews() {
-    view.backgroundColor = UIColor.white
+    // 顶部视图
     view.addSubview(header)
-    if #available(iOS 11.0, *) {
-      NSLayoutConstraint.activate([
-        header.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-        header.topAnchor.constraint(
-          equalTo: self.view.safeAreaLayoutGuide.topAnchor,
-          constant: 32
-        ),
-        header.widthAnchor.constraint(equalToConstant: 60),
-        header.heightAnchor.constraint(equalToConstant: 60),
-      ])
-    } else {
-      // Fallback on earlier versions
-      NSLayoutConstraint.activate([
-        header.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-        header.topAnchor.constraint(equalTo: view.topAnchor, constant: 32),
-        header.widthAnchor.constraint(equalToConstant: 60),
-        header.heightAnchor.constraint(equalToConstant: 60),
-      ])
-    }
+    NSLayoutConstraint.activate([
+      header.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+      header.topAnchor.constraint(
+        equalTo: view.safeAreaLayoutGuide.topAnchor,
+        constant: 32
+      ),
+      header.widthAnchor.constraint(equalToConstant: 60),
+      header.heightAnchor.constraint(equalToConstant: 60),
+    ])
+
     header.clipsToBounds = true
-    header.layer.cornerRadius = 30
+    if NEStyleManager.instance.isNormalStyle() {
+      header.layer.cornerRadius = 30
+    } else {
+      header.layer.cornerRadius = 4
+    }
 
     view.addSubview(nameLabel)
     NSLayoutConstraint.activate([
@@ -95,10 +162,9 @@ class MeViewController: UIViewController {
     updateUserInfo()
 
     let divider = UIView()
-    divider.backgroundColor = .ne_lightBackgroundColor
     view.addSubview(divider)
     divider.translatesAutoresizingMaskIntoConstraints = false
-    divider.backgroundColor = UIColor(hexString: "EFF1F4")
+    divider.backgroundColor = .clear
     NSLayoutConstraint.activate([
       divider.leftAnchor.constraint(equalTo: view.leftAnchor),
       divider.heightAnchor.constraint(equalToConstant: 6),
@@ -107,9 +173,10 @@ class MeViewController: UIViewController {
     ])
 
     view.addSubview(tableView)
-    view.addSubview(arrow)
-    view.addSubview(personInfoBtn)
+    view.addSubview(arrowImageView)
+    view.addSubview(personInfoButton)
 
+    tableView.backgroundColor = NEStyleManager.instance.isNormalStyle() ? UIColor.white : UIColor.clear
     NSLayoutConstraint.activate([
       tableView.topAnchor.constraint(equalTo: divider.bottomAnchor),
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -118,83 +185,99 @@ class MeViewController: UIViewController {
     ])
 
     NSLayoutConstraint.activate([
-      arrow.centerYAnchor.constraint(equalTo: header.centerYAnchor),
-      arrow.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
+      arrowImageView.centerYAnchor.constraint(equalTo: header.centerYAnchor),
+      arrowImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
     ])
 
     NSLayoutConstraint.activate([
-      personInfoBtn.topAnchor.constraint(equalTo: header.topAnchor),
-      personInfoBtn.leftAnchor.constraint(equalTo: view.leftAnchor),
-      personInfoBtn.rightAnchor.constraint(equalTo: view.rightAnchor),
-      personInfoBtn.bottomAnchor.constraint(equalTo: divider.topAnchor),
+      personInfoButton.topAnchor.constraint(equalTo: header.topAnchor),
+      personInfoButton.leftAnchor.constraint(equalTo: view.leftAnchor),
+      personInfoButton.rightAnchor.constraint(equalTo: view.rightAnchor),
+      personInfoButton.bottomAnchor.constraint(equalTo: divider.topAnchor),
+    ])
+
+    view.insertSubview(headerView, belowSubview: header)
+    NSLayoutConstraint.activate([
+      headerView.topAnchor.constraint(equalTo: view.topAnchor),
+      headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+      headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+      headerView.bottomAnchor.constraint(equalTo: divider.topAnchor),
     ])
   }
 
-  func updateUserInfo() {
-    let user = userProvider.getUserInfo(userId: QChatKitClient.instance.imAccid())
-    idLabel.text = "\(NSLocalizedString("account", comment: "")):\(user?.userId ?? "")"
-    nameLabel.text = user?.userInfo?.nickName
-    header.configHeadData(headUrl: user?.userInfo?.avatarUrl, name: user?.showName() ?? "", uid: user?.userId ?? "")
+  func setupUserInfo(_ userFriend: NEUserWithFriend?) {
+    idLabel.text = "\(localizable("account")):\(userFriend?.user?.accountId ?? "")"
+    nameLabel.text = userFriend?.showName()
+    header.configHeadData(headUrl: userFriend?.user?.avatar,
+                          name: userFriend?.shortName() ?? "",
+                          uid: userFriend?.user?.accountId ?? "")
   }
 
-  // MAKR: lazy method
-  private lazy var tableView: UITableView = {
-    let tableView = UITableView(frame: .zero, style: .plain)
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    tableView.separatorStyle = .none
-    tableView.delegate = self
-    tableView.dataSource = self
-    tableView.register(
-      MineTableViewCell.self,
-      forCellReuseIdentifier: "\(NSStringFromClass(MineTableViewCell.self))"
-    )
-    tableView.rowHeight = 52
-    tableView.backgroundColor = .white
-    return tableView
-  }()
-
-  private lazy var arrow: UIImageView = {
-    let imageView = UIImageView(image: UIImage(named: "arrow_right"))
-    imageView.translatesAutoresizingMaskIntoConstraints = false
-    return imageView
-  }()
-
-  private lazy var personInfoBtn: UIButton = {
-    let btn = UIButton()
-    btn.translatesAutoresizingMaskIntoConstraints = false
-    btn.addTarget(self, action: #selector(personInfoBtnClick), for: .touchUpInside)
-    return btn
-
-  }()
-
-  @objc func personInfoBtnClick(sender: UIButton) {
-    let personInfo = PersonInfoViewController()
-    navigationController?.pushViewController(personInfo, animated: true)
+  func updateUserInfo() {
+    if let userFriend = NEFriendUserCache.shared.getFriendInfo(IMKitClient.instance.account()) {
+      setupUserInfo(userFriend)
+    } else {
+      ContactRepo.shared.getUserListFromCloud(accountIds: [IMKitClient.instance.account()]) { [weak self] users, error in
+        self?.setupUserInfo(users?.first)
+      }
+    }
   }
 }
 
 extension MeViewController: UITableViewDelegate, UITableViewDataSource {
-  public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    mineData.count
+  open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    viewModel.mineData.count
   }
 
-  public func tableView(_ tableView: UITableView,
-                        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(
+  open func tableView(_ tableView: UITableView,
+                      cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    if let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(NSStringFromClass(MineTableViewCell.self))",
       for: indexPath
-    ) as! MineTableViewCell
-    cell.configCell(data: mineData[indexPath.row])
-    return cell
+    ) as? MineTableViewCell {
+      let cellTitle = viewModel.mineData[indexPath.row]
+      cell.configCell(data: cellTitle)
+      cell.accessibilityIdentifier = "id.\(cellTitle)"
+      return cell
+    }
+    return MineTableViewCell()
   }
 
-  public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if indexPath.row == 0 {
-      let ctrl = MineSettingViewController()
-      navigationController?.pushViewController(ctrl, animated: true)
-    } else if indexPath.row == 1 {
-      let ctrl = IntroduceBrandViewController()
-      navigationController?.pushViewController(ctrl, animated: true)
-    } else if indexPath.row == 2 {}
+  open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    if IMKitConfigCenter.shared.enableCollectionMessage {
+      if indexPath.row == 0 {
+        let ctrl = MineSettingViewController()
+        navigationController?.pushViewController(ctrl, animated: true)
+      } else if indexPath.row == 1 {
+        if NEStyleManager.instance.isNormalStyle() == true {
+          let collectionCtrl = CollectionMessageController()
+          navigationController?.pushViewController(collectionCtrl, animated: true)
+        } else {
+          let collectionCtrl = FunCollectionMessageController()
+          navigationController?.pushViewController(collectionCtrl, animated: true)
+        }
+      } else if indexPath.row == 2 {
+        let ctrl = IntroduceBrandViewController()
+        navigationController?.pushViewController(ctrl, animated: true)
+      }
+    } else {
+      if indexPath.row == 0 {
+        let ctrl = MineSettingViewController()
+        navigationController?.pushViewController(ctrl, animated: true)
+      } else if indexPath.row == 1 {
+        let ctrl = IntroduceBrandViewController()
+        navigationController?.pushViewController(ctrl, animated: true)
+      }
+    }
+  }
+
+  open func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    if let navigationController = navigationController,
+       navigationController.responds(to: #selector(getter: UINavigationController.interactivePopGestureRecognizer)),
+       gestureRecognizer == navigationController.interactivePopGestureRecognizer,
+       navigationController.visibleViewController == navigationController.viewControllers.first {
+      return false
+    }
+    return true
   }
 }
