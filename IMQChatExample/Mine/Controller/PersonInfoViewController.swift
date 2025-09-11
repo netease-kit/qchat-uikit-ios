@@ -3,45 +3,80 @@
 // found in the LICENSE file.
 
 import NEChatUIKit
+import NECoreIM2Kit
 import NECoreKit
-import NECoreQChatKit
 import NETeamUIKit
 import NIMSDK
 import UIKit
 
 @objcMembers
-class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
+public class PersonInfoViewController: NEBaseViewController,
   UINavigationControllerDelegate, PersonInfoViewModelDelegate, UITableViewDelegate,
-                                UITableViewDataSource, UIImagePickerControllerDelegate {
+  UITableViewDataSource, UIImagePickerControllerDelegate, NEContactListener {
   public var cellClassDic = [
-    SettingCellType.SettingSubtitleCell.rawValue: TeamSettingSubtitleCell.self,
-    SettingCellType.SettingHeaderCell.rawValue: TeamSettingHeaderCell.self,
-    SettingCellType.SettingSubtitleCustomCell.rawValue: TeamSettingRightCustomCell.self,
+    SettingCellType.SettingSubtitleCell.rawValue: CustomTeamSettingSubtitleCell.self,
+    SettingCellType.SettingHeaderCell.rawValue: CustomTeamSettingHeaderCell.self,
+    SettingCellType.SettingSubtitleCustomCell.rawValue: CustomTeamSettingRightCustomCell.self,
   ]
   private var viewModel = PersonInfoViewModel()
   private var className = "PersonInfoViewController"
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    viewModel.getData()
-    setupSubviews()
-    initialConfig()
-  }
+  lazy var tableView: UITableView = {
+    let tableView = UITableView()
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.backgroundColor = .clear
+    tableView.dataSource = self
+    tableView.delegate = self
+    tableView.separatorColor = .clear
+    tableView.separatorStyle = .none
+    tableView.keyboardDismissMode = .onDrag
 
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
+    tableView.estimatedRowHeight = 0
+    tableView.estimatedSectionHeaderHeight = 0
+    tableView.estimatedSectionFooterHeight = 0
+
+    if #available(iOS 15.0, *) {
+      tableView.sectionHeaderTopPadding = 0.0
+    }
+    return tableView
+  }()
+
+  private lazy var pickerView: BirthdayDatePickerView = {
+    let picker = BirthdayDatePickerView()
+    picker.translatesAutoresizingMaskIntoConstraints = false
+    return picker
+  }()
+
+  override open func viewDidLoad() {
+    super.viewDidLoad()
+    ContactRepo.shared.addContactListener(self)
+    initialConfig()
+    setupSubviews()
+    viewModel.getData { [weak self] in
+      self?.tableView.reloadData()
+    }
   }
 
   func initialConfig() {
-    title = NSLocalizedString("person_info", comment: "")
-    view.backgroundColor = .ne_lightBackgroundColor
-    navigationView.backgroundColor = .ne_lightBackgroundColor
+    title = localizable("person_info")
+
+    if NEStyleManager.instance.isNormalStyle() {
+      view.backgroundColor = .ne_backgroundColor
+      navigationView.backgroundColor = .ne_backgroundColor
+      navigationController?.navigationBar.backgroundColor = .ne_backgroundColor
+    } else {
+      view.backgroundColor = .funChatBackgroundColor
+    }
+
+    navigationView.moreButton.isHidden = true
     viewModel.delegate = self
-    NIMSDK.shared().userManager.add(self)
   }
 
   func setupSubviews() {
     view.addSubview(tableView)
+    if NEStyleManager.instance.isNormalStyle() {
+      topConstant += 12
+    }
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
@@ -49,7 +84,7 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
-    cellClassDic.forEach { (key: Int, value: NEBaseTeamSettingCell.Type) in
+    for (key, value) in cellClassDic {
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
   }
@@ -63,16 +98,19 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
       selectValue(0)
     }
     first.setValue(UIColor(hexString: "0x333333"), forKey: "_titleTextColor")
+    first.accessibilityIdentifier = "id.action1"
 
     let second = UIAlertAction(title: secondContent, style: .default) { action in
       selectValue(1)
     }
     second.setValue(UIColor(hexString: "0x333333"), forKey: "_titleTextColor")
+    second.accessibilityIdentifier = "id.action2"
 
-    let cancel = UIAlertAction(title: NSLocalizedString("cancel", comment: ""),
+    let cancel = UIAlertAction(title: commonLocalizable("cancel"),
                                style: .cancel)
 
     cancel.setValue(UIColor(hexString: "0x333333"), forKey: "_titleTextColor")
+    cancel.accessibilityIdentifier = "id.action3"
 
     alert.addAction(first)
     alert.addAction(second)
@@ -81,15 +119,30 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     present(alert, animated: true, completion: nil)
   }
 
+  func showCustomAlert(firstContent: String, secondContent: String,
+                       selectValue: @escaping ((_ value: NSInteger) -> Void)) {
+    let first = NECustomAlertAction(title: firstContent) {
+      selectValue(0)
+    }
+
+    let second = NECustomAlertAction(title: secondContent) {
+      selectValue(1)
+    }
+
+    showCustomActionSheet([first, second])
+  }
+
   func showDatePicker() {
     view.addSubview(pickerView)
-
-    weak var weakSelf = self
-    pickerView.timeCallBack = { time in
+    pickerView.timeCallBack = { [weak self] time in
       if let t = time {
-        weakSelf?.viewModel.updateBirthday(birthDay: t) { error in
-          if error != nil {
-            weakSelf?.showToast(NSLocalizedString("setting_birthday_failure", comment: ""))
+        self?.viewModel.updateSelfBirthday(t) { error in
+          if let err = error {
+            if err.code == protocolSendFailed {
+              self?.showToast(commonLocalizable("network_error"))
+            } else {
+              self?.showToast(localizable("setting_birthday_failure"))
+            }
           }
         }
       }
@@ -97,82 +150,50 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     NSLayoutConstraint.activate([
       pickerView.leftAnchor.constraint(equalTo: view.leftAnchor),
       pickerView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      pickerView.heightAnchor.constraint(equalToConstant: 229),
+      pickerView.topAnchor.constraint(equalTo: view.topAnchor),
       pickerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
   }
 
-  lazy var tableView: UITableView = {
-    let table = UITableView()
-    table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = .clear
-    table.dataSource = self
-    table.delegate = self
-    table.separatorColor = .clear
-    table.separatorStyle = .none
-    table.sectionHeaderHeight = 12.0
-    if #available(iOS 15.0, *) {
-      table.sectionHeaderTopPadding = 0.0
-    }
-    return table
-  }()
-
-  private lazy var pickerView: BirthdayDatePickerView = {
-    let picker = BirthdayDatePickerView()
-    picker.backgroundColor = .white
-    picker.translatesAutoresizingMaskIntoConstraints = false
-    return picker
-  }()
-
-  deinit {
-    NIMSDK.shared().userManager.remove(self)
-  }
-
-  // MARK: NIMUserManagerDelegate
-
-  func onUserInfoChanged(_ user: NIMUser) {
-    if user.userId == QChatKitClient.instance.imAccid() {
-      viewModel.getData()
-      tableView.reloadData()
-    }
-  }
-
   // MARK: UIImagePickerControllerDelegate
 
-  func imagePickerController(_ picker: UIImagePickerController,
-                             didFinishPickingMediaWithInfo info: [UIImagePickerController
-                               .InfoKey: Any]) {
+  open func imagePickerController(_ picker: UIImagePickerController,
+                                  didFinishPickingMediaWithInfo info: [UIImagePickerController
+                                    .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
     uploadHeadImage(image: image)
     dismiss(animated: true, completion: nil)
   }
 
-  public func uploadHeadImage(image: UIImage) {
-    view.makeToastActivity(.center)
+  open func uploadHeadImage(image: UIImage) {
     weak var weakSelf = self
-    if let imageData = image.jpegData(compressionQuality: 0.6) as NSData? {
-      let filePath = NSHomeDirectory().appending("/Documents/")
-        .appending(QChatKitClient.instance.imAccid())
+    if NEChatDetectNetworkTool.shareInstance.manager?.isReachable == false {
+      weakSelf?.showToast(commonLocalizable("network_error"))
+      return
+    }
+
+    view.makeToastActivity(.center)
+    if let imageData = image.jpegData(compressionQuality: 0.6) as NSData?,
+       var filePath = NEPathUtils.getDirectoryForDocuments(dir: "\(imkitDir)image/") {
+      filePath += "\(IMKitClient.instance.account())_avatar.jpg"
       let succcess = imageData.write(toFile: filePath, atomically: true)
       if succcess {
-        NIMSDK.shared().resourceManager
-          .upload(filePath, scene: NIMNOSSceneTypeAvatar,
-                  progress: nil) { urlString, error in
-            if error == nil {
-              weakSelf?.viewModel.updateAvatar(avatar: urlString ?? "") { error in
-                if error != nil {
-                  weakSelf?.showToast(NSLocalizedString("setting_head_failure", comment: ""))
-                }
+        let fileTask = ResourceRepo.shared.createUploadFileTask(filePath)
+        ResourceRepo.shared.uploadFile(fileTask, nil) { [weak self] urlString, error in
+          if error == nil {
+            self?.viewModel.updateSelfAvatar(urlString ?? "") { [weak self] error in
+              if error != nil {
+                self?.showToast(localizable("setting_head_failure"))
               }
-
-            } else {
-              NELog.errorLog(
-                weakSelf?.className ?? "",
-                desc: "❌CALLBACK upload image failed,error = \(error!)"
-              )
             }
-            self.view.hideToastActivity()
+          } else {
+            NEALog.errorLog(
+              weakSelf?.className ?? "",
+              desc: "CALLBACK upload image failed,error = \(error!)"
+            )
           }
+          self?.view.hideToastActivity()
+        }
       }
     }
   }
@@ -180,7 +201,11 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
   // MARK: PersonInfoViewModelDelegate
 
   func didClickHeadImage() {
-    showBottomAlert(self)
+    if NEStyleManager.instance.isNormalStyle() {
+      showBottomAlert(self)
+    } else {
+      showCustomBottomAlert(self)
+    }
   }
 
   func didClickNickName(name: String) {
@@ -189,11 +214,15 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     ctrl.contentText = name
     weak var weakSelf = self
     ctrl.callBack = { editText in
-      weakSelf?.viewModel.updateNickName(name: editText) { error in
-        if error != nil {
-          weakSelf?.showToastInWindow(NSLocalizedString("setting_nickname_failure", comment: ""))
+      weakSelf?.viewModel.updateSelfNickName(editText) { [weak self] error in
+        if let err = error {
+          if err.code == antiErrorCode {
+            self?.showToastInWindow(localizable("anti_error"))
+            return
+          }
+          self?.showToastInWindow(localizable("setting_nickname_failure"))
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
@@ -201,22 +230,43 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
   }
 
   func didClickGender() {
-    var sex = NIMUserGender.unknown
+    var gender = V2NIMGender.GENDER_UNKNOWN
     weak var weakSelf = self
-    showAlert(
-      firstContent: NSLocalizedString("male", comment: ""),
-      secondContent: NSLocalizedString("female", comment: "")
-    ) { value in
-      sex = value == 0 ? .male : .female
-      weakSelf?.viewModel.updateSex(sex: sex) { error in
-        if error != nil {
-          weakSelf?.showToast(NSLocalizedString("change_gender_failure", comment: ""))
+    let block: ((_ value: NSInteger) -> Void) = {
+      value in
+      gender = value == 0 ? .GENDER_MALE : .GENDER_FEMALE
+
+      weakSelf?.viewModel.updateSelfSex(gender) { [weak self] error in
+        if let err = error {
+          if err.code == antiErrorCode {
+            self?.showToastInWindow(localizable("anti_error"))
+            return
+          }
+          if error?.code == protocolSendFailed {
+            self?.showToast(commonLocalizable("network_error"))
+          } else {
+            self?.showToast(localizable("change_gender_failure"))
+          }
         }
       }
     }
+    if NEStyleManager.instance.isNormalStyle() {
+      showAlert(firstContent: localizable("male"),
+                secondContent: localizable("female"),
+                selectValue: block)
+    } else {
+      showCustomAlert(firstContent: localizable("male"),
+                      secondContent: localizable("female"),
+                      selectValue: block)
+    }
   }
 
-  func didClickBirthday() {
+  func didClickBirthday(birth: String) {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    if let selectDate = formatter.date(from: birth) {
+      pickerView.picker.setDate(selectDate, animated: true)
+    }
     showDatePicker()
   }
 
@@ -226,15 +276,24 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     ctrl.contentText = mobile
     weak var weakSelf = self
     ctrl.callBack = { editText in
-      weakSelf?.viewModel.updateMobile(mobile: editText) { error in
-        if error != nil {
-          weakSelf?.showToastInWindow(NSLocalizedString("change_phone_failure", comment: ""))
+      weakSelf?.viewModel.updateSelfMobile(editText) { [weak self] error in
+        if let err = error {
+          if err.code == antiErrorCode {
+            self?.showToastInWindow(localizable("anti_error"))
+            return
+          }
+          self?.showToastInWindow(localizable("change_phone_failure"))
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
     navigationController?.pushViewController(ctrl, animated: true)
+  }
+
+  func isValidEmail(_ email: String) -> Bool {
+    let emailRegex = #"^\w+@\w+\.[a-zA-Z]{2,}"#
+    return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
   }
 
   func didClickEmail(email: String) {
@@ -243,11 +302,20 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     ctrl.contentText = email
     weak var weakSelf = self
     ctrl.callBack = { editText in
-      weakSelf?.viewModel.updateEmail(email: editText) { error in
-        if error != nil {
-          weakSelf?.showToastInWindow(NSLocalizedString("change_email_failure", comment: ""))
+      if editText.count > 0, weakSelf?.isValidEmail(editText) == false {
+        weakSelf?.showToastInWindow(localizable("change_email_failure"))
+        return
+      }
+
+      weakSelf?.viewModel.updateSelfEmail(editText) { [weak self] error in
+        if let err = error {
+          if err.code == antiErrorCode {
+            self?.showToastInWindow(localizable("anti_error"))
+            return
+          }
+          self?.showToastInWindow(localizable("change_email_failure"))
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
@@ -260,11 +328,15 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     ctrl.contentText = sign
     weak var weakSelf = self
     ctrl.callBack = { editText in
-      weakSelf?.viewModel.updateSign(sign: editText) { error in
-        if error != nil {
-          weakSelf?.showToastInWindow(NSLocalizedString("change_sign_failure", comment: ""))
+      weakSelf?.viewModel.updateSelfSign(editText) { [weak self] error in
+        if let err = error {
+          if err.code == antiErrorCode {
+            self?.showToastInWindow(localizable("anti_error"))
+            return
+          }
+          self?.showToastInWindow(localizable("change_sign_failure"))
         } else {
-          weakSelf?.navigationController?.popViewController(animated: true)
+          self?.navigationController?.popViewController(animated: true)
         }
       }
     }
@@ -272,13 +344,13 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
   }
 
   func didCopyAccount(account: String) {
-    showToast(NSLocalizedString("copy_success", comment: ""))
+    showToast(commonLocalizable("copy_success"))
     UIPasteboard.general.string = account
   }
 
   // MARK: UITableViewDelegate, UITableViewDataSource
 
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     if viewModel.sectionData.count > section {
       let model = viewModel.sectionData[section]
       return model.cellModels.count
@@ -286,11 +358,11 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     return 0
   }
 
-  func numberOfSections(in tableView: UITableView) -> Int {
+  open func numberOfSections(in tableView: UITableView) -> Int {
     viewModel.sectionData.count
   }
 
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let model = viewModel.sectionData[indexPath.section].cellModels[indexPath.row]
     if let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(model.type)",
@@ -302,19 +374,22 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     return UITableViewCell()
   }
 
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let model = viewModel.sectionData[indexPath.section].cellModels[indexPath.row]
     if let block = model.cellClick {
       block()
     }
   }
 
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+  open func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     let model = viewModel.sectionData[indexPath.section].cellModels[indexPath.row]
     return model.rowHeight
   }
 
-  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+  open func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    if section == 0 {
+      return 0
+    }
     if viewModel.sectionData.count > section {
       let model = viewModel.sectionData[section]
       if model.cellModels.count > 0 {
@@ -324,9 +399,24 @@ class PersonInfoViewController: NEBaseViewController, NIMUserManagerDelegate,
     return 0
   }
 
-  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let header = UIView()
-    header.backgroundColor = .ne_lightBackgroundColor
-    return header
+  open func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    let headerView = UIView()
+    headerView.backgroundColor = .ne_lightBackgroundColor
+    return headerView
+  }
+
+  // MARK: - NEContactListener
+
+  /// 好友信息缓存更新（包含好友信息和用户信息）
+  /// - Parameter changeType: 操作类型
+  /// - Parameter contacts: 好友列表
+  open func onContactChange(_ changeType: NEContactChangeType, _ contacts: [NEUserWithFriend]) {
+    for contact in contacts {
+      if contact.user?.accountId == IMKitClient.instance.account() {
+        viewModel.userInfo = contact
+        viewModel.refreshData()
+        tableView.reloadData()
+      }
+    }
   }
 }

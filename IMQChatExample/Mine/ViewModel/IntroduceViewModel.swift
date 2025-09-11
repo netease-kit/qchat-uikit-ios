@@ -5,6 +5,7 @@
 
 import Foundation
 import NETeamUIKit
+import NIMSDK
 
 @objcMembers
 public class IntroduceViewModel: NSObject {
@@ -12,14 +13,19 @@ public class IntroduceViewModel: NSObject {
 
   func getData() {
     let versionItem = SettingCellModel()
-    versionItem.cellName = NSLocalizedString("version", comment: "")
+    versionItem.cellName = localizable("version")
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     if let version = appVersion {
       versionItem.subTitle = "V\(version)"
     }
 
+    let imVersionItem = SettingCellModel()
+    imVersionItem.cellName = localizable("im_version")
+    imVersionItem.subTitle = "\(NIMSDK.shared().sdkVersion())"
+    imVersionItem.type = SettingCellType.SettingSubtitleCell.rawValue
+
     let introduceItem = SettingCellModel()
-    introduceItem.cellName = NSLocalizedString("product_intro", comment: "")
-    sectionData.append(contentsOf: [versionItem, introduceItem])
+    introduceItem.cellName = localizable("product_intro")
+    sectionData.append(contentsOf: [versionItem, imVersionItem, introduceItem])
   }
 }

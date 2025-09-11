@@ -7,14 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0DB838F85C09EF899E431F78 /* Pods_IMQChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */; };
+		095C49AACE56B3AE24C35CB8 /* Pods_IMQChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 385EDCF4BC308420AC98213C /* Pods_IMQChatExample.framework */; };
 		181EE6542B23512F0043817F /* NodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE63F2B23512F0043817F /* NodeViewModel.swift */; };
 		181EE6552B23512F0043817F /* MineSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6402B23512F0043817F /* MineSettingViewModel.swift */; };
 		181EE6562B23512F0043817F /* PersonInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6412B23512F0043817F /* PersonInfoViewModel.swift */; };
 		181EE6572B23512F0043817F /* MessageRemindViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6422B23512F0043817F /* MessageRemindViewModel.swift */; };
 		181EE6582B23512F0043817F /* IntroduceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6432B23512F0043817F /* IntroduceViewModel.swift */; };
 		181EE6592B23512F0043817F /* MeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6452B23512F0043817F /* MeViewController.swift */; };
-		181EE65A2B23512F0043817F /* NEAboutWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6462B23512F0043817F /* NEAboutWebViewController.swift */; };
 		181EE65B2B23512F0043817F /* NELoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6472B23512F0043817F /* NELoginViewController.swift */; };
 		181EE65C2B23512F0043817F /* InputPersonInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6482B23512F0043817F /* InputPersonInfoController.swift */; };
 		181EE65D2B23512F0043817F /* MineSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6492B23512F0043817F /* MineSettingViewController.swift */; };
@@ -27,11 +26,41 @@
 		181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */; };
 		181EE6652B23512F0043817F /* NodeSelectCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6522B23512F0043817F /* NodeSelectCell.swift */; };
 		181EE6662B23512F0043817F /* VersionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181EE6532B23512F0043817F /* VersionCell.swift */; };
+		18311E1E2E7275A5004962EE /* IMSDKConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E1C2E7275A5004962EE /* IMSDKConfigManager.swift */; };
+		18311E242E7275B1004962EE /* IMSDKConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E202E7275B1004962EE /* IMSDKConfigViewController.swift */; };
+		18311E252E7275B1004962EE /* PocLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E222E7275B1004962EE /* PocLoginController.swift */; };
+		18311E262E7275B1004962EE /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E212E7275B1004962EE /* LanguageViewController.swift */; };
+		18311E272E7275B1004962EE /* StyleSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E232E7275B1004962EE /* StyleSelectionViewController.swift */; };
+		18311E2A2E7275BA004962EE /* MeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E292E7275BA004962EE /* MeViewModel.swift */; };
+		18311E2B2E7275BA004962EE /* LanguageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E282E7275BA004962EE /* LanguageViewModel.swift */; };
+		18311E362E7275C5004962EE /* CustomTeamSettingRightCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E322E7275C5004962EE /* CustomTeamSettingRightCustomCell.swift */; };
+		18311E372E7275C5004962EE /* CustomTeamArrowSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E302E7275C5004962EE /* CustomTeamArrowSettingCell.swift */; };
+		18311E382E7275C5004962EE /* StyleSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E2C2E7275C5004962EE /* StyleSelectionCell.swift */; };
+		18311E392E7275C5004962EE /* ArrowTitleCustomTeamSettingSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E2D2E7275C5004962EE /* ArrowTitleCustomTeamSettingSwitchCell.swift */; };
+		18311E3A2E7275C5004962EE /* CustomTeamSettingSubtitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E332E7275C5004962EE /* CustomTeamSettingSubtitleCell.swift */; };
+		18311E3B2E7275C5004962EE /* CustomSettingTextviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E2F2E7275C5004962EE /* CustomSettingTextviewCell.swift */; };
+		18311E3C2E7275C5004962EE /* CustomTeamSettingHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E312E7275C5004962EE /* CustomTeamSettingHeaderCell.swift */; };
+		18311E3D2E7275C5004962EE /* CustomSettingInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E2E2E7275C5004962EE /* CustomSettingInputCell.swift */; };
+		18311E3E2E7275C5004962EE /* CustomTeamSettingSwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E342E7275C5004962EE /* CustomTeamSettingSwitchCell.swift */; };
+		18311E402E727770004962EE /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E3F2E727770004962EE /* Constant.swift */; };
+		18311E4E2E727799004962EE /* CustomChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E422E727799004962EE /* CustomChatCell.swift */; };
+		18311E4F2E727799004962EE /* CustomContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E442E727799004962EE /* CustomContactTableViewCell.swift */; };
+		18311E502E727799004962EE /* CustomContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E452E727799004962EE /* CustomContactViewController.swift */; };
+		18311E512E727799004962EE /* CustomConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E432E727799004962EE /* CustomConfig.swift */; };
+		18311E522E727799004962EE /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E4B2E727799004962EE /* CustomView.swift */; };
+		18311E532E727799004962EE /* CustomConversationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E472E727799004962EE /* CustomConversationListCell.swift */; };
+		18311E542E727799004962EE /* CustomConversationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E462E727799004962EE /* CustomConversationController.swift */; };
+		18311E552E727799004962EE /* NESecurityWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E4C2E727799004962EE /* NESecurityWarningView.swift */; };
+		18311E562E727799004962EE /* CustomNormalChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E492E727799004962EE /* CustomNormalChatViewController.swift */; };
+		18311E572E727799004962EE /* CustomP2PChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E4A2E727799004962EE /* CustomP2PChatViewController.swift */; };
+		18311E582E727799004962EE /* AIChatDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E412E727799004962EE /* AIChatDataLoader.swift */; };
+		18311E592E727799004962EE /* CustomFunChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E482E727799004962EE /* CustomFunChatViewController.swift */; };
+		18311E5C2E72780E004962EE /* CustomSettingCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E5A2E72780E004962EE /* CustomSettingCellModel.swift */; };
+		18311E5E2E727838004962EE /* UIStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E5D2E727838004962EE /* UIStyleManager.swift */; };
 		183776DF2D9E77BE005F4255 /* DemoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183776DD2D9E77BE005F4255 /* DemoService.swift */; };
 		39572AAB28C6F74D007A9526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39572AAD28C6F74D007A9526 /* InfoPlist.strings */; };
 		39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A36F8028002CFF009B07A9 /* NETabBarController.swift */; };
 		39A39BA928C5A2B70001B638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39A39BAB28C5A2B80001B638 /* Localizable.strings */; };
-		39F793C827E20434007F63FF /* NENavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F793C727E20434007F63FF /* NENavigationController.swift */; };
 		4B3B9BDF277AFEE50091A74E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3B9BDE277AFEE50091A74E /* AppDelegate.swift */; };
 		4B3B9BE3277AFEE50091A74E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B3B9BE2277AFEE50091A74E /* ViewController.swift */; };
 		4B3B9BE6277AFEE50091A74E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B3B9BE4277AFEE50091A74E /* Main.storyboard */; };
@@ -59,14 +88,12 @@
 		01B0A28E2816CF41009065C5 /* IMUIKitExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IMUIKitExample.entitlements; sourceTree = "<group>"; };
 		01C0FC0F27BE754400C32949 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		01C0FC1027BE754500C32949 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMQChatExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		181EE63F2B23512F0043817F /* NodeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeViewModel.swift; sourceTree = "<group>"; };
 		181EE6402B23512F0043817F /* MineSettingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewModel.swift; sourceTree = "<group>"; };
 		181EE6412B23512F0043817F /* PersonInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersonInfoViewModel.swift; sourceTree = "<group>"; };
 		181EE6422B23512F0043817F /* MessageRemindViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRemindViewModel.swift; sourceTree = "<group>"; };
 		181EE6432B23512F0043817F /* IntroduceViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroduceViewModel.swift; sourceTree = "<group>"; };
 		181EE6452B23512F0043817F /* MeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeViewController.swift; sourceTree = "<group>"; };
-		181EE6462B23512F0043817F /* NEAboutWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEAboutWebViewController.swift; sourceTree = "<group>"; };
 		181EE6472B23512F0043817F /* NELoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NELoginViewController.swift; sourceTree = "<group>"; };
 		181EE6482B23512F0043817F /* InputPersonInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputPersonInfoController.swift; sourceTree = "<group>"; };
 		181EE6492B23512F0043817F /* MineSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineSettingViewController.swift; sourceTree = "<group>"; };
@@ -79,15 +106,47 @@
 		181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdayDatePickerView.swift; sourceTree = "<group>"; };
 		181EE6522B23512F0043817F /* NodeSelectCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeSelectCell.swift; sourceTree = "<group>"; };
 		181EE6532B23512F0043817F /* VersionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VersionCell.swift; sourceTree = "<group>"; };
+		18311E1C2E7275A5004962EE /* IMSDKConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMSDKConfigManager.swift; sourceTree = "<group>"; };
+		18311E202E7275B1004962EE /* IMSDKConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IMSDKConfigViewController.swift; sourceTree = "<group>"; };
+		18311E212E7275B1004962EE /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
+		18311E222E7275B1004962EE /* PocLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocLoginController.swift; sourceTree = "<group>"; };
+		18311E232E7275B1004962EE /* StyleSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleSelectionViewController.swift; sourceTree = "<group>"; };
+		18311E282E7275BA004962EE /* LanguageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewModel.swift; sourceTree = "<group>"; };
+		18311E292E7275BA004962EE /* MeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeViewModel.swift; sourceTree = "<group>"; };
+		18311E2C2E7275C5004962EE /* StyleSelectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleSelectionCell.swift; sourceTree = "<group>"; };
+		18311E2D2E7275C5004962EE /* ArrowTitleCustomTeamSettingSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowTitleCustomTeamSettingSwitchCell.swift; sourceTree = "<group>"; };
+		18311E2E2E7275C5004962EE /* CustomSettingInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettingInputCell.swift; sourceTree = "<group>"; };
+		18311E2F2E7275C5004962EE /* CustomSettingTextviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettingTextviewCell.swift; sourceTree = "<group>"; };
+		18311E302E7275C5004962EE /* CustomTeamArrowSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTeamArrowSettingCell.swift; sourceTree = "<group>"; };
+		18311E312E7275C5004962EE /* CustomTeamSettingHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTeamSettingHeaderCell.swift; sourceTree = "<group>"; };
+		18311E322E7275C5004962EE /* CustomTeamSettingRightCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTeamSettingRightCustomCell.swift; sourceTree = "<group>"; };
+		18311E332E7275C5004962EE /* CustomTeamSettingSubtitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTeamSettingSubtitleCell.swift; sourceTree = "<group>"; };
+		18311E342E7275C5004962EE /* CustomTeamSettingSwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTeamSettingSwitchCell.swift; sourceTree = "<group>"; };
+		18311E3F2E727770004962EE /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
+		18311E412E727799004962EE /* AIChatDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIChatDataLoader.swift; sourceTree = "<group>"; };
+		18311E422E727799004962EE /* CustomChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomChatCell.swift; sourceTree = "<group>"; };
+		18311E432E727799004962EE /* CustomConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConfig.swift; sourceTree = "<group>"; };
+		18311E442E727799004962EE /* CustomContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomContactTableViewCell.swift; sourceTree = "<group>"; };
+		18311E452E727799004962EE /* CustomContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomContactViewController.swift; sourceTree = "<group>"; };
+		18311E462E727799004962EE /* CustomConversationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConversationController.swift; sourceTree = "<group>"; };
+		18311E472E727799004962EE /* CustomConversationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomConversationListCell.swift; sourceTree = "<group>"; };
+		18311E482E727799004962EE /* CustomFunChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFunChatViewController.swift; sourceTree = "<group>"; };
+		18311E492E727799004962EE /* CustomNormalChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNormalChatViewController.swift; sourceTree = "<group>"; };
+		18311E4A2E727799004962EE /* CustomP2PChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomP2PChatViewController.swift; sourceTree = "<group>"; };
+		18311E4B2E727799004962EE /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
+		18311E4C2E727799004962EE /* NESecurityWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NESecurityWarningView.swift; sourceTree = "<group>"; };
+		18311E5A2E72780E004962EE /* CustomSettingCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettingCellModel.swift; sourceTree = "<group>"; };
+		18311E5D2E727838004962EE /* UIStyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStyleManager.swift; sourceTree = "<group>"; };
+		18311E5F2E727A38004962EE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		183776DD2D9E77BE005F4255 /* DemoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoService.swift; sourceTree = "<group>"; };
 		18D0A2A428D564CB00788205 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A628D564DF00788205 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A828D5674400788205 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		385EDCF4BC308420AC98213C /* Pods_IMQChatExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IMQChatExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		39572AAC28C6F74D007A9526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		39A36F8028002CFF009B07A9 /* NETabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NETabBarController.swift; sourceTree = "<group>"; };
 		39A39BAA28C5A2B80001B638 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		39A39BAC28C5A2BA0001B638 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		39F793C727E20434007F63FF /* NENavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NENavigationController.swift; sourceTree = "<group>"; };
 		4B3B9BDB277AFEE50091A74E /* IMQChatExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IMQChatExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B3B9BDE277AFEE50091A74E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B3B9BE2277AFEE50091A74E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -95,9 +154,9 @@
 		4B3B9BE7277AFEE70091A74E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B3B9BEA277AFEE70091A74E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4B3B9BEC277AFEE70091A74E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.debug.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.debug.xcconfig"; sourceTree = "<group>"; };
 		9EA2014027BE4B4800F8BBD0 /* AppKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppKey.swift; sourceTree = "<group>"; };
-		D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.release.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.release.xcconfig"; sourceTree = "<group>"; };
+		BF7630E706EC44153462B199 /* Pods-IMQChatExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.debug.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.debug.xcconfig"; sourceTree = "<group>"; };
+		C24D3E64FA40190C420BE9C0 /* Pods-IMQChatExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IMQChatExample.release.xcconfig"; path = "Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample.release.xcconfig"; sourceTree = "<group>"; };
 		DD4ADFA629878A8400C61D55 /* IMUIKitExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IMUIKitExample-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,7 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DB838F85C09EF899E431F78 /* Pods_IMQChatExample.framework in Frameworks */,
+				095C49AACE56B3AE24C35CB8 /* Pods_IMQChatExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +175,7 @@
 		181EE63D2B23512F0043817F /* Mine */ = {
 			isa = PBXGroup;
 			children = (
+				18311E5B2E72780E004962EE /* Model */,
 				181EE63E2B23512F0043817F /* ViewModel */,
 				181EE6442B23512F0043817F /* Controller */,
 				181EE64F2B23512F0043817F /* View */,
@@ -126,6 +186,8 @@
 		181EE63E2B23512F0043817F /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				18311E282E7275BA004962EE /* LanguageViewModel.swift */,
+				18311E292E7275BA004962EE /* MeViewModel.swift */,
 				181EE63F2B23512F0043817F /* NodeViewModel.swift */,
 				181EE6402B23512F0043817F /* MineSettingViewModel.swift */,
 				181EE6412B23512F0043817F /* PersonInfoViewModel.swift */,
@@ -138,8 +200,11 @@
 		181EE6442B23512F0043817F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				18311E202E7275B1004962EE /* IMSDKConfigViewController.swift */,
+				18311E212E7275B1004962EE /* LanguageViewController.swift */,
+				18311E222E7275B1004962EE /* PocLoginController.swift */,
+				18311E232E7275B1004962EE /* StyleSelectionViewController.swift */,
 				181EE6452B23512F0043817F /* MeViewController.swift */,
-				181EE6462B23512F0043817F /* NEAboutWebViewController.swift */,
 				181EE6472B23512F0043817F /* NELoginViewController.swift */,
 				181EE6482B23512F0043817F /* InputPersonInfoController.swift */,
 				181EE6492B23512F0043817F /* MineSettingViewController.swift */,
@@ -155,6 +220,8 @@
 		181EE64F2B23512F0043817F /* View */ = {
 			isa = PBXGroup;
 			children = (
+				18311E2C2E7275C5004962EE /* StyleSelectionCell.swift */,
+				18311E352E7275C5004962EE /* Theme */,
 				181EE6502B23512F0043817F /* MineTableViewCell.swift */,
 				181EE6512B23512F0043817F /* BirthdayDatePickerView.swift */,
 				181EE6522B23512F0043817F /* NodeSelectCell.swift */,
@@ -163,9 +230,52 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		18311E352E7275C5004962EE /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				18311E2D2E7275C5004962EE /* ArrowTitleCustomTeamSettingSwitchCell.swift */,
+				18311E2E2E7275C5004962EE /* CustomSettingInputCell.swift */,
+				18311E2F2E7275C5004962EE /* CustomSettingTextviewCell.swift */,
+				18311E302E7275C5004962EE /* CustomTeamArrowSettingCell.swift */,
+				18311E312E7275C5004962EE /* CustomTeamSettingHeaderCell.swift */,
+				18311E322E7275C5004962EE /* CustomTeamSettingRightCustomCell.swift */,
+				18311E332E7275C5004962EE /* CustomTeamSettingSubtitleCell.swift */,
+				18311E342E7275C5004962EE /* CustomTeamSettingSwitchCell.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		18311E4D2E727799004962EE /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				18311E412E727799004962EE /* AIChatDataLoader.swift */,
+				18311E422E727799004962EE /* CustomChatCell.swift */,
+				18311E432E727799004962EE /* CustomConfig.swift */,
+				18311E442E727799004962EE /* CustomContactTableViewCell.swift */,
+				18311E452E727799004962EE /* CustomContactViewController.swift */,
+				18311E462E727799004962EE /* CustomConversationController.swift */,
+				18311E472E727799004962EE /* CustomConversationListCell.swift */,
+				18311E482E727799004962EE /* CustomFunChatViewController.swift */,
+				18311E492E727799004962EE /* CustomNormalChatViewController.swift */,
+				18311E4A2E727799004962EE /* CustomP2PChatViewController.swift */,
+				18311E4B2E727799004962EE /* CustomView.swift */,
+				18311E4C2E727799004962EE /* NESecurityWarningView.swift */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
+		18311E5B2E72780E004962EE /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				18311E5A2E72780E004962EE /* CustomSettingCellModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		183776DE2D9E77BE005F4255 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
+				18311E1C2E7275A5004962EE /* IMSDKConfigManager.swift */,
 				183776DD2D9E77BE005F4255 /* DemoService.swift */,
 			);
 			path = Manager;
@@ -174,7 +284,8 @@
 		39A2F24128D9DF9100DDCAF2 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				39F793C727E20434007F63FF /* NENavigationController.swift */,
+				18311E5D2E727838004962EE /* UIStyleManager.swift */,
+				18311E3F2E727770004962EE /* Constant.swift */,
 				39A36F8028002CFF009B07A9 /* NETabBarController.swift */,
 				4B3B9BDE277AFEE50091A74E /* AppDelegate.swift */,
 				9EA2014027BE4B4800F8BBD0 /* AppKey.swift */,
@@ -204,6 +315,7 @@
 		4B3B9BDD277AFEE50091A74E /* IMQChatExample */ = {
 			isa = PBXGroup;
 			children = (
+				18311E4D2E727799004962EE /* Custom */,
 				183776DE2D9E77BE005F4255 /* Manager */,
 				181EE63D2B23512F0043817F /* Mine */,
 				39A2F24128D9DF9100DDCAF2 /* Main */,
@@ -225,7 +337,7 @@
 				18D0A2A828D5674400788205 /* CocoaLumberjack.framework */,
 				18D0A2A628D564DF00788205 /* CoreGraphics.framework */,
 				18D0A2A428D564CB00788205 /* UIKit.framework */,
-				10FFFA104023E20526C21D6D /* Pods_IMQChatExample.framework */,
+				385EDCF4BC308420AC98213C /* Pods_IMQChatExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -233,8 +345,8 @@
 		F552B53527F5CDE6D78E0094 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */,
-				D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */,
+				BF7630E706EC44153462B199 /* Pods-IMQChatExample.debug.xcconfig */,
+				C24D3E64FA40190C420BE9C0 /* Pods-IMQChatExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -246,13 +358,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4B3B9BEF277AFEE70091A74E /* Build configuration list for PBXNativeTarget "IMQChatExample" */;
 			buildPhases = (
-				9740DF6B83B63E65EE4A9825 /* [CP] Check Pods Manifest.lock */,
+				11782C380021DF07CD9392B1 /* [CP] Check Pods Manifest.lock */,
 				4B3B9BD7277AFEE50091A74E /* Sources */,
 				4B3B9BD8277AFEE50091A74E /* Frameworks */,
 				4B3B9BD9277AFEE50091A74E /* Resources */,
 				39722F9327998A14007BFC8B /* Embed Frameworks */,
-				2C8B365BAA9F409DC49C94CC /* [CP] Embed Pods Frameworks */,
-				137E50D1AD0E84C29605A298 /* [CP] Copy Pods Resources */,
+				890C60B82F323610B64D4A00 /* [CP] Embed Pods Frameworks */,
+				C0C2A664C0981B0597CF727E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -315,41 +427,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		137E50D1AD0E84C29605A298 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2C8B365BAA9F409DC49C94CC /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9740DF6B83B63E65EE4A9825 /* [CP] Check Pods Manifest.lock */ = {
+		11782C380021DF07CD9392B1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -371,6 +449,48 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		890C60B82F323610B64D4A00 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0C2A664C0981B0597CF727E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-IMQChatExample/Pods-IMQChatExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -380,11 +500,14 @@
 			files = (
 				181EE6632B23512F0043817F /* MineTableViewCell.swift in Sources */,
 				181EE6612B23512F0043817F /* ConfigTestViewController.swift in Sources */,
+				18311E5C2E72780E004962EE /* CustomSettingCellModel.swift in Sources */,
 				181EE6662B23512F0043817F /* VersionCell.swift in Sources */,
-				39F793C827E20434007F63FF /* NENavigationController.swift in Sources */,
 				181EE65C2B23512F0043817F /* InputPersonInfoController.swift in Sources */,
+				18311E1E2E7275A5004962EE /* IMSDKConfigManager.swift in Sources */,
 				181EE6592B23512F0043817F /* MeViewController.swift in Sources */,
 				181EE6622B23512F0043817F /* IntroduceBrandViewController.swift in Sources */,
+				18311E2A2E7275BA004962EE /* MeViewModel.swift in Sources */,
+				18311E2B2E7275BA004962EE /* LanguageViewModel.swift in Sources */,
 				181EE6552B23512F0043817F /* MineSettingViewModel.swift in Sources */,
 				9EA2014127BE4B4800F8BBD0 /* AppKey.swift in Sources */,
 				181EE6562B23512F0043817F /* PersonInfoViewModel.swift in Sources */,
@@ -392,13 +515,39 @@
 				4B3B9BE3277AFEE50091A74E /* ViewController.swift in Sources */,
 				39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */,
 				181EE6582B23512F0043817F /* IntroduceViewModel.swift in Sources */,
+				18311E4E2E727799004962EE /* CustomChatCell.swift in Sources */,
+				18311E4F2E727799004962EE /* CustomContactTableViewCell.swift in Sources */,
+				18311E502E727799004962EE /* CustomContactViewController.swift in Sources */,
+				18311E512E727799004962EE /* CustomConfig.swift in Sources */,
+				18311E522E727799004962EE /* CustomView.swift in Sources */,
+				18311E532E727799004962EE /* CustomConversationListCell.swift in Sources */,
+				18311E542E727799004962EE /* CustomConversationController.swift in Sources */,
+				18311E552E727799004962EE /* NESecurityWarningView.swift in Sources */,
+				18311E562E727799004962EE /* CustomNormalChatViewController.swift in Sources */,
+				18311E572E727799004962EE /* CustomP2PChatViewController.swift in Sources */,
+				18311E582E727799004962EE /* AIChatDataLoader.swift in Sources */,
+				18311E592E727799004962EE /* CustomFunChatViewController.swift in Sources */,
 				181EE6652B23512F0043817F /* NodeSelectCell.swift in Sources */,
-				181EE65A2B23512F0043817F /* NEAboutWebViewController.swift in Sources */,
+				18311E242E7275B1004962EE /* IMSDKConfigViewController.swift in Sources */,
+				18311E252E7275B1004962EE /* PocLoginController.swift in Sources */,
+				18311E262E7275B1004962EE /* LanguageViewController.swift in Sources */,
+				18311E272E7275B1004962EE /* StyleSelectionViewController.swift in Sources */,
 				181EE6542B23512F0043817F /* NodeViewModel.swift in Sources */,
 				181EE65F2B23512F0043817F /* NENodeViewController.swift in Sources */,
 				181EE6602B23512F0043817F /* PersonInfoViewController.swift in Sources */,
 				4B3B9BDF277AFEE50091A74E /* AppDelegate.swift in Sources */,
 				183776DF2D9E77BE005F4255 /* DemoService.swift in Sources */,
+				18311E362E7275C5004962EE /* CustomTeamSettingRightCustomCell.swift in Sources */,
+				18311E402E727770004962EE /* Constant.swift in Sources */,
+				18311E372E7275C5004962EE /* CustomTeamArrowSettingCell.swift in Sources */,
+				18311E382E7275C5004962EE /* StyleSelectionCell.swift in Sources */,
+				18311E392E7275C5004962EE /* ArrowTitleCustomTeamSettingSwitchCell.swift in Sources */,
+				18311E3A2E7275C5004962EE /* CustomTeamSettingSubtitleCell.swift in Sources */,
+				18311E5E2E727838004962EE /* UIStyleManager.swift in Sources */,
+				18311E3B2E7275C5004962EE /* CustomSettingTextviewCell.swift in Sources */,
+				18311E3C2E7275C5004962EE /* CustomTeamSettingHeaderCell.swift in Sources */,
+				18311E3D2E7275C5004962EE /* CustomSettingInputCell.swift in Sources */,
+				18311E3E2E7275C5004962EE /* CustomTeamSettingSwitchCell.swift in Sources */,
 				181EE65E2B23512F0043817F /* MessageRemindViewController.swift in Sources */,
 				181EE6642B23512F0043817F /* BirthdayDatePickerView.swift in Sources */,
 				181EE6572B23512F0043817F /* MessageRemindViewModel.swift in Sources */,
@@ -413,6 +562,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				39572AAC28C6F74D007A9526 /* en */,
+				18311E5F2E727A38004962EE /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -571,7 +721,7 @@
 		};
 		4B3B9BF0277AFEE70091A74E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9E7069411A7E30901E5E9943 /* Pods-IMQChatExample.debug.xcconfig */;
+			baseConfigurationReference = BF7630E706EC44153462B199 /* Pods-IMQChatExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -598,7 +748,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -607,10 +757,14 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.5.6;
+				MARKETING_VERSION = 10.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "IMQChatExample/IMUIKitExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -621,7 +775,7 @@
 		};
 		4B3B9BF1277AFEE70091A74E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D5757FFF2530367EF0005899 /* Pods-IMQChatExample.release.xcconfig */;
+			baseConfigurationReference = C24D3E64FA40190C420BE9C0 /* Pods-IMQChatExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -648,7 +802,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -657,10 +811,14 @@
 					"$(inherited)",
 					"$(SDKROOT)/usr/lib/swift",
 				);
-				MARKETING_VERSION = 9.5.6;
+				MARKETING_VERSION = 10.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.netease.yunxin.app.im;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "IMQChatExample/IMUIKitExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import NEChatUIKit
+import NECommonUIKit
 import NECoreKit
 import NETeamUIKit
 import UIKit
@@ -11,76 +12,82 @@ class IntroduceBrandViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
   private var viewModel = IntroduceViewModel()
 
+  /// 网易云信IM Logo
+  private lazy var headImageView: UIImageView = {
+    let imageView = UIImageView(image: UIImage(named: "yunxin_logo"))
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    imageView.accessibilityIdentifier = "id.aboutLogo"
+    return imageView
+  }()
+
+  /// 网易云信  文本
+  private lazy var headLabel: UILabel = {
+    let label = UILabel()
+    label.translatesAutoresizingMaskIntoConstraints = false
+    label.text = localizable("brand_des")
+    label.font = UIFont.systemFont(ofSize: 20.0)
+    label.textColor = UIColor(hexString: "333333")
+    label.accessibilityIdentifier = "id.aboutApp"
+    return label
+  }()
+
+  /// 内容列表控件
+  lazy var tableView: UITableView = {
+    let tableView = UITableView()
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.backgroundColor = .white
+    tableView.dataSource = self
+    tableView.delegate = self
+    tableView.separatorStyle = .none
+    tableView.register(VersionCell.self, forCellReuseIdentifier: "VersionCell")
+    tableView.keyboardDismissMode = .onDrag
+
+    tableView.estimatedRowHeight = 0
+    tableView.estimatedSectionHeaderHeight = 0
+    tableView.estimatedSectionFooterHeight = 0
+
+    if #available(iOS 15.0, *) {
+      tableView.sectionHeaderTopPadding = 0.0
+    }
+    return tableView
+  }()
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    title = NSLocalizedString("about_yunxin", comment: "")
-    navigationView.backgroundColor = .white
     viewModel.getData()
     setupSubviews()
   }
 
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-  }
-
+  /// UI 初始化
   func setupSubviews() {
-    view.addSubview(headImage)
+    view.addSubview(headImageView)
     view.addSubview(headLabel)
     view.addSubview(tableView)
-
+    navigationController?.navigationBar.backgroundColor = .white
+    navigationView.backgroundColor = .white
+    navigationView.moreButton.isHidden = true
     NSLayoutConstraint.activate([
-      headImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      headImage.topAnchor.constraint(
+      headImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      headImageView.topAnchor.constraint(
         equalTo: view.topAnchor,
         constant: topConstant + 20
       ),
-      headImage.widthAnchor.constraint(equalToConstant: 72),
-      headImage.heightAnchor.constraint(equalToConstant: 53),
+      headImageView.widthAnchor.constraint(equalToConstant: 72),
+      headImageView.heightAnchor.constraint(equalToConstant: 53),
     ])
 
     NSLayoutConstraint.activate([
-      headLabel.centerXAnchor.constraint(equalTo: headImage.centerXAnchor),
-      headLabel.topAnchor.constraint(equalTo: headImage.bottomAnchor, constant: 10),
+      headLabel.centerXAnchor.constraint(equalTo: headImageView.centerXAnchor),
+      headLabel.topAnchor.constraint(equalTo: headImageView.bottomAnchor, constant: 10),
     ])
 
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: headImage.bottomAnchor, constant: 45),
+      tableView.topAnchor.constraint(equalTo: headImageView.bottomAnchor, constant: 45),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
   }
-
-  // MARK: lazy method
-
-  private lazy var headImage: UIImageView = {
-    let image = UIImageView(image: UIImage(named: "yunxin_logo"))
-    image.translatesAutoresizingMaskIntoConstraints = false
-    return image
-  }()
-
-  private lazy var headLabel: UILabel = {
-    let label = UILabel()
-    label.translatesAutoresizingMaskIntoConstraints = false
-    label.text = NSLocalizedString("brand_des", comment: "")
-    label.font = UIFont.systemFont(ofSize: 20.0)
-    label.textColor = UIColor(hexString: "333333")
-    return label
-  }()
-
-  lazy var tableView: UITableView = {
-    let table = UITableView()
-    table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = .white
-    table.dataSource = self
-    table.delegate = self
-    table.separatorStyle = .none
-    table.register(VersionCell.self, forCellReuseIdentifier: "VersionCell")
-    if #available(iOS 15.0, *) {
-      table.sectionHeaderTopPadding = 0.0
-    }
-    return table
-  }()
 
   // MARK: UITableViewDelegate, UITableViewDataSource
 
@@ -95,7 +102,7 @@ class IntroduceBrandViewController: NEBaseViewController, UITableViewDelegate,
       for: indexPath
     ) as? VersionCell {
       cell.configData(model: model)
-      if indexPath.row == 0 {
+      if indexPath.row == 0 || indexPath.row == 1 {
         cell.cellType = .version
       } else {
         cell.cellType = .productIntroduce
@@ -106,8 +113,8 @@ class IntroduceBrandViewController: NEBaseViewController, UITableViewDelegate,
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    if indexPath.row == 1 {
-      let ctrl = NEAboutWebViewController(url: "https://netease.im/m/")
+    if indexPath.row == 2 {
+      let ctrl = NEWKWebViewController(url: "https://netease.im/m/", title: localizable("product_intro"))
       navigationController?.pushViewController(ctrl, animated: true)
     }
   }

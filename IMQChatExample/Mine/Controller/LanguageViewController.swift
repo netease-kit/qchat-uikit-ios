@@ -4,15 +4,17 @@
 // found in the LICENSE file.
 
 import NEChatUIKit
+import NECommonUIKit
 import NECoreKit
 import NETeamUIKit
 import UIKit
 
-class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
+class LanguageViewController: NEBaseViewController, UITableViewDelegate,
   UITableViewDataSource {
   public var cellClassDic =
-    [SettingCellType.SettingSwitchCell.rawValue: CustomTeamSettingSwitchCell.self]
-  private var viewModel = MessageRemindViewModel()
+    [SettingCellType.SettingSubtitleCustomCell.rawValue: CustomTeamSettingRightCustomCell.self]
+  private var viewModel = LanguageViewModel()
+  private var selectedModel: SettingCellModel?
 
   lazy var tableView: UITableView = {
     let tableView = UITableView()
@@ -44,14 +46,20 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
 
   /// 导航栏配置
   func initialConfig() {
-    title = localizable("message_remind")
+    title = localizable("app_language")
     if NEStyleManager.instance.isNormalStyle() {
       view.backgroundColor = .ne_backgroundColor
       navigationView.backgroundColor = .ne_backgroundColor
       navigationController?.navigationBar.backgroundColor = .ne_backgroundColor
+      navigationView.setMoreButtonTitle(localizable("save"))
+      navigationView.moreButton.setTitleColor(.ne_normalTheme, for: .normal)
     } else {
       view.backgroundColor = .funChatBackgroundColor
+      navigationView.setMoreButtonTitle(localizable("complete"))
+      navigationView.setMoreButtonWidth(NEAppLanguageUtil.getCurrentLanguage() == .english ? 80 : 34)
+      navigationView.moreButton.setTitleColor(.ne_funTheme, for: .normal)
     }
+    navigationView.addMoreButtonTarget(target: self, selector: #selector(saveButtonAction))
   }
 
   /// 页面主题元素初始化以及布局
@@ -70,7 +78,20 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
     for (key, value) in cellClassDic {
       tableView.register(value, forCellReuseIdentifier: "\(key)")
     }
-    navigationView.moreButton.isHidden = true
+  }
+
+  @objc func saveButtonAction() {
+    if let lan = selectedModel?.defaultHeadData,
+       let lanType = NEAppLanguage(rawValue: lan) {
+      NEAppLanguageUtil.setCurrentLanguage(lanType)
+      NotificationCenter.default.post(
+        name: NENotificationName.changeLanguage,
+        object: nil
+      )
+    } else {
+      showToast(commonLocalizable("failed_operation"))
+    }
+    navigationController?.popViewController(animated: true)
   }
 
   // MARK: UITableViewDelegate, UITableViewDataSource
@@ -100,11 +121,15 @@ class MessageRemindViewController: NEBaseViewController, UITableViewDelegate,
   }
 
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //        let model = viewModel.sectionData[indexPath.section].cellModels[indexPath.row]
-    //        if let block = model.cellClick {
-
-    //            block()
-    //        }
+    for (index, model) in viewModel.sectionData[indexPath.section].cellModels.enumerated() {
+      if index == indexPath.row {
+        model.rightCustomViewIcon = UIImage(named: "language_select")
+        selectedModel = model
+      } else {
+        model.rightCustomViewIcon = UIImage()
+      }
+    }
+    tableView.reloadData()
   }
 
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -4,7 +4,6 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
 import NETeamUIKit
 import UIKit
 
@@ -13,6 +12,27 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
   // 记录默认选中的cell
   private var selectIndex = 0
 
+  lazy var tableView: UITableView = {
+    let tableView = UITableView()
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.backgroundColor = .ne_lightBackgroundColor
+    tableView.dataSource = self
+    tableView.delegate = self
+    tableView.separatorColor = .clear
+    tableView.separatorStyle = .none
+    tableView.sectionHeaderHeight = 12.0
+    tableView.keyboardDismissMode = .onDrag
+
+    tableView.estimatedRowHeight = 0
+    tableView.estimatedSectionHeaderHeight = 0
+    tableView.estimatedSectionFooterHeight = 0
+
+    if #available(iOS 15.0, *) {
+      tableView.sectionHeaderTopPadding = 0.0
+    }
+    return tableView
+  }()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     viewModel.getData()
@@ -20,12 +40,14 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
   }
 
   func setupUI() {
-    title = NSLocalizedString("node_select", comment: "")
+    title = localizable("node_select")
+    navigationView.backgroundColor = .ne_lightBackgroundColor
+
     view.addSubview(tableView)
     NSLayoutConstraint.activate([
       tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
       tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant),
+      tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: NEConstant.navigationAndStatusHeight),
       tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
     ])
 
@@ -37,37 +59,22 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
 
   private func showAlert(_ isDomestic: Bool) {
     let alertController = UIAlertController(
-      title: NSLocalizedString("change_node", comment: ""),
-      message: NSLocalizedString("restart_take_effect", comment: ""),
+      title: localizable("change_node"),
+      message: localizable("restart_take_effect"),
       preferredStyle: .alert
     )
 
-    let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .default) { action in
+    let cancelAction = UIAlertAction(title: commonLocalizable("cancel"), style: .default) { action in
     }
     alertController.addAction(cancelAction)
-    let sureAction = UIAlertAction(title: NSLocalizedString("restart", comment: ""), style: .default) { action in
+    let sureAction = UIAlertAction(title: localizable("exit"), style: .default) { action in
       // 设置节点
-      QChatKitClient.instance.getSettingRepo().setNodeValue(isDomestic)
+      SettingRepo.shared.setNodeValue(isDomestic)
       exit(0)
     }
     alertController.addAction(sureAction)
     present(alertController, animated: true, completion: nil)
   }
-
-  lazy var tableView: UITableView = {
-    let table = UITableView()
-    table.translatesAutoresizingMaskIntoConstraints = false
-    table.backgroundColor = .ne_lightBackgroundColor
-    table.dataSource = self
-    table.delegate = self
-    table.separatorColor = .clear
-    table.separatorStyle = .none
-    table.sectionHeaderHeight = 12.0
-    if #available(iOS 15.0, *) {
-      table.sectionHeaderTopPadding = 0.0
-    }
-    return table
-  }()
 
   // MARK: UITableViewDataSource, UITableViewDelegate
 
@@ -117,8 +124,8 @@ class NENodeViewController: NEBaseViewController, UITableViewDataSource, UITable
   }
 
   func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-    let header = UIView()
-    header.backgroundColor = .ne_lightBackgroundColor
-    return header
+    let headerView = UIView()
+    headerView.backgroundColor = .ne_lightBackgroundColor
+    return headerView
   }
 }

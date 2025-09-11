@@ -2,17 +2,15 @@
 
 module YXConfig
   def self.imuikit_version
-    "9.7.4"
-#    "10.6.2"
+   "10.8.6"
   end
 
   def self.qchatkit_version
-    "9.5.6"
-#    "10.0.0"
+   "10.0.1"
   end
 
   def self.deployment_target
-    "12.0"
+    "13.0"
   end
 
   def self.swift_version
