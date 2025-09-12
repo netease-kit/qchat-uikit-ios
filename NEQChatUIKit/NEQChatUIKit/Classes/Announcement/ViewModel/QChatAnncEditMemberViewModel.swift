@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 public protocol QChatAnncEditMemberViewModelDelegate: NSObjectProtocol {
   func didClickRemoveAdmin()

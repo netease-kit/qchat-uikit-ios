@@ -2,10 +2,9 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public protocol QChatAnncManagerViewModelDelegate: NSObjectProtocol {
@@ -38,7 +37,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
 
   public func inviteMembersToServer(serverId: UInt64, accids: [String],
                                     _ completion: @escaping (NSError?, [String]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     let param = NEQChatInviteServerMembersParam(serverId: serverId, accids: accids)
 
     repo.inviteMembersToServerWithResult(param: param) { error, failedIds, bandedFialedIds in
@@ -116,7 +115,6 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
 
     var isNoMoreData = false
     repo.getServerMembers(param) { [weak self] error, members in
-
       if error == nil {
         if members.count < self?.limit ?? 0 {
           isNoMoreData = true
@@ -161,7 +159,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
       } else {
         completion(error as NSError?, nil, isNoMoreData)
         print("getServerMembersByPage failed,error = \(error!)")
-        NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + ", CALLBACK FAILED, error:" + error!.localizedDescription)
+        NEALog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + ", CALLBACK FAILED, error:" + error!.localizedDescription)
       }
     }
   }
@@ -199,14 +197,14 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   }
 
   func reloadNormalMember(_ serverId: UInt64?, _ roleId: UInt64?, _ owner: String?, _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(className(), desc: "reloadNormalMember rid : \(roleId ?? 0)")
+    NEALog.infoLog(className(), desc: "reloadNormalMember rid : \(roleId ?? 0)")
     getMemberWithRoles(serverId, 0) { [weak self] error, members, isNoMoreData in
-      NELog.infoLog(self?.className() ?? "", desc: "reloadNormalMember members \(members?.count ?? 0)")
+      NEALog.infoLog(self?.className() ?? "", desc: "reloadNormalMember members \(members?.count ?? 0)")
       if let err = error {
         completion(err as NSError)
       } else {
         if let rid = roleId {
-          NELog.infoLog(self?.className() ?? "", desc: "reloadNormalMember rid \(rid)")
+          NEALog.infoLog(self?.className() ?? "", desc: "reloadNormalMember rid \(rid)")
           self?.normalMembers.removeAll()
           members?.forEach { member in
             if member.accid == owner {
@@ -219,7 +217,7 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
               }
             }
             if findRoleid == false {
-              NELog.infoLog(self?.className() ?? "", desc: "add normal member \(member)")
+              NEALog.infoLog(self?.className() ?? "", desc: "add normal member \(member)")
               self?.normalMembers.append(member)
             }
           }
@@ -304,14 +302,14 @@ public class QChatAnncManagerViewModel: NSObject, NIMQChatMessageManagerDelegate
   public func addMemberRole(_ serverId: UInt64?, _ channelId: UInt64?, _ accid: String?) {
     let param = NEQChatAddMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
     repo.addMemberRole(param: param) { [weak self] error, memberRole in
-      NELog.infoLog(self?.className() ?? "", desc: "add member role error : \(error?.localizedDescription ?? "")")
+      NEALog.infoLog(self?.className() ?? "", desc: "add member role error : \(error?.localizedDescription ?? "")")
     }
   }
 
   public func removeMemberRole(_ serverId: UInt64?, _ channelId: UInt64?, _ accid: String?) {
     let param = NEQChatRemoveMemberRoleParam(serverId: serverId, channelId: channelId, accid: accid)
     repo.removeMemberRole(param: param) { [weak self] error in
-      NELog.infoLog(self?.className() ?? "", desc: "remove member role error : \(error?.localizedDescription ?? "")")
+      NEALog.infoLog(self?.className() ?? "", desc: "remove member role error : \(error?.localizedDescription ?? "")")
     }
   }
 

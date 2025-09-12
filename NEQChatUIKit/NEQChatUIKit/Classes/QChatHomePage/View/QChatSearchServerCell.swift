@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -43,7 +43,7 @@ class QChatSearchServerCell: UITableViewCell {
 
       if serverModel?.announce != nil {
         repo.getServerMemberList(parameter: param) { error, membersResult in
-          NELog.infoLog(
+          NEALog.infoLog(
             self.className,
             desc: "CALLBACK getServerMemberList " + (error?.localizedDescription ?? "no error")
           )
@@ -84,7 +84,7 @@ class QChatSearchServerCell: UITableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override func draw(_ rect: CGRect) {
@@ -230,7 +230,7 @@ extension QChatSearchServerCell {
     }
 
     repo.applyServerJoin(parameter: param) { [self] error in
-      NELog.infoLog(
+      NEALog.infoLog(
         className,
         desc: "CALLBACK applyServerJoin " + (error?.localizedDescription ?? "no error")
       )

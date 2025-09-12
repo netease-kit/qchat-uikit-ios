@@ -5,7 +5,7 @@
 
 import Foundation
 @_exported import NECommonUIKit
-@_exported import NECoreIMKit
+@_exported import NECoreIM2Kit
 @_exported import NECoreKit
 
 let coreLoader = CoreLoader<QChatBaseViewController>()

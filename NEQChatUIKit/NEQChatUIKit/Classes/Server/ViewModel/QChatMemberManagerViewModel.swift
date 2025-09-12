@@ -4,7 +4,6 @@
 
 import CoreMedia
 import Foundation
-import NECoreQChatKit
 import NEQChatKit
 
 @objcMembers
@@ -22,7 +21,7 @@ public class QChatMemberManagerViewModel: NSObject {
   override init() {}
 
   func getData(_ sid: UInt64?, _ rid: UInt64?, _ refresh: Bool = false) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", sid:\(sid ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", sid:\(sid ?? 0)")
     var param = NEQChatGetServerRoleMembersParam()
     param.limit = limit
     param.serverId = sid
@@ -59,7 +58,7 @@ public class QChatMemberManagerViewModel: NSObject {
 
   func addMembers(_ users: [QChatUserInfo], _ serverId: UInt64?, _ roleId: UInt64?,
                   _ completion: @escaping (Int) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", users.count:\(users.count)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", users.count:\(users.count)")
     var param = NEQChatAddServerRoleMemberParam()
     param.serverId = serverId
     param.roleId = roleId
@@ -101,7 +100,7 @@ public class QChatMemberManagerViewModel: NSObject {
 
   func remove(_ user: QChatUserInfo, _ serverId: UInt64?, _ rid: UInt64?,
               _ completion: @escaping (Int) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
     var param = NEQChatRemoveServerRoleMemberParam()
     param.serverId = serverId
     param.roleId = rid

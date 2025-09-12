@@ -8,7 +8,16 @@ import UIKit
 
 @objcMembers
 open class QChatBaseViewController: UIViewController, UIGestureRecognizerDelegate {
-  public var topConstant: CGFloat = 0
+  public var topConstant: CGFloat = 0 {
+    didSet {
+      navigationViewHeightAnchor?.constant = topConstant
+    }
+  }
+
+  // 自定义导航栏高度布局约束
+  public var navigationViewHeightAnchor: NSLayoutConstraint?
+
+  // 自定义导航栏
   public let navigationView = NENavigationView()
 
   override open var title: String? {
@@ -22,27 +31,45 @@ open class QChatBaseViewController: UIViewController, UIGestureRecognizerDelegat
     }
   }
 
-  override open func viewDidLoad() {
-    super.viewDidLoad()
-    view.backgroundColor = .white
-    navigationController?.interactivePopGestureRecognizer?.delegate = self
+  override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+  }
+
+  public required init?(coder: NSCoder) {
+    super.init(coder: coder)
+  }
+
+  override open func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
 
     if let useSystemNav = NEConfigManager.instance.getParameter(key: useSystemNav) as? Bool, useSystemNav {
       navigationController?.isNavigationBarHidden = false
-      topConstant = 0
+      navigationView.removeFromSuperview()
       setupBackUI()
     } else {
       navigationController?.isNavigationBarHidden = true
+    }
+  }
+
+  override open func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .white
+
+    if let useSystemNav = NEConfigManager.instance.getParameter(key: useSystemNav) as? Bool, useSystemNav {
+      topConstant = NEConstant.navigationAndStatusHeight
+    } else {
       topConstant = NEConstant.navigationAndStatusHeight
       navigationView.translatesAutoresizingMaskIntoConstraints = false
       navigationView.addBackButtonTarget(target: self, selector: #selector(backEvent))
       navigationView.moreButton.isHidden = true
+
       view.addSubview(navigationView)
+      navigationViewHeightAnchor = navigationView.heightAnchor.constraint(equalToConstant: topConstant)
+      navigationViewHeightAnchor?.isActive = true
       NSLayoutConstraint.activate([
         navigationView.leftAnchor.constraint(equalTo: view.leftAnchor),
         navigationView.rightAnchor.constraint(equalTo: view.rightAnchor),
         navigationView.topAnchor.constraint(equalTo: view.topAnchor),
-        navigationView.heightAnchor.constraint(equalToConstant: topConstant),
       ])
     }
   }
@@ -64,5 +91,18 @@ open class QChatBaseViewController: UIViewController, UIGestureRecognizerDelegat
 
   open func backEvent() {
     navigationController?.popViewController(animated: true)
+  }
+
+  open func addLeftSwipeDismissGesture() {
+    // 侧滑返回（根视图）
+    let gestureRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(swipeDismiss))
+    gestureRecognizer.edges = .left
+    view.addGestureRecognizer(gestureRecognizer)
+  }
+
+  open func swipeDismiss(_ gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
+    if gestureRecognizer.state == .ended {
+      navigationController?.dismiss(animated: true, completion: nil)
+    }
   }
 }

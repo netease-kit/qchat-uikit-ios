@@ -4,7 +4,7 @@
 
 import AVFoundation
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objcMembers
@@ -20,7 +20,7 @@ public class QChatIdGroupSortViewModel: NSObject {
   var isOwner = false
 
   func getData(_ serverId: UInt64?) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
     var param = NEQChatGetServerRoleParam()
     param.limit = 200
     param.serverId = serverId
@@ -36,7 +36,7 @@ public class QChatIdGroupSortViewModel: NSObject {
   }
 
   func filterData(_ roles: [NEQChatServerRole]?, _ sets: Set<NSNumber>?) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", roles.count:\(roles?.count ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", roles.count:\(roles?.count ?? 0)")
     weak var weakSelf = self
     roles?.forEach { role in
       if role.type == .everyone {
@@ -59,7 +59,7 @@ public class QChatIdGroupSortViewModel: NSObject {
 
   func removeRole(_ serverId: UInt64?, _ roleId: UInt64?, _ model: QChatIdGroupModel,
                   _ completion: @escaping () -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
     var param = NEQChatDeleteServerRoleParam()
     param.serverId = serverId
     param.roleId = roleId
@@ -76,7 +76,7 @@ public class QChatIdGroupSortViewModel: NSObject {
   }
 
   func saveSort(_ serverId: UInt64?, _ completion: @escaping () -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId ?? 0)")
     var startIndex = 0
 
     var startSort = false

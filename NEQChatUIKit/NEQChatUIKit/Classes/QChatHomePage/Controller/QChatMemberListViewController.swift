@@ -5,10 +5,9 @@
 
 import NECommonKit
 import NECoreKit
-import NECoreQChatKit
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public class QChatMemberListViewController: NEBaseViewController, UITableViewDelegate,
@@ -36,7 +35,7 @@ public class QChatMemberListViewController: NEBaseViewController, UITableViewDel
     let param = NEQChatGetServerMembersByPageParam(timeTag: 0, serverId: id)
     weak var weakSelf = self
     memberViewModel.requestServerMemebersByPage(param: param) { error, serverMemberArray in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.className,
         desc: "CALLBACK requestServerMemebersByPage " +
           (error?.localizedDescription ?? "no error")
@@ -101,7 +100,7 @@ public class QChatMemberListViewController: NEBaseViewController, UITableViewDel
           guard let serverId = self?.serverId else { return }
           self?.serverViewModel
             .inviteMembersToServer(serverId: serverId, accids: userIds) { error in
-              NELog.infoLog(
+              NEALog.infoLog(
                 ModuleName + " " + (self?.className ?? "QChatMemberListViewController"),
                 desc: "CALLBACK inviteMembersToServer " +
                   (error?.localizedDescription ?? "no error")
@@ -143,7 +142,7 @@ public class QChatMemberListViewController: NEBaseViewController, UITableViewDel
       }
 
     //        FIXME: router
-    //        let contactCtrl = ContactsSelectedViewController()
+    //        let contactCtrl = ContactSelectedViewController()
     //        self.navigationController?.pushViewController(contactCtrl, animated: true)
     //        weak var weakSelf = self
     //

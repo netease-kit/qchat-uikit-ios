@@ -7,15 +7,15 @@ import MJRefresh
 import NECommonKit
 import NECommonUIKit
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 @objcMembers
 public class QChatViewController: QChatBaseViewController, UINavigationControllerDelegate,
-                                  QChatInputViewDelegate, QChatViewModelDelegate, UITableViewDataSource, UITableViewDelegate, NIMMediaManagerDelegate, QChatMessageOperationViewDelegate, QChatAnncSettingViewControllerDelegate, UIImagePickerControllerDelegate {
+  QChatInputViewDelegate, QChatViewModelDelegate, UITableViewDataSource, UITableViewDelegate, NIMMediaManagerDelegate, QChatMessageOperationViewDelegate, QChatAnncSettingViewControllerDelegate, UIImagePickerControllerDelegate {
   private var viewmodel: QChatViewModel?
 
   // 公告频道对应的 server，非公告频道时为 nil
@@ -52,7 +52,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func viewWillAppear(_ animated: Bool) {
@@ -127,7 +127,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
   }()
 
   deinit {
-    NELog.infoLog(ModuleName + " " + self.className(), desc: "✅ QChatViewController release")
+    NEALog.infoLog(ModuleName + " " + self.className(), desc: "✅ QChatViewController release")
     NIMSDK.shared().mediaManager.remove(self)
   }
 
@@ -325,7 +325,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
     if NEChatDetectNetworkTool.shareInstance.manager?.isReachable == false {
       viewmodel?.getMessageHistory { [weak self] error in
         if let err = error {
-          NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: "CALLBACK error:\(err)")
+          NEALog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: "CALLBACK error:\(err)")
         } else {
           if let time = self?.viewmodel?.messages.first?.message?.timestamp {
             self?.viewmodel?.markMessageRead(time: time)
@@ -345,7 +345,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
 
   func loadMoreData(_ isBottom: Bool = false) {
     viewmodel?.getMoreMessageHistory { [weak self] error in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className() ?? ""),
         desc: "CALLBACK getMoreMessageHistory " + (error?.localizedDescription ?? "no error")
       )
@@ -503,12 +503,12 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
   // MARK: QChatmenuViewDelegate
 
   public func sendText(text: String?) {
-    NELog.infoLog(ModuleName + " " + className(), desc: "sendText:\(text ?? "")")
+    NEALog.infoLog(ModuleName + " " + className(), desc: "sendText:\(text ?? "")")
     guard let content = text, content.count > 0 else {
       return
     }
     viewmodel?.sendTextMessage(text: content) { [weak self] error in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className() ?? "QChatViewController"),
         desc: "CALLBACK sendTextMessage " + (error?.localizedDescription ?? "no error")
       )
@@ -535,13 +535,13 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
         layoutInputView(offset: 204)
         scrollTableViewToBottom()
       } else if index == 2 {
-        showBottomAlert(self, false, false,  { [weak self] in
+        showBottomAlert(self, false, false) { [weak self] in
           if NIMSDK.shared().mediaManager.isPlaying() {
             NIMSDK.shared().mediaManager.stopPlay()
             self?.playAudioCell?.stopAnimation()
             self?.playAudioModel?.isPlaying = false
           }
-        })
+        }
       } else if index == 3 {
         layoutInputView(offset: 204)
         scrollTableViewToBottom()
@@ -576,7 +576,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
     }
     // 发送消息
     viewmodel?.sendImageMessage(image: image) { [weak self] error in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className() ?? "QChatViewController"),
         desc: "CALLBACK sendImageMessage " + (error?.localizedDescription ?? "no error")
       )
@@ -920,7 +920,7 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
     print("dur:\(dur)")
     if dur > 1 {
       viewmodel?.sendAudioMessage(path: fp) { [weak self] error in
-        NELog.infoLog(
+        NEALog.infoLog(
           ModuleName + " " + (self?.className() ?? ""),
           desc: "CALLBACK sendAudioMessage " + (error?.localizedDescription ?? "no error")
         )
@@ -986,7 +986,7 @@ extension QChatViewController: QChatBaseCellDelegate {
 
   /// 头像单击手势
   func didClickHeader(_ message: NIMQChatMessage) {
-    if QChatKitClient.instance.isMySelf(message.from) == true {
+    if QChatKitClient.instance.isMe(message.from) == true {
       Router.shared.use(
         MeSettingRouter,
         parameters: ["nav": navigationController as Any],
@@ -1242,7 +1242,7 @@ extension QChatViewController: QChatBaseCellDelegate {
     if let text = viewmodel?.operationModel?.message?.text {
       let pasteboard = UIPasteboard.general
       pasteboard.string = text
-      view.makeToast(localizable("copy_success"), duration: 2, position: .center)
+      showToast(commonLocalizable("copy_success"))
     }
   }
 

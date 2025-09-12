@@ -7,10 +7,9 @@ import Foundation
 import MJRefresh
 import NECommonKit
 import NECommonUIKit
-import NECoreQChatKit
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 @objc
@@ -197,7 +196,7 @@ open class QChatHomeViewController: UIViewController, ViewModelDelegate {
     let param = NEQChatGetServersByPageParam(timeTag: timeTag, limit: 50)
     weak var weakSelf = self
     serverViewModel.getServerList(parameter: param) { error, servers in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.className,
         desc: "CALLBACK getServerList " + (error?.localizedDescription ?? "no error")
       )
@@ -421,7 +420,7 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
   }
 
   func createDefaultChannel(serverId: UInt64) {
-    NELog.infoLog(ModuleName + " " + className, desc: "noti create server id:\(serverId), controller: \(self)")
+    NEALog.infoLog(ModuleName + " " + className, desc: "noti create server id:\(serverId), controller: \(self)")
 
     weak var weakSelf = self
     let viewModel = QChatChannelViewModel(serverId: serverId)
@@ -429,22 +428,22 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
     let className = className()
     viewModel.createChannel { error, channel in
       if let err = error {
-        NELog.errorLog(
+        NEALog.errorLog(
           ModuleName + " " + className,
           desc: "createChannel second_channel failed，error = \(err)"
         )
       } else {
-        NELog.infoLog(ModuleName + " " + className, desc: "✅CALLBACK second_channel create success, serverId: \(serverId)")
+        NEALog.infoLog(ModuleName + " " + className, desc: "✅CALLBACK second_channel create success, serverId: \(serverId)")
         viewModel.name = localizable("first_channel")
 
         viewModel.createChannel { error, channel in
           if let err = error {
-            NELog.errorLog(
+            NEALog.errorLog(
               ModuleName + " " + className,
               desc: "createChannel first_channel failed，error = \(err)"
             )
           } else {
-            NELog.infoLog(ModuleName + " " + className, desc: "✅CALLBACK first_channel create success, serverId: \(serverId)")
+            NEALog.infoLog(ModuleName + " " + className, desc: "✅CALLBACK first_channel create success, serverId: \(serverId)")
             weakSelf?.enterChatVC(channel: channel)
           }
         }
@@ -469,7 +468,7 @@ extension QChatHomeViewController: UITableViewDelegate, UITableViewDataSource {
   }
 
   private func enterChatVC(channel: NEQChatChatChannel?, _ isVisitorMode: Bool = false) {
-    NELog.infoLog(ModuleName + " " + className(), desc: "[enterChatVC], navigationController:\(String(describing: navigationController))")
+    NEALog.infoLog(ModuleName + " " + className(), desc: "[enterChatVC], navigationController:\(String(describing: navigationController))")
 
     let chatVC = QChatViewController(channel: channel)
     chatVC.isVisitorMode = isVisitorMode
@@ -537,7 +536,6 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
           self.requestData(timeTag: 0)
         }
       case .serverMemberApplyDone, .serverCreate, .serverRemove, .serverMemberLeave:
-
         if systemNotification.type == .serverRemove {
           dealServerData(systemNotification: systemNotification)
           self.requestData(timeTag: 0)
@@ -570,7 +568,6 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
           }
         }
       case .serverUpdate:
-
         guard let attach = systemNotification.attach as? NIMQChatUpdateServerAttachment, let imServer = attach.server else {
           return
         }
@@ -625,7 +622,7 @@ extension QChatHomeViewController: NIMQChatMessageManagerDelegate {
     let param = NEQChatGetServersParam(serverIds: [NSNumber(value: targetServerId)])
     weak var weakSelf = self
     serverViewModel.getServers(parameter: param) { error, result in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.className,
         desc: "CALLBACK getServers " + (error?.localizedDescription ?? "no error")
       )

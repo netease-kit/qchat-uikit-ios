@@ -3,7 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
+import NEQChatKit
 import UIKit
 
 protocol QChatPermissionSettingCellDelegate: AnyObject {
@@ -145,6 +145,6 @@ class QChatPermissionSettingCell: QChatCornerCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 }

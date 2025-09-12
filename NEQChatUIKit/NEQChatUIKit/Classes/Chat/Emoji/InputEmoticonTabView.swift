@@ -3,7 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreIMKit
+import NECoreIM2Kit
 import UIKit
 
 @objc public protocol InputEmoticonTabViewDelegate: NSObjectProtocol {
@@ -22,7 +22,7 @@ public class InputEmoticonTabView: UIControl {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   func setUpSubViews() {
@@ -54,7 +54,7 @@ public class InputEmoticonTabView: UIControl {
     seps.removeAll()
 
     guard let catalogs = emoticonCatalogs else {
-      NELog.errorLog(className, desc: "❌emoticonCatalogs is nil")
+      NEALog.errorLog(className, desc: "❌emoticonCatalogs is nil")
       return
     }
     for catelog in catalogs {

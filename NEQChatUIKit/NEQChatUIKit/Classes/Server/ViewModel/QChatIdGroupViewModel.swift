@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 typealias IdGroupViewModelBlock = () -> Void
 
@@ -40,7 +40,7 @@ public class QChatIdGroupViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   func getRoles(_ serverId: UInt64?, _ refresh: Bool = false, _ block: IdGroupViewModelBlock?) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
     var param = NEQChatGetServerRoleParam()
     param.serverId = serverId
     param.limit = limitCount
@@ -64,7 +64,7 @@ public class QChatIdGroupViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   func parseData(_ roles: [NEQChatServerRole], _ refresh: Bool) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", roles.count:\(roles.count)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", roles.count:\(roles.count)")
     var models = [QChatIdGroupModel]()
     for role in roles {
       print("get data proprity : ", role.priority as Any)
@@ -78,7 +78,7 @@ public class QChatIdGroupViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   func filterData(_ models: [QChatIdGroupModel], _ refresh: Bool) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", models.count:\(models.count)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", models.count:\(models.count)")
     if refresh == true {
       topDatas.removeAll()
       datas.removeAll()

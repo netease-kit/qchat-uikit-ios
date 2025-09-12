@@ -4,9 +4,9 @@
 // found in the LICENSE file.
 
 import MJRefresh
-import NECoreQChatKit
-import NIMSDK
+import NEQChatKit
 import NIMQChat
+import NIMSDK
 import UIKit
 
 class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
@@ -47,7 +47,7 @@ class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override func draw(_ rect: CGRect) {
@@ -254,7 +254,7 @@ extension QChatHomeChannelView {
     guard let serverId = qchatServerModel?.serverId else { return }
     channelViewModel.getChannelsByPage(serverId, timeTag) { [self] error, result in
       if error == nil {
-        NELog.infoLog(className(), desc: "✅CALLBACK getChannelsByPage SUCCESS")
+        NEALog.infoLog(className(), desc: "✅CALLBACK getChannelsByPage SUCCESS")
         var dataArray = [NEQChatChatChannel]()
         if let retArray = result?.channels {
           dataArray.append(contentsOf: retArray)
@@ -263,7 +263,7 @@ extension QChatHomeChannelView {
           channelArray.removeAll()
           channelArray = dataArray
           if dataArray.isEmpty {
-            emptyView.settingContent(content: localizable("server_nochannel"))
+            emptyView.setText(localizable("server_nochannel"))
             emptyView.setEmptyImage(image: UIImage.ne_imageNamed(name: "channel_noMoreData"))
             emptyView.isHidden = false
           } else {
@@ -286,7 +286,7 @@ extension QChatHomeChannelView {
           nextTimeTag = result?.nextTimetag ?? 0
         }
       } else {
-        NELog.errorLog(className(), desc: "❌CALLBACK getChannelsByPage failed,error = \(error!)")
+        NEALog.errorLog(className(), desc: "❌CALLBACK getChannelsByPage failed,error = \(error!)")
       }
     }
   }
@@ -300,7 +300,7 @@ extension QChatHomeChannelView {
     subTitleLabel.isHidden = true
     addChannelBtn.isHidden = true
     emptyView.isHidden = false
-    emptyView.settingContent(content: localizable("add_favorite_service"))
+    emptyView.setText(localizable("add_favorite_service"))
     emptyView.setEmptyImage(image: UIImage.ne_imageNamed(name: "servers_noMore"))
   }
 
@@ -367,7 +367,7 @@ extension QChatHomeChannelView: UITableViewDataSource, UITableViewDelegate {
 
   public func tableView(_ tableView: UITableView,
                         heightForRowAt indexPath: IndexPath) -> CGFloat {
-    NELog.infoLog(className() + " heightForRowAt ", desc: "index row : \(indexPath.row) index section : \(indexPath.section)")
+    NEALog.infoLog(className() + " heightForRowAt ", desc: "index row : \(indexPath.row) index section : \(indexPath.section)")
     if let cid = channelArray[indexPath.row].channelId, channelViewModel.lastMsgDic[cid] != nil {
       return 52.0
     }

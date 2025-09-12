@@ -4,10 +4,10 @@
 
 import Foundation
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 @objc
 public protocol QChatViewModelDelegate: NSObjectProtocol {
@@ -32,7 +32,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public var operationModel: QChatMessageFrame?
 
   init(channel: NEQChatChatChannel?, server: NEQChatServer?) {
-    NELog.infoLog(ModuleName + " " + QChatViewModel.className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + QChatViewModel.className(), desc: #function)
     super.init()
     self.channel = channel
     self.server = server
@@ -44,7 +44,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func sendTextMessage(text: String, _ completion: @escaping (Error?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", text.count:\(text.count)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", text.count:\(text.count)")
     if text.count <= 0 {
       return
     }
@@ -62,7 +62,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func sendImageMessage(image: UIImage, _ completion: @escaping (Error?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
       let message = NIMQChatMessage()
       message.messageObject = NIMImageObject(image: image)
@@ -92,7 +92,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   // 查询本地消息
   public func getMessageHistory(_ completion: @escaping (Error?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
       let param = NIMQChatGetMessageCacheParam()
       param.serverId = sid
@@ -131,7 +131,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func getMoreMessageHistory(_ completion: @escaping (Error?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
       var param = NEQChatGetMessageHistoryParam(serverId: sid, channelId: cid)
       param.lastMsg = lastMsg
@@ -156,7 +156,6 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
             }
 
             self?.getUserInfo(userIds: userIds) { error in
-
               let chunkMessages = messageArray.chunk(20)
 
               for chunkMessage in chunkMessages {
@@ -194,29 +193,55 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   public func getUserInfo(userIds: [String],
                           _ completion: @escaping (Error?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messages.count:\(messages.count)")
-    FriendProvider.shared.getUserInfoAdvanced(userIds: userIds) { userInfoList, error in
-      for msg in self.messages {
-        for u in userInfoList {
-          if msg.message?.from == u.userId {
-            msg.avatar = u.userInfo?.thumbAvatarUrl
-            msg.nickname = u.userInfo?.nickName
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messages.count:\(messages.count)")
+    FriendProvider.shared.getFriendByIds(accountIds: userIds) { friends, error in
+      if let friends = friends {
+        var noFriendIds = [String]()
+        for msg in self.messages {
+          for u in friends {
+            if msg.message?.from == u.accountId {
+              msg.avatar = u.userProfile?.avatar
+              msg.nickname = u.alias
+              continue
+            }
+          }
+
+          if let sender = msg.message?.from {
+            noFriendIds.append(sender)
           }
         }
+
+        if !noFriendIds.isEmpty {
+          UserProvider.shared.getUserList(accountIds: noFriendIds) { users, error in
+            if let users = users {
+              for msg in self.messages {
+                for u in users {
+                  if msg.message?.from == u.accountId {
+                    msg.avatar = u.avatar
+                    msg.nickname = u.name
+                    continue
+                  }
+                }
+              }
+            }
+            completion(error?.nserror as? NSError)
+          }
+        } else {
+          completion(error?.nserror as? NSError)
+        }
       }
-      completion(error)
     }
   }
 
   public func markMessageRead(time: TimeInterval) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     if let cid = channel?.channelId, let sid = channel?.serverId {
       var param = NEQChatMarkMessageReadParam(serverId: sid, channelId: cid)
       param.ackTimestamp = time
       weak var weakSelf = self
       QChatSystemMessageProvider.shared.markMessageRead(param: param) { error in
         if error != nil {
-          NELog.errorLog(
+          NEALog.errorLog(
             ModuleName + " " + (weakSelf?.className() ?? "QChatViewModel"),
             desc: "❌markMessageRead failed,error = \(error!)"
           )
@@ -309,7 +334,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   func deleteMessageUpdateUI(_ message: NIMQChatMessage) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId: " + message.messageId)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId: " + message.messageId)
     let index = indexOfMessage(message: message)
     if index >= 0 {
       messages.remove(at: index)
@@ -318,7 +343,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   func revokeMessageUpdateUI(_ message: NIMQChatMessage) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId: " + message.messageId)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId: " + message.messageId)
     let index = indexOfMessage(message: message)
     if index >= 0 {
       messages[index].isRevoked = true
@@ -420,7 +445,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   /// 查询成员是否是管理员
   func isAdmistrator(serverId: UInt64?, accid: String?, completion: @escaping (Bool) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(String(describing: serverId)) accid:\(String(describing: accid))")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(String(describing: serverId)) accid:\(String(describing: accid))")
     guard let serverId = serverId,
           let accid = accid else {
       return
@@ -429,7 +454,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
     let param = NEQChatGetExistingAccidsInServerRoleParam(serverId: serverId, accids: [accid])
     repo.getExistingServerRolesByAccids(param) { [weak self] error, serverRoles in
       if let err = error {
-        NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + "getServerRolesByAccId CALLBACK ERROR:\(err.localizedDescription)")
+        NEALog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + "getServerRolesByAccId CALLBACK ERROR:\(err.localizedDescription)")
       } else if let roles = serverRoles?[accid] {
         for role in roles {
           if role.roleId == self?.server?.announce?.roleId?.uint64Value {
@@ -447,7 +472,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   //    MARK: NIMChatManagerDelegate
 
   public func onRecvMessages(_ messages: [NIMQChatMessage]) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messages.count:\(messages.count)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messages.count:\(messages.count)")
     if lastMsg == nil {
       lastMsg = messages.first
     }
@@ -516,7 +541,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func willSend(_ message: NIMQChatMessage) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
     print("\(#function)")
     if lastMsg == nil {
       lastMsg = message
@@ -530,13 +555,13 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func send(_ message: NIMQChatMessage, progress: Float) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
     print("\(#function)  progress\(progress)")
     delegate?.send(message, progress: progress)
   }
 
   public func send(_ message: NIMQChatMessage, didCompleteWithError error: Error?) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", messageId:\(message.messageId)")
     let index = indexOfMessage(message: message)
     if index < 0 {
       return
@@ -554,7 +579,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   public func applyServerJoin(parameter: NEQChatApplyServerJoinParam,
                               _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
     repo.applyServerJoin(param: parameter) { error in
       completion(error)
     }
@@ -562,7 +587,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
   // 本地消息显示时间
   private func addTimeMessage(_ message: NIMQChatMessage) -> QChatMessageFrame {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     let lastTs = messages.last?.message?.timestamp ?? 0.0
     let curTs = message.timestamp
     let dur = curTs - lastTs
@@ -578,7 +603,7 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   private func addTimeForHistoryMessage(_ message: NIMQChatMessage, isTop: Bool = false) -> QChatMessageFrame {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     let curTs = message.timestamp
     let messageFrame = QChatMessageFrame()
 

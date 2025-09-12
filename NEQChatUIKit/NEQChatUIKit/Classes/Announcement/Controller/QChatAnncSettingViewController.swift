@@ -5,10 +5,10 @@
 
 import NECommonUIKit
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public protocol QChatAnncSettingViewControllerDelegate: NSObjectProtocol {
@@ -61,7 +61,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func viewWillAppear(_ animated: Bool) {
@@ -102,6 +102,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
     title = localizable("notice_setting")
     view.backgroundColor = .ne_lightBackgroundColor
     navigationView.backgroundColor = .ne_lightBackgroundColor
+    navigationView.moreButton.isHidden = true
 
     view.addSubview(headerView)
     NSLayoutConstraint.activate([
@@ -210,7 +211,7 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
       viewModel.repo.leaveServer(serverid) { [weak self] error in
         self?.view.hideToastActivity()
         if let err = error as NSError? {
-          NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: "leave server error : \(err)")
+          NEALog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: "leave server error : \(err)")
           switch err.code {
           case errorCode_NetWorkError:
             self?.showToast(localizable("network_error"))
@@ -393,8 +394,8 @@ public class QChatAnncSettingViewController: NEBaseTableViewController, UITableV
 
   // UINavigationControllerDelegate
   public func imagePickerController(_ picker: UIImagePickerController,
-                             didFinishPickingMediaWithInfo info: [UIImagePickerController
-                               .InfoKey: Any]) {
+                                    didFinishPickingMediaWithInfo info: [UIImagePickerController
+                                      .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
     uploadHeadImage(image: image)
     picker.dismiss(animated: true, completion: nil)

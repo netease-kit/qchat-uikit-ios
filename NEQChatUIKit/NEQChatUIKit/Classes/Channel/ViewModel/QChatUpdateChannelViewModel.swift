@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objcMembers
@@ -14,13 +14,13 @@ public class QChatUpdateChannelViewModel: NSObject {
   private let className = "QChatUpdateChannelViewModel"
 
   init(channel: NEQChatChatChannel?) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     self.channel = channel
     channelTmp = channel
   }
 
   func updateChannelInfo(completion: @escaping (NSError?, NEQChatChatChannel?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     var param = NEQChatUpdateChannelParam(channelId: channel?.channelId)
     param.name = channelTmp?.name
     param.topic = channelTmp?.topic
@@ -34,7 +34,7 @@ public class QChatUpdateChannelViewModel: NSObject {
   }
 
   func deleteChannel(completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     QChatChannelProvider.shared.deleteChannel(channelId: channel?.channelId, completion)
   }
 }

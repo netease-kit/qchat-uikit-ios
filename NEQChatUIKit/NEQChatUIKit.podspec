@@ -23,8 +23,8 @@ Pod::Spec.new do |spec|
   spec.resource = 'NEQChatUIKit/Assets/**/*'
   YXConfig.pod_target_xcconfig(spec)
   
-  spec.dependency 'NEQChatKit', YXConfig.qchatkit_version
-  spec.dependency 'NECommonUIKit'
+  spec.dependency 'NEQChatKit'
+  spec.dependency 'NECommonUIKit', '9.8.1'
   spec.dependency 'MJRefresh'
   spec.dependency 'SDWebImageWebPCoder'
   spec.dependency 'SDWebImageSVGKitPlugin'

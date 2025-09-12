@@ -4,16 +4,16 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 typealias SaveSuccessBlock = (_ server: NEQChatServer?) -> Void
 
 public class QChatServerSettingViewController: NEBaseTableViewController, UITableViewDelegate,
-                                               UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+  UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
   let viewModel = QChatSettingViewModel()
   var server: NEQChatServer?
   var permissions = [QChatSettingModel]()
@@ -51,7 +51,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func viewWillAppear(_ animated: Bool) {
@@ -350,7 +350,7 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
       viewModel.repo.leaveServer(serverid) { [weak self] error in
         self?.view.hideToastActivity()
         if let err = error as NSError? {
-          NELog.errorLog(ModuleName + " " + (self?.className ?? ""), desc: "leave server error : \(err)")
+          NEALog.errorLog(ModuleName + " " + (self?.className ?? ""), desc: "leave server error : \(err)")
           switch err.code {
           case errorCode_NetWorkError:
             self?.showToast(localizable("network_error"))
@@ -519,8 +519,8 @@ public class QChatServerSettingViewController: NEBaseTableViewController, UITabl
 
   // UINavigationControllerDelegate
   public func imagePickerController(_ picker: UIImagePickerController,
-                             didFinishPickingMediaWithInfo info: [UIImagePickerController
-                               .InfoKey: Any]) {
+                                    didFinishPickingMediaWithInfo info: [UIImagePickerController
+                                      .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
     uploadHeadImage(image: image)
     picker.dismiss(animated: true, completion: nil)

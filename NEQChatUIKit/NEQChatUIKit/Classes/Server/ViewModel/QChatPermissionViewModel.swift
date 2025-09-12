@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -28,7 +28,7 @@ public class QChatPermissionViewModel: NSObject {
   override init() {}
 
   func getData(_ serverRole: NEQChatServerRole) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverRole.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverRole.serverId ?? 0)")
     weak var weakSelf = self
 //        print("get data authors : ", serverRole.auths as Any)
     serverRole.auths?.forEach { info in
@@ -47,7 +47,7 @@ public class QChatPermissionViewModel: NSObject {
 
   func loadData(_ keys: [String], _ keyValues: [String: String],
                 _ datas: inout [QChatPermissionCellModel]) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", keys.count:\(keys.count)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", keys.count:\(keys.count)")
     for index in 0 ..< keys.count {
       let model = QChatPermissionCellModel()
       model.permission = permission

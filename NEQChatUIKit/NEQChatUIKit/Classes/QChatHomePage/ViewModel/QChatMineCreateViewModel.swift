@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objcMembers
@@ -12,7 +12,7 @@ public class QChatMineCreateViewModel: NSObject {
 
   public func createAnncServer(parameter: inout NEQChatCreateServerParam,
                                _ completion: @escaping (NSError?, NEQChatServer?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
     repo.createAnncServer(&parameter) { [weak self] error, server in
       if let err = error {
         completion(err, nil)
@@ -30,7 +30,7 @@ public class QChatMineCreateViewModel: NSObject {
 
   public func createServer(parameter: NEQChatCreateServerParam,
                            _ completion: @escaping (NSError?, NEQChatCreateServerResult?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
     repo.createServer(param: parameter) { error, serverResult in
       completion(error, serverResult)
     }
@@ -91,10 +91,10 @@ public class QChatMineCreateViewModel: NSObject {
     status.status = .Deny
     param.commands?.append(status)
 
-    NELog.infoLog(className(), desc: "mine craete notice server param: \(param)")
+    NEALog.infoLog(className(), desc: "mine craete notice server param: \(param)")
 
     repo.updateRole(param) { [weak self] error, role in
-      NELog.infoLog(self?.className() ?? "", desc: "mine craete notice server roleProvider.updateRole error: \(error?.localizedDescription ?? "")")
+      NEALog.infoLog(self?.className() ?? "", desc: "mine craete notice server roleProvider.updateRole error: \(error?.localizedDescription ?? "")")
     }
   }
 }

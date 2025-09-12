@@ -3,7 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreIMKit
+import NECoreIM2Kit
 import UIKit
 
 @objc public protocol InputEmoticonContainerViewDelegate: NSObjectProtocol {
@@ -47,7 +47,7 @@ public class InputEmoticonContainerView: UIView {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   func setUpSubViews() {
@@ -142,7 +142,7 @@ public class InputEmoticonContainerView: UIView {
         return emotionsCount / layoutCount + 1
       }
     } else {
-      NELog.errorLog(classTag, desc: "❌count maybe nil")
+      NEALog.errorLog(classTag, desc: "❌count maybe nil")
       return 0
     }
   }
@@ -184,12 +184,12 @@ extension InputEmoticonContainerView {
                      page: NSInteger) -> UIView {
     let subView = UIView()
     guard let layout = emoticon.layout else {
-      NELog.errorLog(classTag, desc: "layout is nil")
+      NEALog.errorLog(classTag, desc: "layout is nil")
       return UIView()
     }
 
     guard let emotions = emoticon.emoticons else {
-      NELog.errorLog(classTag, desc: "emoticon.emoticons is nil")
+      NEALog.errorLog(classTag, desc: "emoticon.emoticons is nil")
       return UIView()
     }
 
@@ -252,7 +252,7 @@ extension InputEmoticonContainerView {
                                  startX: CGFloat, startY: CGFloat, iconWidth: CGFloat,
                                  iconHeight: CGFloat, emotion: NIMInputEmoticonCatalog) {
     guard let layout = emotion.layout else {
-      NELog.errorLog(classTag, desc: "❌emotion is nill")
+      NEALog.errorLog(classTag, desc: "❌emotion is nill")
       return
     }
 
@@ -298,7 +298,7 @@ extension InputEmoticonContainerView: EmojiPageViewDelegate, EmojiPageViewDataSo
     var resultEmotion = NIMInputEmoticonCatalog()
 
     guard let totalData = totalCatalogData, let targetView = pageView else {
-      NELog.errorLog(classTag, desc: "❌totalCatalogData is nil")
+      NEALog.errorLog(classTag, desc: "❌totalCatalogData is nil")
       return UIView()
     }
 
@@ -336,7 +336,7 @@ extension InputEmoticonContainerView: InputEmoticonTabViewDelegate {
 extension InputEmoticonContainerView: NIMInputEmoticonButtonDelegate {
   public func selectedEmoticon(emotion: NIMInputEmoticon, catalogID: String) {
     guard let emotionId = emotion.emoticonID else {
-      NELog.errorLog(classTag, desc: "❌emoticonID is nil")
+      NEALog.errorLog(classTag, desc: "❌emoticonID is nil")
       return
     }
     if emotion.type == .unicode {

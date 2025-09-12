@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import MJRefresh
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -165,7 +165,7 @@ public class QChatChannelMembersVC: QChatTableViewController, QChatMemberInfoVie
 
   func didClickUserHeader(_ accid: String?) {
     if let uid = accid {
-      if QChatKitClient.instance.isMySelf(uid) {
+      if QChatKitClient.instance.isMe(uid) {
         Router.shared.use(
           MeSettingRouter,
           parameters: ["nav": navigationController as Any],

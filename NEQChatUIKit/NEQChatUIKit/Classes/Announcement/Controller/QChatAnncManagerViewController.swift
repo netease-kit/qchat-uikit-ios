@@ -4,7 +4,7 @@
 
 import MJRefresh
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -165,7 +165,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
 
   func didClickUserHeader(_ accid: String?) {
     if let uid = accid {
-      if QChatKitClient.instance.isMySelf(uid) {
+      if QChatKitClient.instance.isMe(uid) {
         Router.shared.use(
           MeSettingRouter,
           parameters: ["nav": navigationController as Any],
@@ -317,7 +317,6 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
     memberSelect.delegate = self
     memberSelect.serverId = qchatServer?.serverId
     memberSelect.completion = { [weak self] users in
-
       if NEChatDetectNetworkTool.shareInstance.manager?.isReachable == false {
         self?.view.makeToast(localizable("network_error"), duration: 2, position: .center)
         return
@@ -368,7 +367,6 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
 
         self?.viewmodel
           .inviteMembersToServer(serverId: serverId, accids: userIds) { [weak self] error, failedIds in
-
             if error == nil {
               if let fIds = failedIds, fIds.count == userIds.count {
                 self?.view.makeToast(localizable("failed_operation"))
@@ -404,7 +402,7 @@ open class QChatAnncManagerViewController: NEBaseTableViewController, UITableVie
 
   func reloadNormalData() {
     if isRefresh == true {
-      NELog.infoLog(className(), desc: "current is refresh")
+      NEALog.infoLog(className(), desc: "current is refresh")
       return
     }
     isRefresh = true

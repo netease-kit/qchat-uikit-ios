@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objcMembers
@@ -16,9 +16,8 @@ public class QChatMemberListViewModel: NSObject {
 
   func requestServerMemebersByPage(param: NEQChatGetServerMembersByPageParam,
                                    _ completion: @escaping (NSError?, [NEQChatServerMemeber]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
     repo.getServerMembersByPage(param) { error, memberResult in
-
       if error == nil {
         guard let memberArr = memberResult?.memberArray else { return }
         var accidList = [String]()
@@ -53,7 +52,7 @@ public class QChatMemberListViewModel: NSObject {
       } else {
         completion(error, nil)
         print("getServerMembersByPage failed,error = \(error!)")
-        NELog.errorLog(ModuleName + " " + self.className(), desc: #function + ", CALLBACK FAILED, error:" + error!.localizedDescription)
+        NEALog.errorLog(ModuleName + " " + self.className(), desc: #function + ", CALLBACK FAILED, error:" + error!.localizedDescription)
       }
     }
   }

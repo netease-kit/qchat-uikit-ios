@@ -22,7 +22,7 @@ public class QChatEmojiCommentCell: QChatEmojiCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func setupUI() {

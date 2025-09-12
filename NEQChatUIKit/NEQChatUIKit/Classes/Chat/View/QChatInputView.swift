@@ -4,7 +4,6 @@
 // found in the LICENSE file.
 
 import NECommonKit
-import NIMSDK
 import UIKit
 
 @objc public enum QChatMenuType: Int {
@@ -76,7 +75,7 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   func commonUI() {
@@ -294,7 +293,6 @@ public class QChatInputView: UIView, QChatRecordViewDelegate, InputEmoticonConta
       in: NSMakeRange(0, attribute.length),
       options: NSAttributedString.EnumerationOptions(rawValue: 0)
     ) { dics, range, stop in
-
       if let neAttachment = dics[NSAttributedString.Key.attachment] as? NEEmotionAttachment,
          let des = neAttachment.emotion?.tag {
         muta.append(des)

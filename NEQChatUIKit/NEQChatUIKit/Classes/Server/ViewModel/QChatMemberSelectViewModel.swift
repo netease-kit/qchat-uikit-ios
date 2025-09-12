@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objc
@@ -28,12 +28,12 @@ public class QChatMemberSelectViewModel: NSObject {
   override init() {}
 
   func loadFirst(serverId: UInt64?, completion: @escaping (NSError?, [QChatUserInfo]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
     lastTimeTag = 0
     datas.removeAll()
     print("self?.datas:\(datas.count)")
     getServerMebers(serverId) { [weak self] error, userInfos in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatMemberSelectViewModel"),
         desc: "CALLBACK getServerMebers " + (error?.localizedDescription ?? "no error")
       )
@@ -81,9 +81,9 @@ public class QChatMemberSelectViewModel: NSObject {
   }
 
   func loadMore(serverId: UInt64?, completion: @escaping (NSError?, [QChatUserInfo]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
     getServerMebers(serverId) { [weak self] error, userInfos in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatMemberSelectViewModel"),
         desc: "CALLBACK getServerMebers " + (error?.localizedDescription ?? "no error")
       )
@@ -128,7 +128,7 @@ public class QChatMemberSelectViewModel: NSObject {
 
   func getServerMebers(_ serverId: UInt64?,
                        completion: @escaping (NSError?, [QChatUserInfo]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(serverId ?? 0)")
     var param = NEQChatGetServerMembersByPageParam(timeTag: lastTimeTag, serverId: serverId)
     param.limit = pageSize
     repo.getServerMembers(param) { error, members in

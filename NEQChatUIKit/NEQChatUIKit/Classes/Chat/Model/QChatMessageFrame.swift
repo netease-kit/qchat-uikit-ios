@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public class QChatMessageFrame: NSObject {
@@ -159,7 +159,7 @@ public class QChatMessageFrame: NSObject {
         if quickComment.count > 0 {
           let font: UIFont = quickComment.selfReplyed ? .systemFont(ofSize: 16, weight: .semibold) : .systemFont(ofSize: 16, weight: .medium)
           let countLabel = QChatMessageHelper.getCountLabel(quickComment.count)
-          let size = countLabel.finalSize(font, CGSize(width: CGFloat(MAXFLOAT), height: 16))
+          let size = String.getRealSize(countLabel, font, CGSize(width: CGFloat(MAXFLOAT), height: 16))
           quickCommentCountWidth[quickComment.replyType] = size.width
           quickCommentWidth! += size.width + 40.0
           tempWidth += size.width + 40.0
@@ -232,7 +232,7 @@ public class QChatMessageFrame: NSObject {
       font: DefaultTextFont(16)
     )
 
-    contentSize = attributeStr!.finalSize(DefaultTextFont(16), CGSize(width: qChat_content_maxW - qChat_margin * 2, height: CGFloat.greatestFiniteMagnitude))
+    contentSize = NSAttributedString.getRealLabelSize(attributeStr, DefaultTextFont(16), CGSize(width: qChat_content_maxW - qChat_margin * 2, height: CGFloat.greatestFiniteMagnitude))
 
     if contentSize.height < qChat_min_h { // 小于一行高度，就保持一行
       contentSize.height = qChat_min_h

@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 protocol QChatAllChannelDataDelegate: NSObjectProtocol {

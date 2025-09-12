@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import MJRefresh
-import NECoreIMKit
+import NECoreIM2Kit
 import NEQChatKit
 import UIKit
 
@@ -106,7 +106,7 @@ public class QChatIdGroupViewController: NEBaseTableViewController, UITableViewD
   // MARK: UITableViewDelegate, UITableViewDataSource,ViewModelDelegate
 
   public func dataDidError(_ error: Error) {
-    NELog.errorLog(ModuleName + " " + className(), desc: "error : \(error)")
+    NEALog.errorLog(ModuleName + " " + className(), desc: "error : \(error)")
     if let err = error as NSError? {
       switch err.code {
       case errorCode_NetWorkError:

@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -110,9 +110,9 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
 
       weak var weakSelf = self
 
-      if QChatKitClient.instance.isMySelf(accid) == true {
+      if QChatKitClient.instance.isMe(accid) == true {
         viewModel.updateMyMember(user?.serverMember?.serverId, nickName) { error, member in
-          NELog.infoLog(
+          NEALog.infoLog(
             ModuleName + " " + self.tag,
             desc: "CALLBACK updateMyMember " + (error?.localizedDescription ?? "no error")
           )
@@ -136,7 +136,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
         viewModel
           .updateMember(user?.serverMember?.serverId, nickName,
                         user?.accid) { error, member in
-            NELog.infoLog(
+            NEALog.infoLog(
               ModuleName + " " + self.tag,
               desc: "CALLBACK updateMember " + (error?.localizedDescription ?? "no error")
             )
@@ -352,14 +352,14 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
       if select == false {
         view.makeToastActivity(.center)
         viewModel.addMembers(user?.accid, user?.serverId, group.role?.roleId) {
-          NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accid:\(self.user?.accid ?? "nil")")
+          NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accid:\(self.user?.accid ?? "nil")")
           weakSelf?.view.hideToastActivity()
           weakSelf?.didChange = true
         }
       } else {
         view.makeToastActivity(.center)
         viewModel.remove(user?.accid, user?.serverId, group.role?.roleId) {
-          NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accid:\(self.user?.accid ?? "nil")")
+          NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accid:\(self.user?.accid ?? "nil")")
           weakSelf?.view.hideToastActivity()
           weakSelf?.didChange = true
         }
@@ -406,7 +406,7 @@ public class QChatEditMemberViewController: NEBaseTableViewController, UITableVi
     view.makeToastActivity(.center)
     weak var weakSelf = self
     viewModel.kickoutMember(user?.serverId, user?.accid) { error in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.tag,
         desc: "CALLBACK kickoutMember " + (error?.localizedDescription ?? "no error")
       )

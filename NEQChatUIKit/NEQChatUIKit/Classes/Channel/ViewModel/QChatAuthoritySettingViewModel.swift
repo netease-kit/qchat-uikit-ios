@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
 
 @objcMembers
@@ -22,7 +22,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
   func firstGetChannelRoles(_ completion: @escaping (Error?, [RoleModel]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     rolesData.timeTag = 0
     rolesData.roles = [RoleModel]()
     rolesLimitData.roles = [RoleModel]()
@@ -30,7 +30,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
   func getChannelRoles(_ completion: @escaping (Error?, [RoleModel]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     guard let sid = channel?.serverId, let cid = channel?.channelId else {
       completion(NSError.paramError(), nil)
       return
@@ -87,7 +87,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
   func firstGetMembers(_ completion: @escaping (Error?, [RoleModel]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     membersData.pageSize = 50
     membersData.timeTag = 0
     membersData.roles = [RoleModel]()
@@ -95,7 +95,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
   }
 
   func getMembers(_ completion: @escaping (Error?, [RoleModel]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     guard let sid = channel?.serverId, let cid = channel?.channelId else {
       completion(NSError.paramError(), nil)
       return
@@ -146,7 +146,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
 
   public func removeChannelRole(role: NEQChatChannelRole?, index: Int,
                                 _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role?.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role?.serverId ?? 0)")
     var param = NEQChatRemoveChannelRoleParam()
     param.serverId = role?.serverId
     param.roleId = UInt64(role?.roleId ?? 0)
@@ -158,7 +158,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
 
   public func removeMemberRole(member: NEQChatMemberRole?, index: Int,
                                _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member?.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member?.serverId ?? 0)")
     let param = NEQChatRemoveMemberRoleParam(
       serverId: channel?.serverId,
       channelId: channel?.channelId,
@@ -174,7 +174,7 @@ public class QChatAuthoritySettingViewModel: NSObject {
 
 //    本地插入成员
   public func insertLocalMemberAtHead(member: NEQChatMemberRole) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member.serverId ?? 0)")
     let model = RoleModel(member: member, isPlacehold: false)
     membersData.roles.insert(model, at: 0)
     setRoundedCorner()
@@ -182,14 +182,14 @@ public class QChatAuthoritySettingViewModel: NSObject {
 
 //    本地插入身份组
   public func insertLocalRoleAtHead(role: NEQChatChannelRole) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(role.serverId ?? 0)")
     let model = RoleModel(role: role, isPlacehold: false)
     rolesData.roles.insert(model, at: 0)
     setRoundedCorner()
   }
 
   private func setRoundedCorner() {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     if rolesData.roles.count > 0 {
       if rolesData.roles.count == 1 {
         rolesData.roles[0].corner = .all

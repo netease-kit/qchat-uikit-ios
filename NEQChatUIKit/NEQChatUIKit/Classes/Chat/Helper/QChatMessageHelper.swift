@@ -5,8 +5,8 @@
 
 import Foundation
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 public class QChatMessageHelper {
   // 获取图片合适尺寸

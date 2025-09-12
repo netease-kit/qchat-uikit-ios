@@ -3,6 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
+import NECommonKit
 import UIKit
 
 public class QChatCreateServerViewController: NEBaseViewController, UITableViewDelegate,
@@ -20,9 +21,11 @@ public class QChatCreateServerViewController: NEBaseViewController, UITableViewD
     title = localizable("qchat_add_Server")
     addLeftAction(localizable("close"), #selector(closeAction), self)
     navigationView.setBackButtonTitle(localizable("close"))
+    navigationView.setBackButtonWidth(NEAppLanguageUtil.getCurrentLanguage() == .english ? 60 : 34)
     navigationView.addBackButtonTarget(target: self, selector: #selector(closeAction))
     navigationView.backgroundColor = .white
     navigationView.titleBarBottomLine.isHidden = false
+    navigationView.moreButton.isHidden = true
 
     addLeftSwipeDismissGesture()
   }

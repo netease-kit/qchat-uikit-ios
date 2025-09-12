@@ -4,10 +4,10 @@
 
 import Foundation
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 public protocol SettingModelDelegate: NSObjectProtocol {
   func didClickChannelName()
@@ -308,7 +308,7 @@ public class QChatSettingViewModel: NSObject, NIMQChatMessageManagerDelegate {
 
           self?.repo.updateServer(param) { error, _ in
             if let err = error as? NSError {
-              NELog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + " \(err.localizedDescription)")
+              NEALog.errorLog(ModuleName + " " + (self?.className() ?? ""), desc: #function + " \(err.localizedDescription)")
               self?.delegate?.didRefresh()
               self?.delegate?.showToastInView(err.localizedDescription)
               completion(false)

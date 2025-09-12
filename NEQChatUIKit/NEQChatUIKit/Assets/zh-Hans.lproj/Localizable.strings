@@ -132,7 +132,6 @@
 
 
 //MARK: toast
-"copy_success"="复制成功";
 "update_channel_suscess"="保存成功";
 "save_failed"="保存失败";
 "delete_channel_suscess"="删除成功";

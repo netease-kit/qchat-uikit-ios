@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
+import NEQChatKit
 import UIKit
 
 class QChatHomeServerCell: UITableViewCell {
@@ -77,7 +77,7 @@ class QChatHomeServerCell: UITableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   func setupSubviews() {

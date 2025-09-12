@@ -12,22 +12,22 @@ target 'IMQChatExample' do
   use_frameworks!
 
   # 基础库
-  pod 'NEChatKit',   YXConfig.imuikit_version      # IMUIKit 基础库
-  pod 'NEQChatKit',  YXConfig.qchatkit_version     # QChatUIKit 基础库
+  pod 'NEChatKit',   							YXConfig.imuikit_version      # IMUIKit 基础库
+#  pod 'NEQChatKit',  						YXConfig.qchatkit_version     # QChatUIKit 基础库
 
   # UI 组件
-  pod 'NEChatUIKit',           YXConfig.imuikit_version     # 会话（聊天）组件
-  pod 'NEContactUIKit',       YXConfig.imuikit_version      # 通讯录组件
-  pod 'NEConversationUIKit', YXConfig.imuikit_version       # (云端)会话列表组件
-  pod 'NELocalConversationUIKit', YXConfig.imuikit_version  # (本地)会话列表组件
-  pod 'NETeamUIKit',           YXConfig.imuikit_version     # 群相关设置组件
-  pod 'NEQChatUIKit',         YXConfig.qchatkit_version     # 圈组 组件
+  pod 'NEChatUIKit',           		YXConfig.imuikit_version     	# 会话（聊天）组件
+  pod 'NEContactUIKit',       		YXConfig.imuikit_version      # 通讯录组件
+  pod 'NEConversationUIKit', 			YXConfig.imuikit_version      # (云端)会话列表组件
+  pod 'NELocalConversationUIKit', YXConfig.imuikit_version  		# (本地)会话列表组件
+  pod 'NETeamUIKit',           		YXConfig.imuikit_version     	# 群相关设置组件
+#  pod 'NEQChatUIKit',         		YXConfig.qchatkit_version     # 圈组 组件
 
   # 扩展库 - 地理位置组件
-  pod 'NEMapKit',             YXConfig.imuikit_version
+  pod 'NEMapKit',             		YXConfig.imuikit_version
   
   # 扩展库 - AI 划词搜索
-  pod 'NEAISearchKit', YXConfig.imuikit_version
+  pod 'NEAISearchKit', 						YXConfig.imuikit_version
 
   # 扩展库 - 呼叫组件
   pod 'NERtcSDK/RtcBasic'                   #  RTC 音视频基础组件
@@ -39,8 +39,8 @@ target 'IMQChatExample' do
 
   # 如果需要查看UI部分源码请注释掉以上在线依赖(不包含呼叫组件)，打开下面的本地依赖
   # IMUIKit 源码地址：https://github.com/netease-kit/nim-uikit-ios
-#  pod 'NEQChatKit', :path => 'NEQChatKit/NEQChatKit.podspec'
-#  pod 'NEQChatUIKit', :path => 'NEQChatUIKit/NEQChatUIKit.podspec'
+  pod 'NEQChatKit', :path => 'NEQChatKit/NEQChatKit.podspec'
+  pod 'NEQChatUIKit', :path => 'NEQChatUIKit/NEQChatUIKit.podspec'
 
 end
 

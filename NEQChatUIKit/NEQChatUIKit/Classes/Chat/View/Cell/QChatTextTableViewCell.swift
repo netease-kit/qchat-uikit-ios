@@ -73,7 +73,7 @@ class QChatTextTableViewCell: QChatBaseTableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   private lazy var textView: UILabel = {
@@ -114,7 +114,7 @@ class QChatTextTableViewCell: QChatBaseTableViewCell {
 //  }
 //
 //  public required init?(coder aDecoder: NSCoder) {
-//    fatalError("init(coder:) has not been implemented")
+//    super.init(coder: coder)
 //  }
 //
 //  func setupUI() {
