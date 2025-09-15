@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+import NEQChatKit
 
 // 社区下成员列表数据模型
 @objcMembers

@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 
 public protocol QChatChannelViewModelDelegate: NSObjectProtocol {
   func didNeedRefreshData()
@@ -41,7 +41,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func createChannel(_ completion: @escaping (NSError?, NEQChatChatChannel?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     let visibleType: NEQChatChannelVisibleType = isPrivate ? .isPrivate : .isPublic
     let param = NEQChatCreateChannelParam(
       serverId: serverId,
@@ -55,7 +55,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
   }
 
   public func getChannelsByPage(_ serverid: UInt64?, _ timeTag: TimeInterval, _ completion: @escaping (NSError?, NEQChatGetChannelsByPageResult?) -> Void) {
-    NELog.infoLog(
+    NEALog.infoLog(
       ModuleName + " " + className,
       desc: #function + ", serverId:\(serverid ?? 0)"
     )
@@ -74,7 +74,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
   public func getChannelsByPage(parameter: NEQChatGetChannelsByPageParam,
                                 _ completion: @escaping (NSError?, NEQChatGetChannelsByPageResult?)
                                   -> Void) {
-    NELog.infoLog(
+    NEALog.infoLog(
       ModuleName + " " + className,
       desc: #function + ", serverId:\(parameter.serverId ?? 0)"
     )
@@ -137,7 +137,7 @@ public class QChatChannelViewModel: NSObject, NIMQChatMessageManagerDelegate {
         }
         self?.delegate?.didNeedRefreshData()
       } else {
-        NELog.infoLog(QChatChannelViewModel.className(), desc: "get last msg err : \(err?.localizedDescription ?? "")")
+        NEALog.infoLog(QChatChannelViewModel.className(), desc: "get last msg err : \(err?.localizedDescription ?? "")")
       }
     }
   }

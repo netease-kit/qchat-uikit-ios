@@ -5,7 +5,7 @@
 
 import CoreAudio
 import MJRefresh
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 

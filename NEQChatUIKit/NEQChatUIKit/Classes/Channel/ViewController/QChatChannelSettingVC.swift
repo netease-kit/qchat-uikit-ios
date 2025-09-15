@@ -3,7 +3,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
@@ -205,7 +204,7 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
       message: message
     ) {
       self.viewModel?.deleteChannel(completion: { [weak self] error in
-        NELog.infoLog(
+        NEALog.infoLog(
           ModuleName + " " + (self?.className ?? "QChatChannelSettingVC"),
           desc: "CALLBACK deleteChannel " + (error?.localizedDescription ?? "no error")
         )
@@ -261,7 +260,7 @@ public class QChatChannelSettingVC: QChatTableViewController, QChatTextEditCellD
 
   @objc func save() {
     viewModel?.updateChannelInfo(completion: { [weak self] error, channel in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatChannelSettingVC"),
         desc: "CALLBACK updateChannelInfo " + (error?.localizedDescription ?? "no error")
       )

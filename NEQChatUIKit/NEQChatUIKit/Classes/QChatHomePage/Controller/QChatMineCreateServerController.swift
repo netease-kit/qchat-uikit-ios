@@ -4,14 +4,14 @@
 // found in the LICENSE file.
 
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public class QChatMineCreateServerController: NEBaseViewController, UINavigationControllerDelegate,
-                                              UITextFieldDelegate, UIImagePickerControllerDelegate {
+  UITextFieldDelegate, UIImagePickerControllerDelegate {
   private let tag = "QChatMineCreateServerController"
   public var serverViewModel = QChatMineCreateViewModel()
   var headImageUrl: String?
@@ -153,7 +153,7 @@ public class QChatMineCreateServerController: NEBaseViewController, UINavigation
   }()
 
   @objc func createServerBtnClick(sender: UIButton) {
-    NELog.infoLog(ModuleName + " " + tag, desc: "createServerBtn clicked")
+    NEALog.infoLog(ModuleName + " " + tag, desc: "createServerBtn clicked")
     guard let serverName = textField.text, serverName.count > 0 else { return }
 
     if serverName.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -199,11 +199,11 @@ public class QChatMineCreateServerController: NEBaseViewController, UINavigation
       serverViewModel.createServer(parameter: param) { error, result in
         sender.isEnabled = true
         if error != nil {
-          NELog.errorLog(ModuleName + " " + self.tag, desc: "❌createServer failed,error = \(error!)")
+          NEALog.errorLog(ModuleName + " " + self.tag, desc: "❌createServer failed,error = \(error!)")
         } else {
           // 创建社区成功后，默认创建好两个话题
           if let serverId = result?.server?.serverId {
-            NELog.infoLog(ModuleName + " " + self.tag, desc: "✅createServer success, serverId: \(serverId)")
+            NEALog.infoLog(ModuleName + " " + self.tag, desc: "✅createServer success, serverId: \(serverId)")
             NotificationCenter.default.post(
               name: NotificationName.createServer,
               object: serverId
@@ -245,8 +245,8 @@ public class QChatMineCreateServerController: NEBaseViewController, UINavigation
   // MARK: UIImagePickerControllerDelegate
 
   public func imagePickerController(_ picker: UIImagePickerController,
-                             didFinishPickingMediaWithInfo info: [UIImagePickerController
-                               .InfoKey: Any]) {
+                                    didFinishPickingMediaWithInfo info: [UIImagePickerController
+                                      .InfoKey: Any]) {
     let image: UIImage = info[UIImagePickerController.InfoKey.editedImage] as! UIImage
     uploadHeadImage(image: image)
     dismiss(animated: true, completion: nil)

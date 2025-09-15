@@ -4,8 +4,8 @@
 // found in the LICENSE file.
 
 import Foundation
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 class QChatImageTableViewCell: QChatBaseTableViewCell {
@@ -14,7 +14,7 @@ class QChatImageTableViewCell: QChatBaseTableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   private lazy var contentImageView: UIImageView = {

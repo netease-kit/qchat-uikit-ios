@@ -3,7 +3,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
@@ -31,8 +30,8 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
     title = localizable("qchat_create_new_id_group")
     view.backgroundColor = .ne_lightBackgroundColor
     addRightAction(localizable("create"), #selector(createClick), self)
-    rightNavBtn.setTitleColor(.gray, for: .normal)
-    rightNavBtn.isEnabled = true
+    rightNavButton.setTitleColor(.gray, for: .normal)
+    rightNavButton.isEnabled = true
 
     navigationView.setMoreButtonTitle(localizable("create"))
     navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
@@ -76,12 +75,12 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
       if let textField = textFld {
         textField.text = text
         serverName = text
-        rightNavBtn.setTitleColor(.ne_greyText, for: .normal)
+        rightNavButton.setTitleColor(.ne_greyText, for: .normal)
       }
       return
     }
 
-    rightNavBtn.isEnabled = false
+    rightNavButton.isEnabled = false
     var param = NEQChatServerRoleParam()
     param.serverId = serverId
     param.type = .custom
@@ -162,10 +161,10 @@ public class QChatCreateGroupViewController: NEBaseTableViewController,
   func textDidChange(_ textField: UITextField) {
     if let text = textField.text {
       if !text.isEmpty {
-        rightNavBtn.setTitleColor(.ne_blueText, for: .normal)
+        rightNavButton.setTitleColor(.ne_blueText, for: .normal)
         navigationView.moreButton.setTitleColor(.ne_blueText, for: .normal)
       } else {
-        rightNavBtn.setTitleColor(.ne_greyText, for: .normal)
+        rightNavButton.setTitleColor(.ne_greyText, for: .normal)
         navigationView.moreButton.setTitleColor(.ne_greyText, for: .normal)
       }
       serverName = text

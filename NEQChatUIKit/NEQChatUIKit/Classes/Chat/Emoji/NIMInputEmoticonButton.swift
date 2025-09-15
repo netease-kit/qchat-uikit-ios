@@ -3,7 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreIMKit
+import NECoreIM2Kit
 import UIKit
 
 public protocol NIMInputEmoticonButtonDelegate: NSObjectProtocol {
@@ -42,7 +42,7 @@ public class NIMInputEmoticonButton: UIButton {
 
   @objc func onIconSelected(sender: NIMInputEmoticonButton) {
     guard let data = emotionData, let id = catalogID else {
-      NELog.errorLog(classsTag, desc: "emotionData or catalogID maybe nil")
+      NEALog.errorLog(classsTag, desc: "emotionData or catalogID maybe nil")
       return
     }
     delegate?.selectedEmoticon(emotion: data, catalogID: id)

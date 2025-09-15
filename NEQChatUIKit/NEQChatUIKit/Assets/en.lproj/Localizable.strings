@@ -130,7 +130,6 @@
 
 
 //MARK:toast
-"copy_success"="Copy successful";
 "update_channel_suscess"="Save successful";
 "save_failed"="Save failed";
 "delete_channel_suscess"="Delete successful";

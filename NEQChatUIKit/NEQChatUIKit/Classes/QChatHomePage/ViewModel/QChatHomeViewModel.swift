@@ -4,10 +4,10 @@
 
 import Foundation
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import SDWebImageSVGKitPlugin
 import SDWebImageWebPCoder
 import UIKit
@@ -46,7 +46,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   override public init() {
     super.init()
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     repo.delegate = self
     let webpCoder = SDImageWebPCoder()
     SDImageCodersManager.shared.addCoder(webpCoder)
@@ -56,7 +56,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func onUnReadChange(_ unreads: [NIMQChatUnreadInfo]?,
                              _ lastUnreads: [NIMQChatUnreadInfo]?) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ",qchat onUnReadChange unreads.count:\(unreads?.count ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ",qchat onUnReadChange unreads.count:\(unreads?.count ?? 0)")
 
     var set = Set<UInt64>()
 
@@ -93,11 +93,11 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   public func serverUnreadInfoChanged(_ serverUnreadInfoDic: [NSNumber: NIMQChatServerUnreadInfo]) {
-    NELog.infoLog(ModuleName + " " + "serverUnreadInfoChanged", desc: "serverUnreadInfoDic : \(serverUnreadInfoDic)")
+    NEALog.infoLog(ModuleName + " " + "serverUnreadInfoChanged", desc: "serverUnreadInfoDic : \(serverUnreadInfoDic)")
   }
 
   func checkServerExistUnread(_ serverId: UInt64) -> Bool {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     if let channelDic = channelDataDic[serverId] {
       for key in channelDic.keys {
         if let unreadCount = channelDic[key], unreadCount > 0 {
@@ -122,7 +122,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func createServer(parameter: NEQChatCreateServerParam,
                            _ completion: @escaping (NSError?, NEQChatCreateServerResult?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", name:\(parameter.name ?? "nil")")
     QChatServerProvider.shared.createServer(param: parameter) { error, serverResult in
       completion(error, serverResult)
     }
@@ -130,7 +130,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func getServers(parameter: NEQChatGetServersParam,
                          _ completion: @escaping (NSError?, NEQChatGetServersResult?) -> Void) {
-    NELog.infoLog(
+    NEALog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverIds.count:\(parameter.serverIds?.count ?? 0)"
     )
@@ -141,7 +141,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func getServerList(parameter: NEQChatGetServersByPageParam,
                             _ completion: @escaping (NSError?, [NEQChatServer]?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function)
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function)
     repo.getServerList(param: parameter) { [weak self] error, result in
       var retServers = [NEQChatServer]()
       var invalidServers = [NEQChatServer]()
@@ -161,7 +161,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   public func getServerMemberList(parameter: NEQChatGetServerMembersParam,
                                   _ completion: @escaping (NSError?,
                                                            NEQChatGetServerMembersResult?) -> Void) {
-    NELog.infoLog(
+    NEALog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverAccIds.count:\(parameter.serverAccIds?.count ?? 0)"
     )
@@ -174,7 +174,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
                                      _ completion: @escaping (NSError?,
                                                               NEQChatGetServerMembersResult?)
                                        -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId ?? 0)")
     QChatServerProvider.shared.getServerMembersByPage(param: parameter) { error, result in
       completion(error, result)
     }
@@ -183,7 +183,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func applyServerJoin(parameter: NEQChatApplyServerJoinParam,
                               _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(parameter.serverId)")
     QChatServerProvider.shared.applyServerJoin(param: parameter) { error in
       completion(error)
     }
@@ -191,7 +191,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func inviteMembersToServer(serverId: UInt64, accids: [String],
                                     _ completion: @escaping (NSError?) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     let param = NEQChatInviteServerMembersParam(serverId: serverId, accids: accids)
     repo.inviteMembersToServer(param) { error in
       completion(error)
@@ -200,18 +200,18 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
 
   public func updateMyServerMember(_ param: NEQChatUpdateMyMemberInfoParam,
                                    _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
     repo.updateMyServerMember(param, completion)
   }
 
   public func updateServerMember(_ param: NEQChatUpdateServerMemberInfoParam,
                                  _ completion: @escaping (Error?, NEQChatServerMemeber) -> Void) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(param.serverId ?? 0)")
     repo.updateServerMember(param, completion)
   }
 
   public func getUnread(_ servers: [NEQChatServer]) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", servers.count:\(servers.count)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", servers.count:\(servers.count)")
 
 //    if currentServerId == nil {
 //      currentServerId = servers.first?.serverId
@@ -226,7 +226,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   func getAllChannel(_ server: NEQChatServer) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(server.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(server.serverId ?? 0)")
     if let sid = server.serverId, requestFlag[sid] == nil {
       let allChannelData = QChatAllChannelData(sid: sid)
       allChannelData.delegate = self
@@ -235,7 +235,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   func getChannelUnread(_ serverId: UInt64, _ channels: [NEQChatChatChannel]) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId), channels.count:\(channels.count)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId), channels.count:\(channels.count)")
 //    print("getChannelUnread channel count : ", channels.count)
     var param = NEQChatGetChannelUnreadInfosParam()
     var targets = [NEQChatChannelIdInfo]()
@@ -249,7 +249,6 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
     param.targets = targets
 //        weak var weakSelf = self
     repo.getChannelUnReadInfo(param) { error, infos in
-
       print("get channel unread info : ", error as Any)
       /*
        infos?.forEach({ info in
@@ -277,20 +276,20 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   }
 
   func dataGetSuccess(_ serverId: UInt64, _ channels: [NEQChatChatChannel]) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     print("get unread channel success : ", channels.count)
     requestFlag.removeValue(forKey: serverId)
     getChannelUnread(serverId, channels)
   }
 
   func dataGetError(_ serverId: UInt64, _ error: Error) {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     requestFlag.removeValue(forKey: serverId)
     print("get all channels error : ", error)
   }
 
   func getChannelUnreadCount(_ serverId: UInt64, _ channelId: UInt64) -> UInt {
-    NELog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
+    NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", serverId:\(serverId)")
     if let channelDic = channelDataDic[serverId], let count = channelDic[channelId] {
       return count
     }
@@ -307,7 +306,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
       param.serverIds = [NSNumber(value: serverId)]
       param.operateType = .subscribe
       weakSelf?.subscribeAsVisitor(param) { error in
-        NELog.infoLog(weakSelf?.className() ?? "", desc: "visitor subscribeAsVisitor : \(error?.localizedDescription ?? "")")
+        NEALog.infoLog(weakSelf?.className() ?? "", desc: "visitor subscribeAsVisitor : \(error?.localizedDescription ?? "")")
         weakSelf?.visitorSubcribeAllChannel(serverId)
       }
     }
@@ -324,7 +323,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   // 游客模式订阅channel
   public func subscribeChannel(_ param: NIMQChatSubscribeChannelAsVisitorParam, _ completion: @escaping (Error?) -> Void) {
     repo.subscribeChannel(param) { [weak self] error, result in
-      NELog.infoLog(self?.className() ?? "", desc: "subscribeChannel failedChannelInfos : \(result?.failedChannelInfos ?? []) error : \(error?.localizedDescription ?? "")")
+      NEALog.infoLog(self?.className() ?? "", desc: "subscribeChannel failedChannelInfos : \(result?.failedChannelInfos ?? []) error : \(error?.localizedDescription ?? "")")
       completion(error)
     }
   }
@@ -332,7 +331,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
   // 游客模式订阅Server
   public func subscribeAsVisitor(_ param: NIMQChatSubscribeServerAsVisitorParam, _ completion: @escaping (Error?) -> Void) {
     repo.subscribeAsVisitor(param) { [weak self] error, result in
-      NELog.infoLog(self?.className() ?? "", desc: "subscribeAsVisitor failedServerIds : \(result?.failedServerIds ?? []) error : \(error?.localizedDescription ?? "")")
+      NEALog.infoLog(self?.className() ?? "", desc: "subscribeAsVisitor failedServerIds : \(result?.failedServerIds ?? []) error : \(error?.localizedDescription ?? "")")
       completion(error)
     }
   }
@@ -402,7 +401,7 @@ public class QChatHomeViewModel: NSObject, QChatRepoMessageDelegate, QChatAllCha
       do {
         try FileManager.default.removeItem(atPath: path)
       } catch {
-        NELog.errorLog(ModuleName + " " + className(), desc: "deleteVisitorCache error = \(error)")
+        NEALog.errorLog(ModuleName + " " + className(), desc: "deleteVisitorCache error = \(error)")
       }
     }
   }

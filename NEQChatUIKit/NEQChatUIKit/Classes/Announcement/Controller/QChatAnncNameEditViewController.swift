@@ -4,10 +4,10 @@
 // found in the LICENSE file.
 
 import NECommonKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 @objc public enum QChatChannelChangeType: Int {
@@ -65,7 +65,7 @@ open class QChatAnncNameEditViewController: NEBaseViewController, UITextViewDele
   }
 
   public required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   deinit {
@@ -167,35 +167,35 @@ open class QChatAnncNameEditViewController: NEBaseViewController, UITextViewDele
   }
 
   open func disableSubmit() {
-    rightNavBtn.setTitleColor(.ne_disableBlueText, for: .normal)
-    rightNavBtn.isEnabled = false
+    rightNavButton.setTitleColor(.ne_disableBlueText, for: .normal)
+    rightNavButton.isEnabled = false
     navigationView.moreButton.setTitleColor(.ne_disableBlueText, for: .normal)
     navigationView.moreButton.isEnabled = false
   }
 
   open func enableSubmit() {
-    rightNavBtn.setTitleColor(.ne_blueText, for: .normal)
-    rightNavBtn.isEnabled = true
+    rightNavButton.setTitleColor(.ne_blueText, for: .normal)
+    rightNavButton.isEnabled = true
     navigationView.moreButton.setTitleColor(.ne_blueText, for: .normal)
     navigationView.moreButton.isEnabled = true
   }
 
   open func hideSubmit() {
-    rightNavBtn.isHidden = true
+    rightNavButton.isHidden = true
     navigationView.moreButton.isHidden = true
     textView.isEditable = false
     clearButton.isHidden = true
   }
 
   open func showSubmit() {
-    rightNavBtn.isHidden = false
+    rightNavButton.isHidden = false
     navigationView.moreButton.isHidden = false
     textView.isEditable = true
     clearButton.isHidden = false
   }
 
   open func saveName() {
-    guard let sid = server?.serverId else {
+    guard (server?.serverId) != nil else {
       showToast(localizable("team_not_exist"))
       return
     }

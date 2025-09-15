@@ -4,9 +4,9 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
-import NIMSDK
+
 import NIMQChat
+import NIMSDK
 import UIKit
 
 @objc class QChatBubbleButton: UIButton {
@@ -141,7 +141,7 @@ class QChatBaseTableViewCell: UITableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   public func addContentSubviews() {
@@ -221,7 +221,7 @@ extension QChatBaseTableViewCell {
   }
 
   @objc func headerClick() {
-    NELog.infoLog("chat base cell", desc: "header click")
+    NEALog.infoLog("chat base cell", desc: "header click")
     if let message = messageFrame?.message {
       delegate?.didClickHeader(message)
     }

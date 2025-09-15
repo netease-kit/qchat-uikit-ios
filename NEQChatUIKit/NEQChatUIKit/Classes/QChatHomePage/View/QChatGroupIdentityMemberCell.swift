@@ -4,7 +4,8 @@
 // found in the LICENSE file.
 
 import MapKit
-import NECoreQChatKit
+import NEQChatKit
+import NIMQChat
 import UIKit
 
 class QChatGroupIdentityMemberCell: UITableViewCell {
@@ -61,7 +62,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override func draw(_ rect: CGRect) {
@@ -244,7 +245,7 @@ class IDGroupLabel: UILabel {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override func draw(_ rect: CGRect) {

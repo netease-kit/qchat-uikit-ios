@@ -2,7 +2,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
@@ -14,12 +13,11 @@ public class QChatJoinServerViewModel: NSObject {
 
   public func getServers(parameter: NEQChatGetServersParam,
                          _ completion: @escaping (NSError?, [NEQChatServer]) -> Void) {
-    NELog.infoLog(
+    NEALog.infoLog(
       ModuleName + " " + className(),
       desc: #function + ", serverIds.count:\(parameter.serverIds?.count ?? 0)"
     )
     repo.getServers(parameter) { error, serverResult in
-
       var retServers = [NEQChatServer]()
       serverResult?.servers.forEach { [weak self] server in
         if self?.isAnnouncement == true {

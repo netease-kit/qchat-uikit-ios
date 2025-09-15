@@ -4,7 +4,7 @@
 
 import NECommonKit
 import NECommonUIKit
-import NECoreQChatKit
+
 import UIKit
 
 public protocol SquareDataSourceDelegate: NSObjectProtocol {
@@ -17,8 +17,8 @@ public protocol SquareDataSourceDelegate: NSObjectProtocol {
 }
 
 @objcMembers
-open class QChatSquareHomeViewController: UIViewController, NEPagingContentViewControllerDataSource, NEPagingMenuViewControllerDataSource, NEPagingMenuViewControllerDelegate, NEPagingContentViewControllerDelegate {
-  public var menuViewController = NEPagingMenuViewController()
+open class QChatSquareHomeViewController: UIViewController, NEPagingContentViewControllerDataSource, NETabPagingMenuViewControllerDataSource, NETabPagingMenuViewControllerDelegate, NEPagingContentViewControllerDelegate {
+  public var menuViewController = NETabPagingMenuViewController()
   public var contentViewController = NEPagingContentViewController()
 
   public weak var delegate: SquareDataSourceDelegate?
@@ -152,13 +152,13 @@ open class QChatSquareHomeViewController: UIViewController, NEPagingContentViewC
     firstLoad?()
   }
 
-  public func menuViewController(viewController: NEPagingMenuViewController, cellForItemAt index: Int) -> NEPagingMenuViewCell {
+  public func menuViewController(viewController: NETabPagingMenuViewController, cellForItemAt index: Int) -> NEPagingMenuViewCell {
     let cell = viewController.dequeueReusableCell(withReuseIdentifier: "identifier", for: index) as! NETitleLabelMenuViewCell
     cell.titleLabel.text = dataSource[index].menu
     return cell
   }
 
-  public func menuViewController(viewController: NEPagingMenuViewController, widthForItemAt index: Int) -> CGFloat {
+  public func menuViewController(viewController: NETabPagingMenuViewController, widthForItemAt index: Int) -> CGFloat {
     68
   }
 
@@ -170,15 +170,15 @@ open class QChatSquareHomeViewController: UIViewController, NEPagingContentViewC
     }
   }
 
-  public func numberOfItemsForMenuViewController(viewController: NEPagingMenuViewController) -> Int {
+  public func numberOfItemsForMenuViewController(viewController: NETabPagingMenuViewController) -> Int {
     dataSource.count
   }
 
-  public func menuViewController(viewController: NEPagingMenuViewController, didSelect page: Int, previousPage: Int) {
+  public func menuViewController(viewController: NETabPagingMenuViewController, didSelect page: Int, previousPage: Int) {
     contentViewController.scroll(to: page, animated: true)
   }
 
-  public func menuViewController(viewController: NEPagingMenuViewController, willAnimateFocusViewTo index: Int, with coordinator: PagingMenuFocusViewAnimationCoordinator) {
+  public func menuViewController(viewController: NETabPagingMenuViewController, willAnimateFocusViewTo index: Int, with coordinator: PagingMenuFocusViewAnimationCoordinator) {
     setFocusViewWidth(index: index)
     coordinator.animateFocusView { [weak self] coordinator in
       self?.focusView.layoutIfNeeded()

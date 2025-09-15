@@ -3,7 +3,6 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreQChatKit
 import NEQChatKit
 import UIKit
 
@@ -24,7 +23,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func viewWillAppear(_ animated: Bool) {
@@ -77,7 +76,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   func loadRoles() {
     // 获取话题下的身份组
     viewModel?.firstGetChannelRoles { [weak self] error, roles in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
         desc: "CALLBACK firstGetChannelRoles " + (error?.localizedDescription ?? "no error")
       )
@@ -99,7 +98,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
   func loadMembers() {
     // 获取话题下的成员
     viewModel?.firstGetMembers { [weak self] error, members in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
         desc: "CALLBACK firstGetMembers " + (error?.localizedDescription ?? "no error")
       )
@@ -330,7 +329,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
         tableView.reloadData()
 //        // 加载更多
 //        viewModel?.getChannelRoles { [weak self] error, roles in
-//          NELog.infoLog(
+//          NEALog.infoLog(
 //            ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
 //            desc: "CALLBACK getChannelRoles " + (error?.localizedDescription ?? "no error")
 //          )
@@ -359,7 +358,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
       if model.isPlacehold {
         // 加载更多
         viewModel?.getMembers { [weak self] error, members in
-          NELog.infoLog(
+          NEALog.infoLog(
             ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
             desc: "CALLBACK getMembers " + (error?.localizedDescription ?? "no error")
           )
@@ -403,7 +402,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
       message: message
     ) {
       self.viewModel?.removeChannelRole(role: role, index: index) { [weak self] error in
-        NELog.infoLog(
+        NEALog.infoLog(
           ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
           desc: "CALLBACK removeChannelRole " + (error?.localizedDescription ?? "no error")
         )
@@ -438,7 +437,7 @@ public class QChatChannelAuthoritySettingVC: QChatTableViewController {
       message: message
     ) {
       self.viewModel?.removeMemberRole(member: member, index: index) { [weak self] error in
-        NELog.infoLog(
+        NEALog.infoLog(
           ModuleName + " " + (self?.className ?? "QChatChannelAuthoritySettingVC"),
           desc: "CALLBACK removeMemberRole " + (error?.localizedDescription ?? "no error")
         )

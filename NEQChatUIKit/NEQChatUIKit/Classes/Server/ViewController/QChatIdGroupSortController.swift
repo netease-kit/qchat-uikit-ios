@@ -3,7 +3,7 @@
 // Use of this source code is governed by a MIT license that can be
 // found in the LICENSE file.
 
-import NECoreIMKit
+import NECoreIM2Kit
 import NEQChatKit
 import UIKit
 
@@ -84,7 +84,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
     view.makeToastActivity(.center)
     weak var weakSelf = self
     viewmodel.saveSort(serverId) {
-      NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(self.serverId ?? 0)")
+      NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(self.serverId ?? 0)")
       weakSelf?.view.hideToastActivity()
       if let block = weakSelf?.completion {
         block()
@@ -199,7 +199,7 @@ public class QChatIdGroupSortController: NEBaseTableViewController, UITableViewD
         ) {
           weakSelf?.view.makeToastActivity(.center)
           weakSelf?.viewmodel.removeRole(weakSelf?.serverId, model.role?.roleId, model) {
-            NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(weakSelf?.serverId ?? 0)")
+            NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(weakSelf?.serverId ?? 0)")
             weakSelf?.didDelete = true
             weakSelf?.view.hideToastActivity()
             if let block = weakSelf?.completion {

@@ -20,7 +20,7 @@ public extension Bundle {
   class func nim_EmojiPlistFile() -> String? {
     let bundle = Bundle.nim_defaultEmojiBundle()
 
-    let resource = (CommonTool.getCurrentLanguage() == "cn") ?"emoji_ios_cn" : "emoji_ios_en"
+    let resource = (NEAppLanguageUtil.getCurrentLanguage() == .english) ? "emoji_ios_en" : "emoji_ios_cn"
     let filepath = bundle?.path(
       forResource: resource,
       ofType: "plist",

@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import NECoreKit
-import NECoreQChatKit
+
 import NEQChatKit
-import NIMSDK
 import NIMQChat
+import NIMSDK
 import UIKit
 
 public protocol QChatSquareViewModelDelegate: NSObjectProtocol {

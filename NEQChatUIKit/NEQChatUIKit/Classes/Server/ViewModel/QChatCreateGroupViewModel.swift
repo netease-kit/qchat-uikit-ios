@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import Foundation
-import NECoreIMKit
+import NECoreIM2Kit
 import NEQChatKit
 
 @objcMembers
@@ -20,13 +20,13 @@ public class QChatCreateGroupViewModel: NSObject {
   override init() {}
 
   func loadAllData() {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
 //        limitUsers.removeAll()
 //        limitUsers.append(contentsOf: allUsers)
   }
 
   private func addUser(_ user: QChatUserInfo) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
     allUsers.append(user)
 //        if limitUsers.count <= limit {
 //            limitUsers.append(user)
@@ -34,13 +34,13 @@ public class QChatCreateGroupViewModel: NSObject {
   }
 
   func addNewUser(_ user: QChatUserInfo) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(user.serverId ?? 0)")
     addUser(user)
     filterData()
   }
 
   func filterData() {
-    NELog.infoLog(ModuleName + " " + className, desc: #function)
+    NEALog.infoLog(ModuleName + " " + className, desc: #function)
     for user in allUsers {
       user.cornerType = .none
     }
@@ -73,14 +73,14 @@ public class QChatCreateGroupViewModel: NSObject {
   }
 
   func removeData(_ index: Int) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", index:\(index)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", index:\(index)")
     allUsers.remove(at: index)
     filterData()
     delegate?.dataDidChange()
   }
 
   func addMembers(_ members: [QChatUserInfo]) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", members.count:\(members.count)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", members.count:\(members.count)")
     for user in members {
       if allUsers.contains(where: { lUser in
         if let cid = lUser.serverMember?.accid, let mid = user.serverMember?.accid {
@@ -97,7 +97,7 @@ public class QChatCreateGroupViewModel: NSObject {
   }
 
   func removeMember(_ member: QChatUserInfo) {
-    NELog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member.serverId ?? 0)")
+    NEALog.infoLog(ModuleName + " " + className, desc: #function + ", serverId:\(member.serverId ?? 0)")
     delegate?.dataDidChange()
   }
 }

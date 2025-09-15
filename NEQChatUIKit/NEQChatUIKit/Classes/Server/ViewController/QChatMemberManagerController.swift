@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 
 import MJRefresh
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -38,7 +38,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
   }
 
   required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+    super.init(coder: coder)
   }
 
   override public func viewDidLoad() {
@@ -105,7 +105,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
     param.roleId = roleId
     print("param existing accid : ", accid as Any)
     viewmodel.repo.getExistingServerRoleMembersByAccids(param) { error, accids in
-      NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accids:\(accids)")
+      NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", accids:\(accids)")
 //      print("getExistingServerRoleMembersByAccids : ", accids)
       var dic = [String: String]()
       var retAccids = [String]()
@@ -225,7 +225,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
         weakSelf?.view.makeToastActivity(.center)
         weakSelf?.viewmodel
           .addMembers(users, weakSelf?.serverId, weakSelf?.roleId) { successCount in
-            NELog.infoLog(ModuleName + " " + (weakSelf?.className() ?? "QChatMemberManagerController"), desc: "✅ CALLBACK SUCCESS")
+            NEALog.infoLog(ModuleName + " " + (weakSelf?.className() ?? "QChatMemberManagerController"), desc: "✅ CALLBACK SUCCESS")
             weakSelf?.view.hideToastActivity()
             weakSelf?.showToast(localizable("qchat_add_success"))
             weakSelf?.memberCount += successCount
@@ -238,7 +238,7 @@ public class QChatMemberManagerController: NEBaseTableViewController, UITableVie
         if let rid = weakSelf?.roleId, let sid = weakSelf?.serverId {
           weakSelf?.view.makeToastActivity(.center)
           weakSelf?.viewmodel.remove(user, sid, rid) { failedCount in
-            NELog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(sid)")
+            NEALog.infoLog(ModuleName + " " + self.className(), desc: #function + ", serverId:\(sid)")
             weakSelf?.view.hideToastActivity()
             if failedCount > 0 {
               weakSelf?.loadMoreData(true)

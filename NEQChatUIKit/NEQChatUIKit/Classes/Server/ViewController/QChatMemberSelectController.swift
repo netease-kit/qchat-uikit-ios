@@ -6,7 +6,7 @@
 import MJRefresh
 import NECommonKit
 import NECommonUIKit
-import NECoreQChatKit
+
 import NEQChatKit
 import UIKit
 
@@ -159,7 +159,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
 
   @objc func loadData() {
     viewmodel.loadFirst(serverId: serverId) { [weak self] error, users in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.tag ?? "QChatMemberSelectController"),
         desc: "CALLBACK loadFirst " + (error?.localizedDescription ?? "no error")
       )
@@ -186,7 +186,7 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
 
   @objc func loadMoreData() {
     viewmodel.loadMore(serverId: serverId) { [weak self] error, users in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + (self?.tag ?? "QChatMemberSelectController"),
         desc: "CALLBACK loadMore " + (error?.localizedDescription ?? "no error")
       )
@@ -329,10 +329,10 @@ public class QChatMemberSelectController: NEBaseTableViewController, MemberSelec
   func refreshSelectCount() {
     if selectArray.count > 0 {
       let str = "\(localizable("qchat_sure"))(\(selectArray.count))"
-      rightNavBtn.setTitle(str, for: .normal)
+      rightNavButton.setTitle(str, for: .normal)
       navigationView.setMoreButtonTitle(str)
     } else {
-      rightNavBtn.setTitle(localizable("qchat_sure"), for: .normal)
+      rightNavButton.setTitle(localizable("qchat_sure"), for: .normal)
       navigationView.setMoreButtonTitle(localizable("qchat_sure"))
     }
   }

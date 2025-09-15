@@ -5,7 +5,7 @@
 
 import NECommonKit
 import NECoreKit
-import NECoreQChatKit
+import NEQChatKit
 import UIKit
 
 // import NEKeyboardManagerSwift
@@ -141,7 +141,7 @@ public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewD
     }
     let param = NEQChatGetServersParam(serverIds: [NSNumber(value: serverId)])
     viewmodel.getServers(parameter: param) { error, serversArray in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.tag,
         desc: "CALLBACK getServers " + (error?.localizedDescription ?? "no error")
       )
@@ -154,7 +154,7 @@ public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewD
         }
         self.tableView.reloadData()
       } else {
-        NELog.errorLog(ModuleName + " " + self.tag, desc: "❌getServers failed,error = \(error!)")
+        NEALog.errorLog(ModuleName + " " + self.tag, desc: "❌getServers failed,error = \(error!)")
       }
     }
   }
@@ -199,7 +199,7 @@ public class QChatJoinOtherServiceController: NEBaseViewController, UITableViewD
 
     let param = NEQChatGetChannelsByPageParam(timeTag: 0, serverId: serverId)
     channelViewModel.getChannelsByPage(parameter: param) { error, result in
-      NELog.infoLog(
+      NEALog.infoLog(
         ModuleName + " " + self.tag,
         desc: "CALLBACK getChannelsByPage " + (error?.localizedDescription ?? "no error")
       )
