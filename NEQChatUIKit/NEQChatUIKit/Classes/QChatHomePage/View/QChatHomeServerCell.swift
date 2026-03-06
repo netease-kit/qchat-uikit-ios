@@ -31,7 +31,7 @@ class QChatHomeServerCell: UITableViewCell {
     // Configure the view for the selected state
   }
 
-  public var serverModel: NEQChatServer? {
+  var serverModel: NEQChatServer? {
     didSet {
       if let imageUrl = serverModel?.icon {
         headView.sd_setImage(with: URL(string: imageUrl), completed: nil)
@@ -177,7 +177,7 @@ class QChatHomeServerCell: UITableViewCell {
     return tagImageView
   }()
 
-  public func showSelectState(isShow: Bool) {
+  func showSelectState(isShow: Bool) {
     leftSelectView.isHidden = isShow ? false : true
   }
 }

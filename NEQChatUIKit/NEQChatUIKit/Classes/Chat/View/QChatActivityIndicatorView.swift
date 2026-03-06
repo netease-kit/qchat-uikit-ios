@@ -12,7 +12,7 @@ enum QChatSendMessageStatus {
 }
 
 class QChatActivityIndicatorView: UIButton {
-  public var messageStatus: QChatSendMessageStatus? {
+  var messageStatus: QChatSendMessageStatus? {
     didSet {
       failBtn.isHidden = true
       activity.isHidden = true

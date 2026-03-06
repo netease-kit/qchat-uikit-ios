@@ -6,7 +6,7 @@
 import UIKit
 
 class QChatSectionView: UITableViewHeaderFooterView {
-  public var titleLabel = UILabel()
+  var titleLabel = UILabel()
   override init(reuseIdentifier: String?) {
     super.init(reuseIdentifier: reuseIdentifier)
     commonUI()

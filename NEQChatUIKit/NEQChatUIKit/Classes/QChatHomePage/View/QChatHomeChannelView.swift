@@ -12,18 +12,18 @@ import UIKit
 class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
   typealias CallBack = (_ server: NEQChatServer?) -> Void
   typealias SelectedChannelBlock = (_ channel: NEQChatChatChannel?, _ isVisitor: Bool?) -> Void
-  public var channelViewModel = QChatChannelViewModel()
-  public var channelArray = [NEQChatChatChannel]()
+  var channelViewModel = QChatChannelViewModel()
+  var channelArray = [NEQChatChatChannel]()
 
-  public var setUpBlock: CallBack?
-  public var addChannelBlock: CallBack?
-  public var selectedChannelBlock: SelectedChannelBlock?
-  public var hasMore = true
-  public var nextTimeTag: TimeInterval = 0
+  var setUpBlock: CallBack?
+  var addChannelBlock: CallBack?
+  var selectedChannelBlock: SelectedChannelBlock?
+  var hasMore = true
+  var nextTimeTag: TimeInterval = 0
 
-  public var viewmodel: QChatHomeViewModel?
+  var viewmodel: QChatHomeViewModel?
 
-  public var qchatServerModel: NEQChatServer? {
+  var qchatServerModel: NEQChatServer? {
     didSet {
       hasMore = true
       nextTimeTag = 0
@@ -113,7 +113,7 @@ class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
     requestData(timeTag: 0)
   }
 
-  public func channelChange(noticeInfo: NIMQChatSystemNotification) {
+  func channelChange(noticeInfo: NIMQChatSystemNotification) {
     switch noticeInfo.type {
     case .channelRemove, .channelCreate, .channelUpdate:
       if noticeInfo.serverId == qchatServerModel?.serverId {
@@ -210,7 +210,7 @@ class QChatHomeChannelView: UIView, QChatChannelViewModelDelegate {
     tableView.reloadData()
   }
 
-  public func refreshVisitorUI() {
+  func refreshVisitorUI() {
     if qchatServerModel?.isVisitorMode == true {
       setUpBtn.isHidden = true
     } else {
@@ -245,7 +245,7 @@ extension QChatHomeChannelView {
     requestData(timeTag: 0)
   }
 
-  public func requestData(timeTag: TimeInterval) {
+  func requestData(timeTag: TimeInterval) {
     if timeTag != 0, !hasMore {
       // 上拉加载无多余数据，无需请求
       return
@@ -291,7 +291,7 @@ extension QChatHomeChannelView {
     }
   }
 
-  public func showEmptyServerView() {
+  func showEmptyServerView() {
     channelArray.removeAll()
     tableView.reloadData()
     titleLabel.isHidden = true
@@ -304,7 +304,7 @@ extension QChatHomeChannelView {
     emptyView.setEmptyImage(image: UIImage.ne_imageNamed(name: "servers_noMore"))
   }
 
-  public func dismissEmptyView() {
+  func dismissEmptyView() {
     titleLabel.isHidden = false
     if qchatServerModel?.isVisitorMode == false {
       setUpBtn.isHidden = false
@@ -317,12 +317,12 @@ extension QChatHomeChannelView {
 }
 
 extension QChatHomeChannelView: UITableViewDataSource, UITableViewDelegate {
-  public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     channelArray.count
   }
 
-  public func tableView(_ tableView: UITableView,
-                        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView,
+                 cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(
       withIdentifier: "\(NSStringFromClass(QChatHomeChannelCell.self))",
       for: indexPath
@@ -358,15 +358,15 @@ extension QChatHomeChannelView: UITableViewDataSource, UITableViewDelegate {
     return cell
   }
 
-  public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     if let block = selectedChannelBlock, channelArray.count > 0 {
       block(channelArray[indexPath.row], qchatServerModel?.isVisitorMode)
     }
   }
 
-  public func tableView(_ tableView: UITableView,
-                        heightForRowAt indexPath: IndexPath) -> CGFloat {
+  func tableView(_ tableView: UITableView,
+                 heightForRowAt indexPath: IndexPath) -> CGFloat {
     NEALog.infoLog(className() + " heightForRowAt ", desc: "index row : \(indexPath.row) index section : \(indexPath.section)")
     if let cid = channelArray[indexPath.row].channelId, channelViewModel.lastMsgDic[cid] != nil {
       return 52.0
@@ -374,7 +374,7 @@ extension QChatHomeChannelView: UITableViewDataSource, UITableViewDelegate {
     return 36
   }
 
-  public func checkManagerChannelPermission() {
+  func checkManagerChannelPermission() {
     if let sid = qchatServerModel?.serverId {
       weak var weakSelf = self
       channelViewModel.checkManageChannelPermission(severId: sid, channelId: 0) { error, enable in

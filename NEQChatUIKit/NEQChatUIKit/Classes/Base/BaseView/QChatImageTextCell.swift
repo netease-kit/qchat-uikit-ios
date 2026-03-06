@@ -9,7 +9,7 @@ class QChatImageTextCell: QChatStateCell {
   var circleView = UIImageView()
   let line = UIView()
 
-  override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     // circle view
     circleView.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +56,7 @@ class QChatImageTextCell: QChatStateCell {
     super.init(coder: coder)
   }
 
-  public lazy var avatarImage: UIImageView = {
+  lazy var avatarImage: UIImageView = {
     let avatar = UIImageView()
     avatar.translatesAutoresizingMaskIntoConstraints = false
     avatar.clipsToBounds = true
@@ -64,7 +64,7 @@ class QChatImageTextCell: QChatStateCell {
     return avatar
   }()
 
-  public lazy var shortNameLabel: UILabel = {
+  lazy var shortNameLabel: UILabel = {
     let name = UILabel()
     name.translatesAutoresizingMaskIntoConstraints = false
     name.textColor = .white
@@ -73,7 +73,7 @@ class QChatImageTextCell: QChatStateCell {
     return name
   }()
 
-  public lazy var nameLabel: UILabel = {
+  lazy var nameLabel: UILabel = {
     let label = UILabel()
     label.textAlignment = .left
     label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class QChatImageTextCell: QChatStateCell {
     return label
   }()
 
-  public func setup(accid: String?, nickName: String?, avatar: String?) {
+  func setup(accid: String?, nickName: String?, avatar: String?) {
     let name = nickName?.count ?? 0 > 0 ? nickName : accid
     nameLabel.text = name
     if let atr = avatar, !atr.isEmpty {

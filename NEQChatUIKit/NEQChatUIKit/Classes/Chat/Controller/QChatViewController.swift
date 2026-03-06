@@ -507,7 +507,13 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
     guard let content = text, content.count > 0 else {
       return
     }
-    viewmodel?.sendTextMessage(text: content) { [weak self] error in
+    // 将已 @ 的用户 accid 列表传给 ViewModel，填入消息的 mentionedAccids
+    let mentionedAccids = menuView.nickAccidList.isEmpty ? nil : menuView.nickAccidList
+    // 提取 @ 范围元数据（必须在清除缓存前调用）
+    let atRemoteExt = menuView.getAtRemoteExtension()
+    // 清除 @ mention 缓存（必须在取出 nickAccidList / remoteExt 之后再清除）
+    menuView.clearAtCache()
+    viewmodel?.sendTextMessage(text: content, mentionedAccids: mentionedAccids, remoteExt: atRemoteExt) { [weak self] error in
       NEALog.infoLog(
         ModuleName + " " + (self?.className() ?? "QChatViewController"),
         desc: "CALLBACK sendTextMessage " + (error?.localizedDescription ?? "no error")
@@ -939,11 +945,31 @@ public class QChatViewController: QChatBaseViewController, UINavigationControlle
   }
 
   public func textDelete(range: NSRange, text: String) -> Bool {
-    true
+    // @ mention 的原子删除已在 QChatInputView 内部处理，此处直接返回 true 允许默认删除
+    return true
   }
 
   public func textChanged(text: String) -> Bool {
-    true
+    return true
+  }
+
+  // MARK: - @ Mention Helpers
+
+  /// 输入 "@" 时由 QChatInputView 回调，弹出 @ 成员选择控制器
+  public func shouldShowAtMemberSelect() {
+    showAtMemberSelectVC()
+  }
+
+  /// 弹出 @ 成员选择控制器
+  open func showAtMemberSelectVC() {
+    let selectVC = QChatAtMemberSelectController()
+    selectVC.channel = viewmodel?.channel
+    selectVC.selectedBlock = { [weak self] addText, accid in
+      self?.menuView.addToAtUsers(addText: addText, accid: accid)
+    }
+    let nav = UINavigationController(rootViewController: selectVC)
+    nav.modalPresentationStyle = .pageSheet
+    present(nav, animated: true, completion: nil)
   }
 
   public func textFieldDidChange(_ textField: UITextView) {}

@@ -6,8 +6,8 @@
 import UIKit
 
 class QChatCenterTextCell: QChatCornerCell {
-  public var titleLabel: UILabel = .init()
-  public var line = UIView()
+  var titleLabel: UILabel = .init()
+  var line = UIView()
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 

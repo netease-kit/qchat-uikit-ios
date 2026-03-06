@@ -8,7 +8,7 @@ import UIKit
 class QChatWhiteBlackViewModel: NSObject {
   let repo = QChatRepo.shared
 
-  public func getOwner(_ serverId: UInt64?, _ completion: @escaping (String?) -> Void) {
+  func getOwner(_ serverId: UInt64?, _ completion: @escaping (String?) -> Void) {
     guard let sid = serverId else {
       return
     }

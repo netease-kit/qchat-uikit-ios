@@ -17,7 +17,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
   var isFirstRow = true
   var titleTopConstraint: NSLayoutConstraint?
 
-  public var memberModel: NEQChatServerMemeber? {
+  var memberModel: NEQChatServerMemeber? {
     didSet {
       guard let model = memberModel else { return }
 
@@ -56,7 +56,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
     super.setSelected(selected, animated: animated)
   }
 
-  override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     selectionStyle = .none
   }
@@ -228,7 +228,7 @@ class QChatGroupIdentityMemberCell: UITableViewCell {
     return view
   }()
 
-  public lazy var arrowImageView: UIImageView = {
+  lazy var arrowImageView: UIImageView = {
     let arrow = UIImageView(image: UIImage.ne_imageNamed(name: "arrowRight"))
     arrow.translatesAutoresizingMaskIntoConstraints = false
     return arrow

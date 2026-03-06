@@ -11,7 +11,7 @@ import UIKit
 
 @objc class QChatBubbleButton: UIButton {
   // 设置气泡背景图片
-  public func setBubbleImage(image: UIImage) {
+  func setBubbleImage(image: UIImage) {
     let image = image
       .resizableImage(withCapInsets: UIEdgeInsets(top: 35, left: 25, bottom: 10, right: 25))
     setBackgroundImage(image, for: .normal)
@@ -69,7 +69,7 @@ class QChatBaseTableViewCell: UITableViewCell {
     // Configure the view for the selected state
   }
 
-  public var messageFrame: QChatMessageFrame? {
+  var messageFrame: QChatMessageFrame? {
     didSet {
       timeLabel.frame = messageFrame?.timeFrame ?? CGRect.zero
       btnHeadImage.frame = messageFrame?.headFrame ?? CGRect.zero
@@ -144,7 +144,7 @@ class QChatBaseTableViewCell: UITableViewCell {
     super.init(coder: coder)
   }
 
-  public func addContentSubviews() {
+  func addContentSubviews() {
     contentView.addSubview(timeLabel)
     contentView.addSubview(btnHeadImage)
     contentView.addSubview(contentBtn)
@@ -182,20 +182,20 @@ class QChatBaseTableViewCell: UITableViewCell {
     return view
   }()
 
-  public lazy var contentBtn: QChatBubbleButton = {
+  lazy var contentBtn: QChatBubbleButton = {
     let btn = QChatBubbleButton(frame: .zero)
     btn.addTarget(self, action: #selector(bubbleClick), for: .touchUpInside)
     return btn
   }()
 
-  public lazy var activityView: QChatActivityIndicatorView = {
+  lazy var activityView: QChatActivityIndicatorView = {
     let activityView = QChatActivityIndicatorView()
     activityView.isHidden = true
     return activityView
   }()
 
   // 快捷（表情）评论区
-  public lazy var quickCommentCollection: UICollectionView = {
+  lazy var quickCommentCollection: UICollectionView = {
     let flow = UICollectionViewFlowLayout()
     flow.scrollDirection = .vertical
     flow.minimumLineSpacing = 4

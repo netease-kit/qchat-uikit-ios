@@ -77,6 +77,8 @@
 "anti_error"="存在不安全内容，请重新输入。";
 "privatized_configuration"="私有化配置";
 "login_by_account"="账号登录";
+"config_info"="配置信息";
 "security_warning"="仅用于体验云信IM 产品功能，请勿轻信汇款、中奖等涉及钱款的信息，勿轻易拨打陌生电话，谨防上当受骗。";
 "login_token_expired"="登录信息失效，请重新登录。";
 "account_forbidden"="用户已被封禁";
+"open_claw_hello"="开启 OpenClaw 智能体之旅，尽情使唤你的小助理吧";
