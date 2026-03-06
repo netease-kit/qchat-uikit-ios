@@ -15,7 +15,7 @@ class QChatSearchServerCell: UITableViewCell {
 
   let repo = QChatRepo.shared
 
-  public var serverModel: NEQChatServer? {
+  var serverModel: NEQChatServer? {
     didSet {
       if let imageUrl = serverModel?.icon {
         headImageView.sd_setImage(with: URL(string: imageUrl), completed: nil)

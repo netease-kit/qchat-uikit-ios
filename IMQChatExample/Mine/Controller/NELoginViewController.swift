@@ -45,6 +45,18 @@ public class NELoginViewController: UIViewController {
     return button
   }()
 
+  /// 配置信息按钮
+  lazy var configInfoButton: UIButton = {
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
+    button.setTitleColor(UIColor.ne_lightText, for: .normal)
+    button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
+    button.setTitle(localizable("config_info"), for: .normal)
+    button.addTarget(self, action: #selector(configInfoBtnClick), for: .touchUpInside)
+    button.accessibilityIdentifier = "id.configInfo"
+    return button
+  }()
+
   lazy var emailLoginButton: UIButton = {
     let button = UIButton()
     button.frame = CGRect(x: 0, y: 0, width: 60, height: 44)
@@ -54,13 +66,6 @@ public class NELoginViewController: UIViewController {
     button.addTarget(self, action: #selector(emailLoginBtnClick), for: .touchUpInside)
     button.accessibilityIdentifier = "id.emailLogin"
     return button
-  }()
-
-  lazy var dividerLineView: UIView = {
-    let view = UIView()
-    view.translatesAutoresizingMaskIntoConstraints = false
-    view.backgroundColor = UIColor.ne_lightText
-    return view
   }()
 
   /// 节点按钮
@@ -113,12 +118,11 @@ public class NELoginViewController: UIViewController {
   }
 
   func setupUI() {
+    view.backgroundColor = .white
     view.addSubview(launchIconView)
     view.addSubview(launchIconLabel)
     view.addSubview(loginButton)
-    view.addSubview(emailLoginButton)
-    view.addSubview(dividerLineView)
-    view.addSubview(nodeButton)
+    view.addSubview(configInfoButton)
 
     NSLayoutConstraint.activate([
       launchIconView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -140,45 +144,71 @@ public class NELoginViewController: UIViewController {
       loginButton.heightAnchor.constraint(equalToConstant: 44),
     ])
 
-    let stackView = UIStackView()
-    stackView.translatesAutoresizingMaskIntoConstraints = false
-    stackView.axis = .horizontal
-    stackView.alignment = .center
-    stackView.distribution = .fillEqually
-    stackView.spacing = 8
-    stackView.addArrangedSubview(emailLoginButton)
-    stackView.addArrangedSubview(nodeButton)
-    stackView.addArrangedSubview(pocSettingButton)
-    stackView.addArrangedSubview(pocLoginButton)
-
-    view.addSubview(stackView)
     NSLayoutConstraint.activate([
-      stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60),
-      stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-      stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-      stackView.heightAnchor.constraint(equalToConstant: 44),
+      configInfoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      configInfoButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 16),
+      configInfoButton.heightAnchor.constraint(equalToConstant: 44),
     ])
   }
 
   func loginBtnClick(sender: UIButton) {
+    // 优先从本地存储读取 account 和 token
+    let loginAccount = UserDefaults.standard.string(forKey: QChatConfigInfoKeys.account) ?? account
+    let loginToken = UserDefaults.standard.string(forKey: QChatConfigInfoKeys.token) ?? token
+    let openclawAccount = UserDefaults.standard.string(forKey: QChatConfigInfoKeys.openclawAccount) ?? ""
+
     weak var weakSelf = self
-    print("login accid : ", account)
-    print("login token : ", token)
+    print("login accid : ", loginAccount)
+    print("login token : ", loginToken)
     
     let option = V2NIMLoginOption()
     option.syncLevel = .DATA_SYNC_TYPE_LEVEL_BASIC
-    IMKitClient.instance.login(account, token, option) { error in
+    IMKitClient.instance.login(loginAccount, loginToken, option) { error in
         if let err = error {
             NEALog.infoLog(weakSelf?.className() ?? "", desc: "login IM error : \(err.localizedDescription)")
             UIApplication.shared.keyWindow?.makeToast(err.localizedDescription)
         } else {
             NEALog.infoLog(weakSelf?.className() ?? "", desc: "login IM Success")
+          
+          if let conversaionId = V2NIMConversationIdUtil.p2pConversationId(openclawAccount) {
+            let message = MessageUtils.tipMessage(text: localizable("open_claw_hello"))
+            if NIMSDK.shared().v2Option?.enableV2CloudConversation == false {
+              LocalConversationRepo.shared.getConversation(conversaionId) { conversaion, error in
+                if conversaion == nil {
+                  LocalConversationRepo.shared.createConversation(conversaionId) { conversaion, error in
+                    if let conversaionId = conversaion?.conversationId {
+                      ChatRepo.shared.insertMessageToLocal(message: message, conversationId: conversaionId) { msg, error in
+                        
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              ConversationRepo.shared.getConversation(conversaionId) { conversaion, error in
+                if conversaion == nil {
+                  ConversationRepo.shared.createConversation(conversaionId) { conversaion, error in
+                    if let conversaionId = conversaion?.conversationId {
+                      ChatRepo.shared.insertMessageToLocal(message: message, conversationId: conversaionId) { msg, error in
+                        
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          
             if let block = weakSelf?.successLogin {
                 block()
             }
         }
     }
+  }
+
+  func configInfoBtnClick(sender: UIButton) {
+    let ctrl = NEConfigInfoViewController()
+    navigationController?.pushViewController(ctrl, animated: true)
   }
 
   func emailLoginBtnClick(sender: UIButton) {

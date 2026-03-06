@@ -78,6 +78,8 @@
 
 "privatized_configuration"="Privatized configuration";
 "login_by_account"="login";
+"config_info"="Config Info";
 "security_warning"="For test only. Beware of money transfer, lottery winnings & strange call scams.";
 "login_token_expired"="Session expired. Please login again.";
 "account_forbidden"="User Banned";
+"open_claw_hello"="Begin your OpenClaw AI agent journey and make the most of your personal assistant!";

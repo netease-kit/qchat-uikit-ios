@@ -9,7 +9,7 @@ import UIKit
 class QChatCopyableLabel: UILabel {
   var copyString: String?
 
-  override public var canBecomeFirstResponder: Bool {
+  override var canBecomeFirstResponder: Bool {
     true
   }
 

@@ -227,15 +227,191 @@ public class QChatMessageFrame: NSObject {
   /// 计算文本消息的宽高
   /// - Parameter contentSize: 根据文案计算的宽高
   func getContentSize() {
-    attributeStr = NEEmotionTool.getAttWithStr(
-      str: message?.text ?? "",
+    let text = message?.text ?? ""
+    let mutableAttrStr = NEEmotionTool.getAttWithStr(
+      str: text,
       font: DefaultTextFont(16)
     )
+
+    // 调试日志：打印 remoteExt 内容，便于排查 @ 高亮不工作的问题
+    print("[QChatAt-Debug] getContentSize text='\(text)' remoteExt=\(String(describing: message?.remoteExt))")
+
+    // 优先使用 remoteExt 中记录的精确范围高亮（可跨设备、历史消息）；
+    // 若无 remoteExt（旧消息兼容），再退回到 mentionedAccids 判断 + RegEx 兜底。
+    let didHighlight = highlightAtMentionsByRemoteExt(in: mutableAttrStr, message: message)
+    if !didHighlight {
+      let hasMention = !isRevoked && (
+        (message?.mentionedAll == true) ||
+        (message?.mentionedAccids.isEmpty == false)
+      )
+      if hasMention {
+        highlightAtMentionsByRegex(in: mutableAttrStr, originalText: text)
+      }
+    }
+
+    attributeStr = mutableAttrStr
 
     contentSize = NSAttributedString.getRealLabelSize(attributeStr, DefaultTextFont(16), CGSize(width: qChat_content_maxW - qChat_margin * 2, height: CGFloat.greatestFiniteMagnitude))
 
     if contentSize.height < qChat_min_h { // 小于一行高度，就保持一行
       contentSize.height = qChat_min_h
+    }
+  }
+
+  // MARK: - @ 高亮辅助方法
+
+  /// 通过 remoteExt 中的精确范围来高亮 @片段（完全对齐 ChatMessageHelper.loadAtInMessage 逻辑）
+  ///
+  /// 存储格式（由 QChatInputView.getAtRemoteExtension 生成）：
+  ///   remoteExt["yxAitMsg"] = { accid: { "segments": [{"start": Int, "end": Int}], "text": String } }
+  ///
+  /// start/end 是"服务端索引"（emoji 按 tag 字符串长度计算），
+  /// 渲染时需减去前缀 emoji 膨胀量还原成 UI 索引，与 loadAtInMessage 一致。
+  ///
+  /// - Returns: 是否找到并执行了高亮（true 表示无需再走正则兜底）
+  @discardableResult
+  private func highlightAtMentionsByRemoteExt(in attrStr: NSMutableAttributedString,
+                                              message: NIMQChatMessage?) -> Bool {
+    guard !isRevoked else { return false }
+
+    // remoteExt 的值是 [AnyHashable: Any]，内层也可能是 [AnyHashable: Any]，
+    // 必须用 AnyHashable key 来取，再逐层转型，避免 as? [String: Any] 直接失败。
+    guard let remoteExt = message?.remoteExt else { return false }
+    let atMsgKey: AnyHashable = qchat_yxAtMsg
+    guard let atDicRaw = remoteExt[atMsgKey], !"\(atDicRaw)".isEmpty else { return false }
+
+    // yxAitMsg 的值可能是：
+    //   a) 本地刚发送的消息：Swift 原生字典 [AnyHashable: Any]
+    //   b) 历史消息/SDK处理后：JSON 字符串，需要先反序列化
+    let atDic: [AnyHashable: Any]
+    if let nativeDict = atDicRaw as? [AnyHashable: Any] {
+      atDic = nativeDict
+    } else if let jsonStr = atDicRaw as? String,
+              let jsonData = jsonStr.data(using: .utf8),
+              let parsed = try? JSONSerialization.jsonObject(with: jsonData) as? [AnyHashable: Any] {
+      atDic = parsed
+    } else {
+      print("[QChatAt-Debug] highlightAtMentionsByRemoteExt: yxAitMsg 值类型无法解析: \(type(of: atDicRaw))")
+      return false
+    }
+    guard !atDic.isEmpty else { return false }
+
+    let text = message?.text ?? ""
+    let font = DefaultTextFont(16)
+    var didHighlight = false
+    var notFound = false
+
+    // 第一轮：带表情索引补偿的精确高亮（对齐 loadAtInMessage 主逻辑）
+    for (_, contentAny) in atDic {
+      guard let contentDic = contentAny as? [AnyHashable: Any] else { continue }
+      let segKey: AnyHashable = qchat_atSegmentsKey
+      guard let segmentsRaw = contentDic[segKey] as? [Any] else { continue }
+
+      for segAny in segmentsRaw {
+        // segment 可能是 [String:Any] 或 [AnyHashable:Any]（JSON 解析后为后者）
+        var startVal: Int?
+        var endVal: Int?
+        if let seg = segAny as? [String: Any] {
+          startVal = (seg["start"] as? NSNumber)?.intValue ?? seg["start"] as? Int
+          endVal   = (seg["end"]   as? NSNumber)?.intValue ?? seg["end"]   as? Int
+        } else if let seg = segAny as? [AnyHashable: Any] {
+          startVal = (seg["start"] as? NSNumber)?.intValue
+          endVal   = (seg["end"]   as? NSNumber)?.intValue
+        }
+        guard let serverStart = startVal, let serverEnd = endVal else { continue }
+
+        // ── 逆向补偿：服务端索引 → UI 索引（与 loadAtInMessage 完全一致）──
+        // 1. 计算 [0, serverStart) 前缀文本中表情膨胀量
+        var prefixReduceCount = 0
+        if serverStart > 0, text.count > serverStart {
+          let prefixText = String(text.prefix(serverStart))
+          let prefixAttr = NEEmotionTool.getAttWithStr(str: prefixText, font: font)
+          prefixReduceCount = qchatGetReduceIndexCount(prefixAttr)
+        }
+        let uiStart = serverStart - prefixReduceCount
+        if uiStart < 0 { notFound = true; break }
+
+        // 2. 计算 [serverStart, serverEnd) 片段内的表情膨胀量
+        let segmentServerLen = serverEnd - serverStart
+        if serverEnd + 1 > text.count { notFound = true; break }
+        let segStartIdx = text.index(text.startIndex, offsetBy: serverStart)
+        let segEndIdx   = text.index(text.startIndex, offsetBy: min(serverEnd + 1, text.count))
+        let segText = String(text[segStartIdx ..< segEndIdx])
+        let segAttr = NEEmotionTool.getAttWithStr(str: segText, font: font)
+        let innerReduceCount = qchatGetReduceIndexCount(segAttr)
+        let uiEnd = uiStart + segmentServerLen - innerReduceCount
+
+        if uiEnd <= uiStart { notFound = true; break }
+
+        // end 是半开区间右边界（含尾部空格），highlightLen = uiEnd - uiStart
+        let highlightLen = uiEnd - uiStart
+        if highlightLen > 0, uiStart + highlightLen <= attrStr.length {
+          attrStr.addAttribute(.foregroundColor, value: UIColor.ne_normalTheme,
+                               range: NSMakeRange(uiStart, highlightLen))
+          didHighlight = true
+        }
+      }
+      if notFound { break }
+    }
+
+    // 第二轮：若补偿逻辑遇到越界（notFound），退回直接用服务端索引（老版本兜底）
+    if notFound {
+      for (_, contentAny) in atDic {
+        guard let contentDic = contentAny as? [AnyHashable: Any] else { continue }
+        let segKey: AnyHashable = qchat_atSegmentsKey
+        guard let segmentsRaw = contentDic[segKey] as? [Any] else { continue }
+        for segAny in segmentsRaw {
+          var startVal: Int?
+          var endVal: Int?
+          if let seg = segAny as? [String: Any] {
+            startVal = (seg["start"] as? NSNumber)?.intValue ?? seg["start"] as? Int
+            endVal   = (seg["end"]   as? NSNumber)?.intValue ?? seg["end"]   as? Int
+          } else if let seg = segAny as? [AnyHashable: Any] {
+            startVal = (seg["start"] as? NSNumber)?.intValue
+            endVal   = (seg["end"]   as? NSNumber)?.intValue
+          }
+          guard let serverStart = startVal, let serverEnd = endVal else { continue }
+          let highlightLen = serverEnd - serverStart + 1
+          if serverStart >= 0, serverStart + highlightLen <= attrStr.length {
+            attrStr.addAttribute(.foregroundColor, value: UIColor.ne_normalTheme,
+                                 range: NSMakeRange(serverStart, highlightLen))
+            didHighlight = true
+          }
+        }
+      }
+    }
+    return didHighlight
+  }
+
+  /// 计算富文本中所有表情 attachment 带来的字符膨胀量（每个表情 = tag.count - 1 个额外字符）
+  /// 与 ChatMessageHelper.getReduceIndexCount 逻辑完全一致
+  private func qchatGetReduceIndexCount(_ attribute: NSAttributedString) -> Int {
+    var count = 0
+    attribute.enumerateAttributes(
+      in: NSMakeRange(0, attribute.length),
+      options: NSAttributedString.EnumerationOptions(rawValue: 0)
+    ) { dics, _, _ in
+      if let neAttachment = dics[NSAttributedString.Key.attachment] as? NEEmotionAttachment,
+         let tagCount = neAttachment.emotion?.tag?.count {
+        count += tagCount - 1
+      }
+    }
+    return count
+  }
+
+  /// RegEx 兜底高亮（用于无 remoteExt 的旧消息）
+  private func highlightAtMentionsByRegex(in attrStr: NSMutableAttributedString, originalText: String) {
+    guard let regex = try? NSRegularExpression(pattern: "@[^@\\s]+(\\s|$)", options: []) else {
+      return
+    }
+    let nsText = originalText as NSString
+    let fullRange = NSRange(location: 0, length: nsText.length)
+    let matches = regex.matches(in: originalText, options: [], range: fullRange)
+    for match in matches {
+      let highlightRange = match.range
+      if highlightRange.location + highlightRange.length <= attrStr.length {
+        attrStr.addAttribute(.foregroundColor, value: UIColor.ne_normalTheme, range: highlightRange)
+      }
     }
   }
 

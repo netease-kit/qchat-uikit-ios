@@ -32,7 +32,7 @@ class QChatTextSelectionCell: QChatTextCell {
     super.init(coder: coder)
   }
 
-  public func selected(selected: Bool) {
+  func selected(selected: Bool) {
     selectedImageView.isHidden = !selected
   }
 

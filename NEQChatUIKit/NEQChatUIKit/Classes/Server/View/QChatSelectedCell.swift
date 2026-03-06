@@ -19,7 +19,7 @@ class QChatSelectedCell: QNEChatBaseCell {
     }
   }
 
-  public lazy var titleLabel: UILabel = {
+  lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.textAlignment = .left
     label.translatesAutoresizingMaskIntoConstraints = false

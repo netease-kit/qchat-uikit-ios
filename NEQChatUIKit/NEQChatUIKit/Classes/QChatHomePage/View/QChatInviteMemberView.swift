@@ -33,7 +33,7 @@ class QChatInviteMemberView: UIView {
     super.init(coder: coder)
   }
 
-  public func showSuccessView() {
+  func showSuccessView() {
     let window = UIApplication.shared.keyWindow
     window?.addSubview(self)
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

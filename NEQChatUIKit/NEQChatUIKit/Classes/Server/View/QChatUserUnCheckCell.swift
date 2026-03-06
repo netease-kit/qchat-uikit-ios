@@ -6,8 +6,8 @@
 import UIKit
 
 class QChatUserUnCheckCell: QChatBaseCollectionViewCell {
-  public var avatarImage = NEUserHeaderView(frame: .zero)
-  public var nameTailLabel = UILabel()
+  var avatarImage = NEUserHeaderView(frame: .zero)
+  var nameTailLabel = UILabel()
 
   override init(frame: CGRect) {
     super.init(frame: frame)

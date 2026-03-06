@@ -11,7 +11,7 @@ protocol QChatPermissionSettingCellDelegate: AnyObject {
 }
 
 class QChatPermissionSettingCell: QChatCornerCell {
-  public weak var delegate: QChatPermissionSettingCellDelegate?
+  weak var delegate: QChatPermissionSettingCellDelegate?
   private var model: QChatRoleStatusInfoExt?
   private var button: UIButton?
   private var titleLabel = UILabel()
@@ -110,7 +110,7 @@ class QChatPermissionSettingCell: QChatCornerCell {
     ])
   }
 
-  public func updateModel(model: QChatRoleStatusInfoExt?) {
+  func updateModel(model: QChatRoleStatusInfoExt?) {
     self.model = model
     titleLabel.text = model?.title
     index = (model?.status?.status.rawValue ?? 0) + 1
@@ -130,7 +130,7 @@ class QChatPermissionSettingCell: QChatCornerCell {
     }
   }
 
-  public func selectedSuccess(success: Bool) {
+  func selectedSuccess(success: Bool) {
     if success {
       if let button = button {
         button.isSelected = !button.isSelected

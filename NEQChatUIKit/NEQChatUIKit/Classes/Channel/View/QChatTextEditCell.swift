@@ -15,7 +15,7 @@ class QChatTextEditCell: QChatCornerCell, UITextFieldDelegate {
   var limit: Int?
   var canEdit = true
   var editTotast = ""
-  public lazy var textFied: UITextField = {
+  lazy var textFied: UITextField = {
     let text = UITextField()
     text.textColor = .ne_darkText
     text.font = UIFont.systemFont(ofSize: 16)
@@ -25,7 +25,7 @@ class QChatTextEditCell: QChatCornerCell, UITextFieldDelegate {
     return text
   }()
 
-  public weak var delegate: QChatTextEditCellDelegate?
+  weak var delegate: QChatTextEditCellDelegate?
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -62,7 +62,7 @@ class QChatTextEditCell: QChatCornerCell, UITextFieldDelegate {
     return canEdit
   }
 
-  public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
     if let lim = limit, let text = textField.text {
       let newText = (text as NSString).replacingCharacters(in: range, with: string)
       if newText.utf16.count > lim {

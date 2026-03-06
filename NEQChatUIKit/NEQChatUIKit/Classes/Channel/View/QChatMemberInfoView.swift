@@ -11,12 +11,12 @@ protocol QChatMemberInfoViewDelegate: AnyObject {
 
 class QChatMemberInfoView: UIView {
   var contentView: UIView = .init()
-  public var avatar = UIImageView()
-  public var shortName = UILabel()
-  public var nameLabel = UILabel()
-  public var nameLabelRightConstraint: NSLayoutConstraint?
-  public var uidLabel = UILabel()
-  public var groupView = UIView()
+  var avatar = UIImageView()
+  var shortName = UILabel()
+  var nameLabel = UILabel()
+  var nameLabelRightConstraint: NSLayoutConstraint?
+  var uidLabel = UILabel()
+  var groupView = UIView()
 
 //    private var onlineView = UIView()
   private var originY: CGFloat = 0
@@ -31,14 +31,14 @@ class QChatMemberInfoView: UIView {
 //        }
 //    }
 
-  public var labelsWidth: CGFloat = 0
-  public var maxWidth: CGFloat = kScreenWidth - 2 * kScreenInterval
-  public var labelMargin: CGFloat = 6
-  public var labelHeight: CGFloat = 25
-  public var isFirstRow = true
-  public weak var delegate: QChatMemberInfoViewDelegate?
+  var labelsWidth: CGFloat = 0
+  var maxWidth: CGFloat = kScreenWidth - 2 * kScreenInterval
+  var labelMargin: CGFloat = 6
+  var labelHeight: CGFloat = 25
+  var isFirstRow = true
+  weak var delegate: QChatMemberInfoViewDelegate?
 
-  public var accid: String?
+  var accid: String?
 
   init(inView: UIView) {
     super.init(frame: inView.bounds)
@@ -208,7 +208,7 @@ class QChatMemberInfoView: UIView {
     ])
   }
 
-  public func setupRoles(dataArray: [String]) {
+  func setupRoles(dataArray: [String]) {
     for i in 0 ..< dataArray.count {
       let label = IDGroupLabel(content: dataArray[i])
       label.textInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
@@ -316,7 +316,7 @@ class QChatMemberInfoView: UIView {
     }
   }
 
-  public func setup(accid: String?, nickName: String?, avatarUrl: String?) {
+  func setup(accid: String?, nickName: String?, avatarUrl: String?) {
     let name = nickName?.count ?? 0 > 0 ? nickName : accid
     nameLabel.text = name
     if name == accid {

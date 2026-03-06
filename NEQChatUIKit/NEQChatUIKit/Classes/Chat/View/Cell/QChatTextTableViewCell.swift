@@ -25,7 +25,7 @@ class QChatTextTableViewCell: QChatBaseTableViewCell {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
   }
 
-  override public var messageFrame: QChatMessageFrame? {
+  override var messageFrame: QChatMessageFrame? {
     didSet {
       textView.attributedText = messageFrame?.attributeStr
       textView.frame = CGRect(
@@ -66,9 +66,9 @@ class QChatTextTableViewCell: QChatBaseTableViewCell {
                                     y: textFrame.origin.y,
                                     width: reeditViewWidth,
                                     height: textFrame.height)
-      } else {
-        textView.textColor = UIColor.ne_darkText
       }
+      // 注意：不能在这里设置 textView.textColor，因为会覆盖 attributedText 中的 @ 高亮颜色。
+      // 默认文字颜色已在 NEEmotionTool.getAttWithStr 中设置为 UIColor.ne_darkText。
     }
   }
 

@@ -43,7 +43,16 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
     QChatSystemMessageProvider.shared.removeDelegate(delegate: self)
   }
 
-  public func sendTextMessage(text: String, _ completion: @escaping (Error?) -> Void) {
+  /// 发送文本消息
+  /// - Parameters:
+  ///   - text: 消息文本
+  ///   - mentionedAccids: @ 的用户 accid 列表（传 ["ait_all"] 表示 @所有人），不传则不设置
+  ///   - remoteExt: @ 范围元数据，格式为 yxAitMsg 字典，存入 message.remoteExt
+  ///   - completion: 完成回调
+  public func sendTextMessage(text: String,
+                              mentionedAccids: [String]? = nil,
+                              remoteExt: [String: Any]? = nil,
+                              _ completion: @escaping (Error?) -> Void) {
     NEALog.infoLog(ModuleName + " " + className(), desc: #function + ", text.count:\(text.count)")
     if text.count <= 0 {
       return
@@ -52,6 +61,24 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
       let message = NIMQChatMessage()
       message.text = text
       message.from = QChatKitClient.instance.imAccid()
+      // 设置 @ 用户列表
+      if let accids = mentionedAccids, !accids.isEmpty {
+        // "ait_all" 表示 @所有人，SDK 用 mentionedAll = true 表示
+        if accids.contains("ait_all") {
+          message.mentionedAll = true
+          // 同时把非"ait_all"的 accid 也填入
+          let realAccids = accids.filter { $0 != "ait_all" }
+          if !realAccids.isEmpty {
+            message.mentionedAccids = realAccids
+          }
+        } else {
+          message.mentionedAccids = accids
+        }
+      }
+      // 将 @ 范围元数据存入 remoteExt，供所有客户端渲染高亮使用
+      if let ext = remoteExt {
+        message.remoteExt = ext
+      }
       QChatSystemMessageProvider.shared.sendMessage(
         message: message,
         session: NIMSession(forQChat: Int64(cid), qchatServerId: Int64(sid))
@@ -572,6 +599,19 @@ public class QChatViewModel: NSObject, NIMQChatMessageManagerDelegate {
         messages.remove(at: index)
       }
     } else {
+      // 将 willSend 阶段已记录的字段补回发送完成后的 message 对象
+      // （SDK 回传的 message 可能不携带这些字段，需要从旧 frame 里恢复）
+      let oldMessage = messages[index].message
+      if message.mentionedAccids.isEmpty {
+        message.mentionedAccids = oldMessage?.mentionedAccids ?? []
+      }
+      if !message.mentionedAll {
+        message.mentionedAll = oldMessage?.mentionedAll ?? false
+      }
+      // 恢复 remoteExt（含 @ 高亮元数据 yxAitMsg），SDK 回传的 message 可能不携带此字段
+      if message.remoteExt == nil || message.remoteExt?.isEmpty == true {
+        message.remoteExt = oldMessage?.remoteExt
+      }
       messages[index].message = message
     }
     delegate?.send(message, didCompleteWithError: error)

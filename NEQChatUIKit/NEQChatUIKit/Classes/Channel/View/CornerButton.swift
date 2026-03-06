@@ -42,11 +42,11 @@ class CornerButton: UIButton {
 //    }
 
 //    public var fillColor: UIColor = .white
-  public var color: UIColor = .white
-  public var selectedColor: UIColor = .white
+  var color: UIColor = .white
+  var selectedColor: UIColor = .white
   private var type: CornerType = .none
-  public var edgeInset: UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
-  public var cornerType: CornerType {
+  var edgeInset: UIEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
+  var cornerType: CornerType {
     get { type }
     set {
       if type != newValue {
@@ -81,7 +81,7 @@ class CornerButton: UIButton {
 //        drawRoundedCorner(rect: rect)
 //    }
 
-  public func drawRoundedCorner(rect: CGRect) {
+  func drawRoundedCorner(rect: CGRect) {
     var path = UIBezierPath()
     let roundRect = CGRect(
       x: rect.origin.x + edgeInset.left,

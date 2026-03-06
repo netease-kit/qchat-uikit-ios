@@ -25,7 +25,7 @@ class QChatImageTableViewCell: QChatBaseTableViewCell {
     return imageView
   }()
 
-  override public var messageFrame: QChatMessageFrame? {
+  override var messageFrame: QChatMessageFrame? {
     didSet {
       let imageObject = messageFrame?.message?.messageObject as! NIMImageObject
       contentImageView.frame = CGRect(

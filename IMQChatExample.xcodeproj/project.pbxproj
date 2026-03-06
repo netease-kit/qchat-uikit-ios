@@ -58,6 +58,7 @@
 		18311E5C2E72780E004962EE /* CustomSettingCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E5A2E72780E004962EE /* CustomSettingCellModel.swift */; };
 		18311E5E2E727838004962EE /* UIStyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18311E5D2E727838004962EE /* UIStyleManager.swift */; };
 		183776DF2D9E77BE005F4255 /* DemoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183776DD2D9E77BE005F4255 /* DemoService.swift */; };
+		18BB2B8F2F5AE2DD000B0840 /* NEConfigInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BB2B8E2F5AE2DD000B0840 /* NEConfigInfoViewController.swift */; };
 		39572AAB28C6F74D007A9526 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39572AAD28C6F74D007A9526 /* InfoPlist.strings */; };
 		39A36F8128002CFF009B07A9 /* NETabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A36F8028002CFF009B07A9 /* NETabBarController.swift */; };
 		39A39BA928C5A2B70001B638 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39A39BAB28C5A2B80001B638 /* Localizable.strings */; };
@@ -139,6 +140,7 @@
 		18311E5D2E727838004962EE /* UIStyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStyleManager.swift; sourceTree = "<group>"; };
 		18311E5F2E727A38004962EE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		183776DD2D9E77BE005F4255 /* DemoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoService.swift; sourceTree = "<group>"; };
+		18BB2B8E2F5AE2DD000B0840 /* NEConfigInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NEConfigInfoViewController.swift; sourceTree = "<group>"; };
 		18D0A2A428D564CB00788205 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/iOSSupport/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A628D564DF00788205 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		18D0A2A828D5674400788205 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +202,7 @@
 		181EE6442B23512F0043817F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				18BB2B8E2F5AE2DD000B0840 /* NEConfigInfoViewController.swift */,
 				18311E202E7275B1004962EE /* IMSDKConfigViewController.swift */,
 				18311E212E7275B1004962EE /* LanguageViewController.swift */,
 				18311E222E7275B1004962EE /* PocLoginController.swift */,
@@ -496,6 +499,7 @@
 				181EE6662B23512F0043817F /* VersionCell.swift in Sources */,
 				181EE65C2B23512F0043817F /* InputPersonInfoController.swift in Sources */,
 				18311E1E2E7275A5004962EE /* IMSDKConfigManager.swift in Sources */,
+				18BB2B8F2F5AE2DD000B0840 /* NEConfigInfoViewController.swift in Sources */,
 				181EE6592B23512F0043817F /* MeViewController.swift in Sources */,
 				181EE6622B23512F0043817F /* IntroduceBrandViewController.swift in Sources */,
 				18311E2A2E7275BA004962EE /* MeViewModel.swift in Sources */,
